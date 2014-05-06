@@ -1,0 +1,152 @@
+{% form_theme form _self %}
+
+{% block genemu_jqueryselect2_hidden_widget %}
+<div class="controls sonata-ba-field sonata-ba-field-standard-natural ">
+    {{ form_widget(form) }}
+</div>
+{% endblock %}
+
+{% block genemu_jqueryselect2_hidden_javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            var $field = $('#{{ id }}');
+            var timeout;
+
+            var $configs = {{ configs|json_encode|raw }};
+            {% set filters = form.vars.filters is defined ? form.vars.filters : [] %}
+            {% set dependentProperty = form.vars.dependentProperty is defined and form.vars.dependentProperty != null ? form.vars.dependentProperty : null %}
+            {% set dependentFieldId = form.vars.dependentFieldId is defined and form.vars.dependentFieldId != null ? form.vars.dependentFieldId : null %}
+
+            var queryFunc = function(query) {
+                if(query.term.length >= $configs.minimumInputLength) {
+                    $.ajax({
+                        url: '{{path(configs.path)}}?name='+encodeURI(query.term)+'&filters={{filters|json_encode|url_encode}}{% if dependentProperty != null %}&{{dependentProperty}}='+$('#{{dependentFieldId}}').val()+'{% endif %}',
+                        cache: true,
+                        dataType: "json",
+                        success: function(data) {
+                            var ret = {results: []};
+                            $.each(data, function() {
+                                ret.results.push({id: this.{{configs.field_id}}, text: this.{{configs.field_name}}});
+                            });
+                            query.callback(ret);
+                        }
+                    });
+                }
+            };
+
+            // custom configs
+            $configs = $.extend($configs, {
+                initSelection: function(element, callback) {
+                    if($field.val().indexOf('__') != -1) {
+                        var split = $field.val().split('__');
+                        $field.val(split[0]);
+                        callback({id: split[0], text: split[1] });
+                    } else {
+                        callback({id: $field.val(), text: $field.val() });
+                    }
+                },
+                query: function (query) {
+                    window.clearTimeout(timeout);
+                    timeout = setTimeout(function() { queryFunc(query); }, $configs.ajax.quietMillis);
+                },
+                allowClear: {{form.vars.required == true ? "false" : "true"}}
+            });
+            // end of custom configs
+
+            $field.select2($configs);
+            $field.keyup(function() {
+              if(timeout) {
+                window.clearTimeout(timeout);
+              }
+              timeout = setTimeout(function() { queryFunc($field.val()); }, $configs.ajax.quietMillis);
+            });
+
+            {% if dependentFieldId != null %}
+                var $dependentField = $('#{{dependentFieldId}}');
+                var refreshBandwidthProfiles = function() {
+                    $field.select2("readonly", true);
+                    var query = {
+                        term: '',
+                        callback: function(ret) {
+                            $field.select2("data", {id: ret.results[0].id, text: ret.results[0].text});
+                            $field.select2("readonly", false);
+                        }
+                    };
+                    queryFunc(query);
+                }
+                if($dependentField.val() == '') {
+                    $field.select2("readonly", true);
+                } else {
+                    {% if form.vars.required == true %}
+                    if($field.val() == '') {
+                        refreshBandwidthProfiles();
+                    }
+                    {% endif %}
+                }
+                $dependentField.on('change', function() {
+                    $field.val('').trigger('change');
+                    {% if form.vars.required == true %}
+                    refreshBandwidthProfiles();
+                    {% else %}
+                    $field.select2("readonly", false);
+                    {% endif %}
+                });
+            {% endif %}
+        });
+    </script>
+{% endblock %}
+
+{% block mmunit_widget %}
+    <div class="control-group">
+    {#{{ form_widget(form) }}#}
+    <input type="hidden" id="{{form.vars.id}}" name="{{form.vars.full_name}}" value="{{value}}" {% if form.vars.disabled == true %}disabled="disabled"{% endif %} />
+    </div>
+{% endblock %}
+
+{% block mmfy_widget %}
+    <div class="control-group">
+    {#{{ form_widget(form) }}#}
+    <input type="hidden" id="{{form.vars.id}}" name="{{form.vars.full_name}}" value="{{value}}" {% if form.vars.disabled == true %}disabled="disabled"{% endif %} />
+    </div>
+{% endblock %}
+
+{% block mmcategory_widget %}
+    <div class="control-group">
+    {#{{ form_widget(form) }}#}
+    <input type="hidden" id="{{form.vars.id}}" name="{{form.vars.full_name}}" value="{{value}}" {% if form.vars.disabled == true %}disabled="disabled"{% endif %} />
+    </div>
+{% endblock %}
+
+{% block circuit_widget %}
+    <div class="control-group">
+    {#{{ form_widget(form) }}#}
+    <input type="hidden" id="{{form.vars.id}}" name="{{form.vars.full_name}}" value="{{value}}" {% if form.vars.disabled == true %}disabled="disabled"{% endif %} />
+    </div>
+{% endblock %}
+
+{% block bandwidth_profile_widget %}
+    <div class="control-group">
+    {#{{ form_widget(form) }}#}
+    <input type="hidden" id="{{form.vars.id}}" name="{{form.vars.full_name}}" value="{{value}}" {% if form.vars.disabled == true %}disabled="disabled"{% endif %} />
+    </div>
+{% endblock %}
+
+{% block requeststatus_widget %}
+<div class="control-group">
+    {% if form.vars.confirmApproved == true %}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            var $field = $('#{{ id }}');
+            $field.on('change', function(e) {
+                if($(this).val() == "{{form.vars.confirmationValue}}") {
+                    if(!confirm('{{'APPROVED_CONFIRM'|trans}}')) {
+                        $field.select2("val", e.removed.id);
+                    }
+                }
+            });
+        });
+    </script>
+    {% endif %}
+    {{ form_widget(form) }}
+</div>
+{% endblock %}

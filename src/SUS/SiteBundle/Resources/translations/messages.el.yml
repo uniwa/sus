@@ -1,0 +1,99 @@
+Logout: Αποσύνδεση
+Created By: Δημιουργήθηκε απο
+Created At: Ημ/νία Καταχώρισης
+LDAP Username: LDAP Username
+Updated By: Ανανεώθηκε απο
+Select a value: Επιλέξτε μια τιμή
+
+ROLE_KEDO: ΚΕΔΟ
+ROLE_HELPDESK: ΦΥ
+ROLE_USER: Μονάδα
+
+# Circuit
+Ypepth Id: Κωδικός Μονάδας (ypepth id)
+Activated At: Ημ/νία Ενεργοποίησης
+Circuit Unit: Μονάδα
+Circuit Number: Αριθμός
+Circuit Connectivity Type: Τύπος Συνδεσιμότητας
+Connectivity Type: Τύπος Συνδεσιμότητας
+Connectivity Type Name: Τύπος Συνδεσιμότητας
+Circuit Bandwidth Profile: Bandwidth Profile Κυκλώματος
+
+# Phone Circuit
+Phone Circuit List: Λίστα Τηλεπικοινωνιακών Κυκλωμάτων
+Type: Τύπος
+Number: Αριθμός
+Circuit Type Name: Τύπος Συνδεσιμότητας
+Paid By Psd: Ανήκει στο ΠΣΔ
+Bandwidth: Εύρος Ζώνης
+Realspeed: Πραγματική Ταχύτητα
+pstn_dialup: 'PSTN'
+isdn_dialup: 'ISDN'
+ll: 'LL(M1020)'
+hellascom: 'HellasCom'
+eline_me: 'e-line ME'
+vdsl_ll: 'VDSL LL(LRE)'
+pstn_adsl: 'aDSLoPSTN'
+pstn_vdsl: 'VDSLoPSTN'
+isdn_adsl: 'aDSLoISDN'
+isdn_vdsl: 'VDSLoISDN'
+ethernet_satellite: 'ETHERNEToSATELLITE'
+wireless_man: 'WIRELESSoMAN'
+ethernet_man: 'ETHERNEToMAN'
+wiress_broadband: 'Wireless Broadband'
+backbone: 'Κυκλώματα Κορμού αστικά/υπεραστικά'
+
+Adsl: ADSL
+Adsl Id: Έχει ADSL
+Adsl Profile: ADSL Προφίλ
+Adsl Realspeed: ADSL Πραγματική Ταχύτητα
+
+# Request
+Circuit: Κύκλωμα
+Status: Κατάσταση Αιτήματος
+Comments: Σχόλια
+PENDING: Σε εκκρεμότητα
+APPROVED: Εγκρίθηκε
+REJECTED: Απορρίφθηκε
+APPROVED_CONFIRM: "Οταν το αίτημα ικανοποιηθεί δεν μπορούν να γίνουν περαιτέρω αλλαγές. Θέλετε να προχωρήσετε;"
+
+# Unit
+Unit: Μονάδα
+Mm Id: Κωδικός ΜΜ Μονάδας
+Unit Mm Id: Κωδικός ΜΜ Μονάδας # Για φίλτρα
+Unit Name: Όνομα Μονάδας
+Unit State: Κατάσταση Μονάδας
+Unit Category: Κατηγορία Μονάδας
+Unit Category Name: Κατηγορία Μονάδας
+Unit Fy: Φορέας Υλοποίησης
+Unit Fy Name: Φορέας Υλοποίησης
+Unit Registry No: Κωδικός ΥΠΕΠΘ
+
+# New Line Request
+New Circuit Request List: Λίστα Αιτημάτων Νέου Κυκλώματος
+Circuit Type: Τύπος Συνδεσιμότητας
+Tech Factsheet No: Αριθμός Τεχνικού Δελτίου
+PSD_CONTROL: Ελέγχεται από ΠΣΔ
+OTE_CONTROL: Ελέγχεται από ΟΤΕ
+ΟΤΕ_PSD_CONTROL: Ελέγχεται από ΟΤΕ&Σχολική Μονάδα
+OTEPENDING: Εκκρεμεί στον ΟΤΕ
+LOCALOTE: Μεταφέρθηκε στον τοπικό ΟΤΕ
+CREWLEVEL: Μεταφέρθηκε σε επίπεδο συνεργείου
+WAITINGCREW: Επίσκεψη συνεργείου ΟΤΕ για εγκατάσταση
+INSTALLED: Ικανοποιήθηκε
+
+# Remove Line Request
+Remove Circuit Request List: Λίστα Αιτημάτων Κατάργησης Κυκλώματος
+
+# Activate Service Request
+Activate Service Request List: Λίστα Αιτημάτων Ενεργοποίησης Υπηρεσίας
+New Connectivity Type: Νέος Τύπος Συνδεσιμότητας
+New Connectivity Type Name: Νέος Τύπος Συνδεσιμότητας
+
+# Change Service Request
+Change Service Request List: Λίστα Αιτημάτων Αλλαγής Τύπου Κυκλώματος
+
+# Change Ownership Request
+Change Ownership Request List: Λίστα Αιτημάτων Αλλαγής Ιδιοκτησίας Κυκλώματος
+New Unit: Νέα Μονάδα
+New Unit Name: Νέα Μονάδα

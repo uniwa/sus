@@ -1,0 +1,267 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: '@SUSAdminBundle/Resources/config/services.xml' }
+    - { resource: '@SUSAdminBundle/Resources/config/sonata.yml' }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
+    default_locale:  %locale%
+    session:         ~
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+    form:
+        resources:
+            - 'SUSAdminBundle::fields.html.twig'
+            - 'SUSAdminBundle::field_mmunit.html.twig'
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        #closure:
+        #    jar: %kernel.root_dir%/Resources/java/compiler.jar
+        #yui_css:
+        #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+        #unix_socket:	/var/mysql/mysql.sock
+        types:
+            point: SUS\UserBundle\Wantlet\ORM\PointType
+        mapping_types:
+            point: string
+    orm:
+        dql:
+            numeric_functions:
+                              ACOS: DoctrineExtensions\Query\Mysql\Acos
+                              SIN: DoctrineExtensions\Query\Mysql\Sin
+                              RADIANS: DoctrineExtensions\Query\Mysql\Radians
+                              COS: DoctrineExtensions\Query\Mysql\Cos
+                              DISTANCE: SUS\UserBundle\Wantlet\ORM\Distance
+                              POINT_STR: SUS\UserBundle\Wantlet\ORM\PointStr
+                              RAND: SUS\UserBundle\Wantlet\ORM\Rand
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+        mappings:
+            gedmo_translatable:
+                type: annotation
+                prefix: Gedmo\Translatable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+                alias: GedmoTranslatable # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+            gedmo_translator:
+                type: annotation
+                prefix: Gedmo\Translator\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
+                alias: GedmoTranslator # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+            gedmo_loggable:
+                type: annotation
+                prefix: Gedmo\Loggable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                alias: GedmoLoggable # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+            gedmo_tree:
+                type: annotation
+                prefix: Gedmo\Tree\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                alias: GedmoTree # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport:  %mailer_transport%
+    encryption: %mailer_encryption%
+    auth_mode:  %mailer_auth_mode%
+    host:       %mailer_host%
+    port:       %mailer_port%
+    username:   %mailer_user%
+    password:   %mailer_password%
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: SUS\UserBundle\Entity\User
+
+services:
+    cache:
+        class: Doctrine\Common\Cache\ApcCache
+    sus.ldap.ldap_manager:
+        class: SUS\UserBundle\Extension\LdapManager
+        arguments: ["@fr3d_ldap.ldap_driver", "@fr3d_ldap.user_manager", %fr3d_ldap.ldap_manager.parameters%, "@service_container"]
+    sus.twig.extension:
+        class: SUS\SiteBundle\Extension\TwigExtension
+        tags:
+            -  { name: twig.extension }
+        arguments:
+            - "@service_container"
+    sus.mm.service:
+        class: SUS\SiteBundle\Extension\MMService
+        arguments:
+            - "@service_container"
+    sus.request.service:
+        class: SUS\SiteBundle\Extension\RequestService
+        public: false
+    sus.form.type.unit_to_mmid_transformer:
+        class: SUS\SiteBundle\Form\DataTransformer\UnitToMmIdTransformer
+        scope: prototype
+        public: false
+        arguments:
+            - "@sus.mm.service"
+    sus.form.type.entity_to_id_transformer:
+        class: SUS\SiteBundle\Form\DataTransformer\EntityToIntTransformer
+        scope: prototype
+        public: false
+        arguments:
+            - "@doctrine.orm.entity_manager"
+    sus.form.type.mmunit:
+        class: SUS\SiteBundle\Form\Type\UnitType
+        tags:
+            - { name: form.type, alias: mmunit }
+        arguments:
+            - "@sus.form.type.unit_to_mmid_transformer="
+    sus.form.type.mmfy:
+        class: SUS\SiteBundle\Form\Type\FyType
+        tags:
+            - { name: form.type, alias: mmfy }
+    sus.form.type.mmcategory:
+        class: SUS\SiteBundle\Form\Type\CategoryType
+        tags:
+            - { name: form.type, alias: mmcategory }
+    sus.form.type.circuit:
+        class: SUS\SiteBundle\Form\Type\CircuitType
+        tags:
+            - { name: form.type, alias: circuit }
+        arguments:
+            - "@sus.form.type.entity_to_id_transformer="
+    sus.form.type.bandwidthprofile:
+        class: SUS\SiteBundle\Form\Type\BandwidthProfileType
+        tags:
+            - { name: form.type, alias: bandwidth_profile }
+        arguments:
+            - "@sus.form.type.entity_to_id_transformer="
+    sus.form.type.requeststatus:
+        class: SUS\SiteBundle\Form\Type\RequestStatusType
+        tags:
+            - { name: form.type, alias: requeststatus }
+    sus.unit.listener:
+        class: SUS\SiteBundle\Extension\UnitListener
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
+        arguments:
+            - "@sus.mm.service"
+    sus.request.listener:
+        class: SUS\SiteBundle\Extension\RequestListener
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postUpdate }
+        arguments:
+            - "@sus.request.service"
+    sus.mmsyncable.listener:
+        class: SUS\SiteBundle\Extension\MMSyncableListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
+        arguments:
+            - "@sus.mm.service"
+            - "@kernel"
+
+fos_rest:
+    view:
+        view_response_listener: false
+        failed_validation: HTTP_BAD_REQUEST
+        default_engine: php
+        formats:
+            html: true
+            json: true
+            xml: true
+            rss: false
+    format_listener:
+        default_priorities: ['html', 'json', xml, '*/*']
+        fallback_format: json
+        prefer_extension: true
+    body_listener:
+        decoders:
+            json: fos_rest.decoder.json
+            xml: fos_rest.decoder.xml
+    routing_loader:
+        default_format: json
+    param_fetcher_listener: true
+
+jms_serializer:
+    metadata:
+        cache: apc
+        auto_detection: true
+        directories:
+            FOSUB:
+                namespace_prefix: FOS\UserBundle
+                path: %kernel.root_dir%/serializer/FOSUB
+
+stof_doctrine_extensions:
+    default_locale: en_US
+    orm:
+        default:
+            timestampable: true
+            blameable: true
+            loggable: true
+            softdeleteable: true
+
+fr3d_ldap:
+    driver:
+        host:                %ldap_host%
+        port:                %ldap_port%    # Optional
+        #username:            uid=wfmtest2,ou=people,dc=sch,dc=gr    # WFM
+        username:            %ldap_username%    # LM
+        #password:            "dk4-@pgc"    # WFM
+        password:            %ldap_password%    # LM
+        #bindRequiredDn:       true   # Optional
+        baseDn:              %ldap_basedn%   # Optional
+        accountFilterFormat: (&(uid=%s)) # Optional. sprintf format %s will be the username
+        optReferrals:        false  # Optional
+        useSsl:              false   # Enable SSL negotiation. Optional
+        useStartTls:         false   # Enable TLS negotiation. Optional
+    user:
+        baseDn: %ldap_basedn%
+        filter: (&(ObjectClass=person))
+        attributes:          # Specify ldap attributes mapping [ldap attribute, user object method]
+           - { ldap_attr: uid,  user_method: setUsername } # Default
+           - { ldap_attr: cn,   user_method: setName }     # Optional
+           - { ldap_attr: mail,   user_method: setEmail }     # Optional
+           - { ldap_attr: memberof,   user_method: void }     # Optional
+    service:
+        ldap_manager: sus.ldap.ldap_manager
+#   service:
+#       user_manager: fos_user.user_manager          # Overrides default user manager
+#       ldap_manager: fr3d_ldap.ldap_manager.default # Overrides default ldap manager
+
+genemu_form:
+    select2: ~

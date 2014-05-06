@@ -1,0 +1,58 @@
+{
+    "name": "symfony/framework-standard-edition",
+    "description": "The \"Symfony Standard Edition\" distribution",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.3.*",
+        "doctrine/orm": "2.3.*",
+        "doctrine/doctrine-bundle": "dev-master",
+        "genemu/form-bundle": "2.1.*",
+        "twig/extensions": "1.0.*",
+        "symfony/assetic-bundle": "2.3.*",
+        "symfony/swiftmailer-bundle": "2.3.*",
+        "symfony/monolog-bundle": "2.3.*",
+        "sensio/distribution-bundle": "2.3.*",
+        "sensio/framework-extra-bundle": "2.3.*",
+        "sensio/generator-bundle": "2.3.*",
+        "jms/security-extra-bundle": "1.5.*",
+        "jms/di-extra-bundle": "dev-master",
+        "knplabs/knp-menu-bundle": "*",
+        "friendsofsymfony/user-bundle": "*",
+        "friendsofsymfony/rest-bundle": "0.12.*",
+        "friendsofsymfony/rest": "0.8.*",
+        "jms/serializer-bundle": "*",
+        "sonata-project/core-bundle": "~2.2@dev",
+        "sonata-project/doctrine-orm-admin-bundle": "*",
+        "sonata-project/cache-bundle": "*",
+        "sonata-project/intl-bundle": "*",
+        "stof/doctrine-extensions-bundle": "*",
+        "fr3d/ldap-bundle": "2.0.*",
+        "ruudk/capifony-tools": "dev-master",
+        "liuggio/excelbundle": "1.0.*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web"
+    }
+}
