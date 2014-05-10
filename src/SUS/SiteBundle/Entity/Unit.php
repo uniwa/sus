@@ -2,103 +2,260 @@
 
 namespace SUS\SiteBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\AccessType;
-use JMS\Serializer\Annotation\Accessor;
-use JMS\Serializer\Annotation\ReadOnly;
 
 /**
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="SUS\SiteBundle\Entity\Repositories\UnitsRepository")
- * @ExclusionPolicy("all")
- * @AccessType("public_method")
+ * Units
+ *
+ * @ORM\Table(name="units")
+ * @ORM\Entity
  */
 class Unit
 {
-    use TimestampableEntity;
-
     /**
-     * @ORM\Column(type="integer")
+     * @var integer
+     *
+     * @ORM\Column(name="unit_id", type="integer", nullable=false)
      * @ORM\Id
-     * @Expose
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $mmId;
+    private $unitId;
 
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
-     * @Expose
+     * @var integer
+     *
+     * @ORM\Column(name="mm_id", type="integer", nullable=true)
      */
-    protected $unitId;
+    private $mmId;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     *
+     * @ORM\Column(name="gluc", type="string", length=255, nullable=true)
      */
-    protected $fyName;
+    private $gluc;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    protected $fyInitials;
+    private $name;
 
     /**
-     * @Expose
+     * @var string
+     *
+     * @ORM\Column(name="special_name", type="string", length=255, nullable=true)
      */
-    protected $fy;
+    private $specialName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Expose
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=true)
      */
-    protected $name;
+    private $active;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Expose
+     * @var boolean
+     *
+     * @ORM\Column(name="suspended", type="boolean", nullable=true)
      */
-    protected $registryNo;
+    private $suspended;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Expose
+     * @var string
+     *
+     * @ORM\Column(name="street_address", type="string", length=255, nullable=true)
      */
-    protected $streetAddress;
+    private $streetAddress;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Expose
+     * @var integer
+     *
+     * @ORM\Column(name="postal_code", type="integer", nullable=true)
      */
-    protected $state;
+    private $postalCode;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Expose
+     * @var string
+     *
+     * @ORM\Column(name="fax_number", type="string", length=255, nullable=true)
      */
-    protected $postalCode;
+    private $faxNumber;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
      */
-    protected $categoryName;
+    private $phoneNumber;
 
     /**
-     * @Expose
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
-    protected $category;
+    private $email;
 
-    public function getMmId() {
-        return $this->mmId;
-    }
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_unit_update", type="datetime", nullable=true)
+     */
+    private $lastUnitUpdate;
 
-    public function setMmId($mmId) {
-        $this->mmId = $mmId;
-    }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tax_number", type="string", length=255, nullable=true)
+     */
+    private $taxNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comments", type="string", length=255, nullable=true)
+     */
+    private $comments;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_update", type="datetime", nullable=true)
+     */
+    private $lastUpdate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="positioning", type="string", length=255, nullable=true)
+     */
+    private $positioning;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     */
+    private $website;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="foundation_date", type="date", nullable=true)
+     */
+    private $foundationDate;
+
+    /**
+     * @var \TaxOffices
+     *
+     * @ORM\ManyToOne(targetEntity="TaxOffices")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tax_office_id", referencedColumnName="tax_office_id")
+     * })
+     */
+    private $taxOffice;
+
+    /**
+     * @var \EduAdmins
+     *
+     * @ORM\ManyToOne(targetEntity="EduAdmins")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="edu_admin_id", referencedColumnName="edu_admin_id")
+     * })
+     */
+    private $eduAdmin;
+
+    /**
+     * @var \RegionEduAdmins
+     *
+     * @ORM\ManyToOne(targetEntity="RegionEduAdmins")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="region_edu_admin_id", referencedColumnName="region_edu_admin_id")
+     * })
+     */
+    private $regionEduAdmin;
+
+    /**
+     * @var \UnitTypes
+     *
+     * @ORM\ManyToOne(targetEntity="UnitTypes")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="unit_type_id", referencedColumnName="unit_type_id")
+     * })
+     */
+    private $unitType;
+
+    /**
+     * @var \Workers
+     *
+     * @ORM\ManyToOne(targetEntity="Workers")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="manager_id", referencedColumnName="worker_id")
+     * })
+     */
+    private $manager;
+
+    /**
+     * @var \Prefectures
+     *
+     * @ORM\ManyToOne(targetEntity="Prefectures")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="prefecture_id", referencedColumnName="prefecture_id")
+     * })
+     */
+    private $prefecture;
+
+    /**
+     * @var \TransferAreas
+     *
+     * @ORM\ManyToOne(targetEntity="TransferAreas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="transfer_area_id", referencedColumnName="transfer_area_id")
+     * })
+     */
+    private $transferArea;
+
+    /**
+     * @var \States
+     *
+     * @ORM\ManyToOne(targetEntity="States")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="state_id", referencedColumnName="state_id")
+     * })
+     */
+    private $state;
+
+    /**
+     * @var \UnitCategory
+     *
+     * @ORM\ManyToOne(targetEntity="UnitCategory")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="category_id", referencedColumnName="category_id")
+     * })
+     */
+    private $category;
+
+    /**
+     * @var \WorkerPositions
+     *
+     * @ORM\ManyToOne(targetEntity="WorkerPositions")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="manager_position_id", referencedColumnName="worker_position_id")
+     * })
+     */
+    private $managerPosition;
+
+    /**
+     * @var \Municipalities
+     *
+     * @ORM\ManyToOne(targetEntity="Municipalities")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="municipality_id", referencedColumnName="municipality_id")
+     * })
+     */
+    private $municipality;
 
     public function getUnitId() {
         return $this->unitId;
@@ -108,40 +265,20 @@ class Unit
         $this->unitId = $unitId;
     }
 
-    public function getState() {
-        return $this->state;
+    public function getMmId() {
+        return $this->mmId;
     }
 
-    public function setState($state) {
-        $this->state = $state;
+    public function setMmId($mmId) {
+        $this->mmId = $mmId;
     }
 
-    public function getFyName() {
-        return $this->fyName;
+    public function getGluc() {
+        return $this->gluc;
     }
 
-    public function setFyName($fyName) {
-        $this->fyName = $fyName;
-    }
-
-    public function getFyInitials() {
-        return $this->fyInitials;
-    }
-
-    public function setFyInitials($fyInitials) {
-        $this->fyInitials = $fyInitials;
-    }
-
-    public function getFy() {
-        $fy = new UnitFy();
-        $fy->setName($this->fyName);
-        $fy->setInitials($this->fyInitials);
-        return $fy;
-    }
-
-    public function setFy($fy) {
-        $this->fyName = $fy->getName();
-        $this->fyInitials = $fy->getInitials();
+    public function setGluc($gluc) {
+        $this->gluc = $gluc;
     }
 
     public function getName() {
@@ -152,12 +289,28 @@ class Unit
         $this->name = $name;
     }
 
-    public function getRegistryNo() {
-        return $this->registryNo;
+    public function getSpecialName() {
+        return $this->specialName;
     }
 
-    public function setRegistryNo($registryNo) {
-        $this->registryNo = $registryNo;
+    public function setSpecialName($specialName) {
+        $this->specialName = $specialName;
+    }
+
+    public function getActive() {
+        return $this->active;
+    }
+
+    public function setActive($active) {
+        $this->active = $active;
+    }
+
+    public function getSuspended() {
+        return $this->suspended;
+    }
+
+    public function setSuspended($suspended) {
+        $this->suspended = $suspended;
     }
 
     public function getStreetAddress() {
@@ -176,25 +329,171 @@ class Unit
         $this->postalCode = $postalCode;
     }
 
-    public function getCategoryName() {
-        return $this->categoryName;
+    public function getFaxNumber() {
+        return $this->faxNumber;
     }
 
-    public function setCategoryName($categoryName) {
-        $this->categoryName = $categoryName;
+    public function setFaxNumber($faxNumber) {
+        $this->faxNumber = $faxNumber;
+    }
+
+    public function getPhoneNumber() {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber($phoneNumber) {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function getLastUnitUpdate() {
+        return $this->lastUnitUpdate;
+    }
+
+    public function setLastUnitUpdate(\DateTime $lastUnitUpdate) {
+        $this->lastUnitUpdate = $lastUnitUpdate;
+    }
+
+    public function getTaxNumber() {
+        return $this->taxNumber;
+    }
+
+    public function setTaxNumber($taxNumber) {
+        $this->taxNumber = $taxNumber;
+    }
+
+    public function getComments() {
+        return $this->comments;
+    }
+
+    public function setComments($comments) {
+        $this->comments = $comments;
+    }
+
+    public function getLastUpdate() {
+        return $this->lastUpdate;
+    }
+
+    public function setLastUpdate(\DateTime $lastUpdate) {
+        $this->lastUpdate = $lastUpdate;
+    }
+
+    public function getPositioning() {
+        return $this->positioning;
+    }
+
+    public function setPositioning($positioning) {
+        $this->positioning = $positioning;
+    }
+
+    public function getWebsite() {
+        return $this->website;
+    }
+
+    public function setWebsite($website) {
+        $this->website = $website;
+    }
+
+    public function getFoundationDate() {
+        return $this->foundationDate;
+    }
+
+    public function setFoundationDate(\DateTime $foundationDate) {
+        $this->foundationDate = $foundationDate;
+    }
+
+    public function getTaxOffice() {
+        return $this->taxOffice;
+    }
+
+    public function setTaxOffice(\TaxOffices $taxOffice) {
+        $this->taxOffice = $taxOffice;
+    }
+
+    public function getEduAdmin() {
+        return $this->eduAdmin;
+    }
+
+    public function setEduAdmin(\EduAdmins $eduAdmin) {
+        $this->eduAdmin = $eduAdmin;
+    }
+
+    public function getRegionEduAdmin() {
+        return $this->regionEduAdmin;
+    }
+
+    public function setRegionEduAdmin(\RegionEduAdmins $regionEduAdmin) {
+        $this->regionEduAdmin = $regionEduAdmin;
+    }
+
+    public function getUnitType() {
+        return $this->unitType;
+    }
+
+    public function setUnitType(\UnitTypes $unitType) {
+        $this->unitType = $unitType;
+    }
+
+    public function getManager() {
+        return $this->manager;
+    }
+
+    public function setManager(\Workers $manager) {
+        $this->manager = $manager;
+    }
+
+    public function getPrefecture() {
+        return $this->prefecture;
+    }
+
+    public function setPrefecture(\Prefectures $prefecture) {
+        $this->prefecture = $prefecture;
+    }
+
+    public function getTransferArea() {
+        return $this->transferArea;
+    }
+
+    public function setTransferArea(\TransferAreas $transferArea) {
+        $this->transferArea = $transferArea;
+    }
+
+    public function getState() {
+        return $this->state;
+    }
+
+    public function setState(\States $state) {
+        $this->state = $state;
     }
 
     public function getCategory() {
-        $category = new UnitCategory();
-        $category->setName($this->categoryName);
-        return $category;
+        return $this->category;
     }
 
-    public function setCategory($category) {
-        $this->categoryName = $category->getName();
+    public function setCategory(\UnitCategory $category) {
+        $this->category = $category;
     }
 
-    public function __toString() {
-        return $this->getName();
+    public function getManagerPosition() {
+        return $this->managerPosition;
+    }
+
+    public function setManagerPosition(\WorkerPositions $managerPosition) {
+        $this->managerPosition = $managerPosition;
+    }
+
+    public function getMunicipality() {
+        return $this->municipality;
+    }
+
+    public function setMunicipality(\Municipalities $municipality) {
+        $this->municipality = $municipality;
     }
 }

@@ -38,7 +38,7 @@ class User extends BaseUser implements LdapUserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="SUS\SiteBundle\Entity\Unit")
-     * @ORM\JoinColumn(name="mmId", referencedColumnName="mmId", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="mmId", referencedColumnName="unit_id", onDelete="SET NULL")
      */
     protected $unit;
 

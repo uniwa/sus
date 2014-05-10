@@ -1,48 +1,81 @@
 <?php
 
-
 namespace SUS\SiteBundle\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\AccessType;
-use JMS\Serializer\Annotation\Accessor;
-use JMS\Serializer\Annotation\ReadOnly;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ExclusionPolicy("all")
- * @AccessType("public_method")
+ * ImplementationEntities
+ *
+ * @ORM\Table(name="implementation_entities")
+ * @ORM\Entity
  */
-class UnitFy {
+class UnitFy
+{
     /**
-     * @Expose
+     * @var integer
+     *
+     * @ORM\Column(name="implementation_entity_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $name;
+    private $implementationEntityId;
+
     /**
-     * @Expose
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $initials;
+    private $name;
 
-    public function getName() {
-        return $this->name;
-    }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="initials", type="string", length=255, nullable=false)
+     */
+    private $initials;
 
-    public function setName($name) {
-        $this->name = $name;
-    }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="street_address", type="string", length=255, nullable=true)
+     */
+    private $streetAddress;
 
-    public function getInitials() {
-        return $this->initials;
-    }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
+     */
+    private $postalCode;
 
-    public function setInitials($initials) {
-        $this->initials = $initials;
-    }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
 
-    public function __toString() {
-        return $this->getName() != '' ? $this->getName() : '';
-    }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     */
+    private $phoneNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="domain", type="string", length=255, nullable=true)
+     */
+    private $domain;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
+     */
+    private $url;
+
+
 }
-
-?>

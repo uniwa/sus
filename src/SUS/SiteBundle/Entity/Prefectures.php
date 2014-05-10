@@ -5,21 +5,21 @@ namespace SUS\SiteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UnitCategory
+ * Prefectures
  *
- * @ORM\Table(name="categories")
+ * @ORM\Table(name="prefectures")
  * @ORM\Entity
  */
-class UnitCategory
+class Prefectures
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     * @ORM\Column(name="prefecture_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $categoryId;
+    private $prefectureId;
 
     /**
      * @var string
