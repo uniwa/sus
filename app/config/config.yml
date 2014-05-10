@@ -127,9 +127,6 @@ services:
         class: SUS\SiteBundle\Extension\MMService
         arguments:
             - "@service_container"
-    sus.request.service:
-        class: SUS\SiteBundle\Extension\RequestService
-        public: false
     sus.form.type.unit_to_mmid_transformer:
         class: SUS\SiteBundle\Form\DataTransformer\UnitToMmIdTransformer
         scope: prototype
@@ -156,35 +153,12 @@ services:
         class: SUS\SiteBundle\Form\Type\CategoryType
         tags:
             - { name: form.type, alias: mmcategory }
-    sus.form.type.circuit:
-        class: SUS\SiteBundle\Form\Type\CircuitType
-        tags:
-            - { name: form.type, alias: circuit }
-        arguments:
-            - "@sus.form.type.entity_to_id_transformer="
-    sus.form.type.bandwidthprofile:
-        class: SUS\SiteBundle\Form\Type\BandwidthProfileType
-        tags:
-            - { name: form.type, alias: bandwidth_profile }
-        arguments:
-            - "@sus.form.type.entity_to_id_transformer="
-    sus.form.type.requeststatus:
-        class: SUS\SiteBundle\Form\Type\RequestStatusType
-        tags:
-            - { name: form.type, alias: requeststatus }
     sus.unit.listener:
         class: SUS\SiteBundle\Extension\UnitListener
         tags:
             - { name: doctrine.event_listener, event: postLoad }
         arguments:
             - "@sus.mm.service"
-    sus.request.listener:
-        class: SUS\SiteBundle\Extension\RequestListener
-        tags:
-            - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
-        arguments:
-            - "@sus.request.service"
     sus.mmsyncable.listener:
         class: SUS\SiteBundle\Extension\MMSyncableListener
         tags:

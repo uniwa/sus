@@ -1,14 +1,14 @@
 <?php
 
-namespace SUS\SiteBundle\Form\DataTransformer;
+namespace Psdtg\SiteBundle\Form\DataTransformer;
 
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
-use SUS\SiteBundle\Entity\Unit;
-use SUS\SiteBundle\Extension\MMService;
+use Psdtg\SiteBundle\Entity\Unit;
+use Psdtg\SiteBundle\Extension\MMService;
 
 /**
  * Transforms between a UserInterface instance and a username string.
@@ -36,7 +36,7 @@ class UnitToMmIdTransformer implements DataTransformerInterface
         if ($value instanceof Unit) {
             return $value->getMmId().'__'.$value->getName();
         } else {
-            throw new UnexpectedTypeException($value, 'SUS\SiteBundle\Entity\Unit');
+            throw new UnexpectedTypeException($value, 'Psdtg\SiteBundle\Entity\Unit');
         }
     }
 

@@ -57,11 +57,3 @@ fys:
 categories:
     resource: SUS\AdminBundle\Controller\CategoryController
     type:     rest
-
-circuits:
-    resource: SUS\AdminBundle\Controller\CircuitController
-    type:     rest
-
-bandwidth_profiles:
-    resource: SUS\AdminBundle\Controller\BandwidthProfileController
-    type:     rest

@@ -11,25 +11,6 @@
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="security.voter" priority="255" />
         </service>
-        <service id="security.acl.voter.phone_circuit_permissions" class="SUS\AdminBundle\Voter\PhoneCircuitAclVoter" public="false">
-            <tag name="monolog.logger" channel="security" />
-            <argument type="service" id="security.acl.provider" />
-            <argument type="service" id="security.acl.object_identity_retrieval_strategy" />
-            <argument type="service" id="security.acl.security_identity_retrieval_strategy" />
-            <argument type="service" id="security.acl.permission.map" />
-            <argument type="service" id="sonata.admin.pool" />
-            <argument type="service" id="logger" on-invalid="null" />
-            <tag name="security.voter" priority="254" />
-        </service>
-        <service id="security.acl.voter.request_permissions" class="SUS\AdminBundle\Voter\RequestAclVoter" public="false">
-            <tag name="monolog.logger" channel="security" />
-            <argument type="service" id="security.acl.provider" />
-            <argument type="service" id="security.acl.object_identity_retrieval_strategy" />
-            <argument type="service" id="security.acl.security_identity_retrieval_strategy" />
-            <argument type="service" id="security.acl.permission.map" />
-            <argument type="service" id="logger" on-invalid="null" />
-            <tag name="security.voter" priority="253" />
-        </service>
         <service id="sonata.admin.dnna.model_manager" class="SUS\AdminBundle\Model\DnnaModelManager">
             <argument type="service" id="doctrine" />
         </service>
@@ -38,140 +19,15 @@
             <argument type="service" id="sonata.admin.builder.filter.factory" />
             <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain" />
         </service>
-        <!-- PhoneCircuit -->
-        <service id="sonata.admin.phonecircuits.helpdesk" class="SUS\AdminBundle\Admin\Helpdesk\PhoneCircuitAdmin">
+        <service id="sonata.admin.unit" class="SUS\AdminBundle\Admin\UnitAdmin">
            <tag name="sonata.admin"
                 manager_type="orm"
-                group="Τηλεπικοινωνιακά Κυκλώματα"
-                label="Τηλεπικοινωνιακά Κυκλώματα"
+                group="Μονάδες"
+                label="Μονάδες"
                 />
            <argument />
-           <argument>SUS\SiteBundle\Entity\Circuits\PhoneCircuit</argument>
-           <argument>SonataAdminBundle:CRUD</argument>
-            <call method="setSecurityContext">
-                <argument type="service" id="security.context" />
-            </call>
-            <!--<call method="setRequest">
-                <argument type="service" id="request" />
-            </call>-->
-       </service>
-        <service id="sonata.admin.phonecircuits.kedo" class="SUS\AdminBundle\Admin\Kedo\PhoneCircuitAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Τηλεπικοινωνιακά Κυκλώματα"
-                label="Τηλεπικοινωνιακά Κυκλώματα"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Circuits\PhoneCircuit</argument>
-           <argument>SonataAdminBundle:CRUD</argument>
-            <!--<call method="setRequest">
-                <argument type="service" id="request" />
-            </call>-->
-       </service>
-        <!-- NewCircuitRequest -->
-        <service id="sonata.admin.newcircuitrequests.helpdesk" class="SUS\AdminBundle\Admin\Helpdesk\NewCircuitRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Νέου Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\NewCircuitRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-        <service id="sonata.admin.newcircuitrequests.kedo" class="SUS\AdminBundle\Admin\Kedo\NewCircuitRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Νέου Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\NewCircuitRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-       <!-- RemoveCircuitRequest -->
-        <service id="sonata.admin.removecircuitrequests.helpdesk" class="SUS\AdminBundle\Admin\Helpdesk\RemoveCircuitRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Κατάργησης Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\RemoveCircuitRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-        <service id="sonata.admin.removecircuitrequests.kedo" class="SUS\AdminBundle\Admin\Kedo\RemoveCircuitRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Κατάργησης Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\RemoveCircuitRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-       <!-- ChangeConnectivityTypeRequest -->
-        <service id="sonata.admin.changeconnectivitytyperequests.helpdesk" class="SUS\AdminBundle\Admin\Helpdesk\ChangeConnectivityTypeRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Αλλαγής Τύπου Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\ChangeConnectivityTypeRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-        <service id="sonata.admin.changeconnectivitytyperequests.kedo" class="SUS\AdminBundle\Admin\Kedo\ChangeConnectivityTypeRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Αλλαγής Τύπου Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\ChangeConnectivityTypeRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-       <!-- ActivateServiceRequest -->
-        <service id="sonata.admin.activateservicerequest.helpdesk" class="SUS\AdminBundle\Admin\Helpdesk\ActivateServiceRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Ενεργοποίησης Υπηρεσίας σε Υπάρχον Ιδιωτικό Κύκλωμα"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\ActivateServiceRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-        <service id="sonata.admin.activateservicerequest.kedo" class="SUS\AdminBundle\Admin\Kedo\ActivateServiceRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Ενεργοποίησης Υπηρεσίας σε Υπάρχον Ιδιωτικό Κύκλωμα"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\ActivateServiceRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-       <!-- ChangeOwnershipRequest -->
-        <service id="sonata.admin.changeownershiprequest.helpdesk" class="SUS\AdminBundle\Admin\Helpdesk\ChangeOwnershipRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Αλλαγής Ιδιοκτησίας Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\ChangeOwnershipRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
-       </service>
-        <service id="sonata.admin.changeownershiprequest.kedo" class="SUS\AdminBundle\Admin\Kedo\ChangeOwnershipRequestAdmin">
-           <tag name="sonata.admin"
-                manager_type="orm"
-                group="Αιτήματα"
-                label="Αίτημα Αλλαγής Ιδιοκτησίας Κυκλώματος"
-                />
-           <argument />
-           <argument>SUS\SiteBundle\Entity\Requests\ChangeOwnershipRequest</argument>
-           <argument>SUSAdminBundle:Request</argument>
+           <argument>SUS\SiteBundle\Entity\Unit</argument>
+           <argument>SUSAdminBundle:Unit</argument>
        </service>
    </services>
 </container>

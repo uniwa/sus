@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-class CircuitAdmin extends Admin
+class UnitAdmin extends Admin
 {
     protected $datagridValues = array(
         '_sort_order' => 'ASC', // Descendant ordering (default = 'ASC')
@@ -55,23 +55,6 @@ class CircuitAdmin extends Admin
         ;
     }
 
-    // NoLease types allow full editing at all times
-    public function circuitNoLease($subject = null) {
-        if($subject == null || $subject->getId() == null || $subject->getConnectivityType()->getNoLease() == true) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function circuitFinalized($subject) {
-        if($subject != null && $subject->getId() != null && $subject->getActivatedAt() != null && ($subject->getConnectivityType()->requiresNumber() != true || $subject->getNumber() != null)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /**
      * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
      *
@@ -110,16 +93,16 @@ class CircuitAdmin extends Admin
         ;
     }
 
-    public function getExportFields()
+    /*public function getExportFields()
     {
         return array(
             'id',
-            'unit.name',
-            'unit.categoryName',
-            'unit.fy',
+            'name',
+            'categoryName',
+            'fy',
             'activatedAt',
         );
-    }
+    }*/
 
     public function getBatchActions()
     {
