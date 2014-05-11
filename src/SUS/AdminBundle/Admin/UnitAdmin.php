@@ -48,10 +48,37 @@ class UnitAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('unit', 'mmunit', array('disabled' => !$this->circuitNoLease($this->getSubject()), 'required' => true))
-            ->add('activatedAt', 'genemu_jquerydate', array('required' => true, 'widget' => 'single_text'))
-            ->add('comments')
-            //->add('services')
+            ->with('Γενικά Στοιχεία')
+                ->add('name', null, array('label' => 'Ονομασία'))
+                ->add('specialName', null, array('label' => ' Ειδική Ονομασία'))
+                ->add('unitType', null, array('label' => 'Τύπος'))
+                ->add('foundationDate', 'genemu_jquerydate', array('required' => false, 'widget' => 'single_text'))
+                ->add('state', null, array('label' => 'Κατάσταση'))
+                ->add('category', null, array('label' => 'Κατηγορία'))
+                ->add('comments', null, array('label' => 'Σχόλια'))
+            ->end()
+
+            ->with('Στοιχεία Τοποθεσίας')
+                ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
+                ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
+                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
+                ->add('prefecture', null, array('label' => 'Νομός'))
+                ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
+                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
+                ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
+            ->end()
+
+            ->with('Στοιχεία Επικοινωνίας')
+                ->add('faxNumber', null, array('label' => 'Αριθμός FAX'))
+                ->add('phoneNumber', null, array('label' => 'Τηλέφωνο Επικοινωνίας'))
+                ->add('email', null, array('label' => 'E-mail'))
+                ->add('website', null, array('label' => 'Website'))
+            ->end()
+
+            ->with('Φορολογικά Στοιχεία')
+                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
+                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
+            ->end()
         ;
     }
 
@@ -65,15 +92,12 @@ class UnitAdmin extends Admin
         $listMapper
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array('template' => 'SUSAdminBundle:Button:show_button.html.twig'),
-                    'edit' => array('template' => 'SUSAdminBundle:Button:edit_button.html.twig'),
+                    //'show' => array(),
+                    'edit' => array(),
             )))
-            ->add('unit.mmId', 'string')
-            ->add('unit.registryNo', 'string')
-            ->add('unit.name')
-            ->add('unit.categoryName')
-            ->add('unit.fy')
-            ->add('activatedAt', 'date')
+            ->add('unitId', 'string')
+            ->add('name', 'string', array('label' => 'Ονομασία'))
+            ->add('state.name', 'string', array('label' => 'Κατάσταση'))
         ;
     }
 
@@ -85,11 +109,7 @@ class UnitAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('unit', null, array(), 'mmunit')
-            ->add('unit.categoryName', null, array(), 'mmcategory')
-            ->add('unit.fyName', null, array(), 'mmfy')
-            ->add('unit.state', null, array(), 'choice', array('choices' => array('ΕΝΕΡΓΗ' => 'ΕΝΕΡΓΗ', 'ΚΑΤΑΡΓΗΜΕΝΗ' => 'ΚΑΤΑΡΓΗΜΕΝΗ', 'ΣΕ ΑΝΑΣΤΟΛΗ' => 'ΣΕ ΑΝΑΣΤΟΛΗ')))
-            ->add('activatedAt', 'doctrine_orm_datetime_range', array(), null, array('widget' => 'single_text', 'required' => false, 'attr' => array('class' => 'datepicker')))
+            ->add('unitId', null, array())
         ;
     }
 

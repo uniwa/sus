@@ -6,8 +6,6 @@ use SUS\SiteBundle\Exception\MMException;
 use SUS\SiteBundle\Entity\Unit;
 use SUS\SiteBundle\Extension\MMSyncableListener;
 use SUS\SiteBundle\Entity\MMSyncableEntity;
-use SUS\SiteBundle\Entity\Circuits\PhoneCircuit;
-use SUS\SiteBundle\Entity\Circuits\ConnectivityType;
 
 class MMService {
     protected $container;
@@ -80,49 +78,23 @@ class MMService {
         return $units[0];
     }
 
-    public function findCircuitByNumberAndUnit($number, Unit $unit) {
-        $circuits = $this->queryMM('circuits', array(
-            'mm_id' => $unit->getMmId(),
-            'orderby' => 'phone_number', // If this is ommitted a field ambiguity error occurs in the MM API
-        ));
-        foreach($circuits as $curCircuit) {
-            if($curCircuit->phone_number == $number) {
-                return $curCircuit;
-            }
-        }
-        return null;
-    }
-
-    public function findConnectivityTypeByName($name) {
-        $types = $this->queryMM('circuit_types');
-        foreach($types as $curType) {
-            if($curType->circuit_type == $name) {
-                return $curType;
-            }
-        }
-        return null;
-    }
-
     public function persistMM(MMSyncableEntity $entity) {
-        if($entity instanceof PhoneCircuit) {
-            return $this->persistCircuit($entity);
-        } elseif ($entity instanceof ConnectivityType) {
-            return $this->persistConnectivityType($entity);
+        if($entity instanceof Unit) {
+            return $this->persistUnit($entity);
         } else {
             throw new MMException('Unsupported entity');
         }
     }
 
     protected function hydrateUnit($entry, $flush = false) {
+        throw new \Exception('Not supported');
         // Unit not found or its too old. Query the WS for fresh data.
-        $em = $this->container->get('doctrine')->getManager();
+        /*$em = $this->container->get('doctrine')->getManager();
 
         $unit = new Unit;
         $unit->setMmId($entry->mm_id);
         $unit->setUnitId($entry->mm_id);
-        $unit->setState($entry->state);
-        $unit->setFyName($entry->implementation_entity);
-        $unit->setFyInitials($entry->implementation_entity_initials);
+        $unit->setState($em->find('SUS\SiteBundle\Entity\States', $entry->state));
         $unit->setName($entry->name);
         $unit->setPostalCode($entry->postal_code);
         $unit->setRegistryNo($entry->registry_no);
@@ -136,7 +108,7 @@ class MMService {
             $em->flush($unit);
         }
 
-        return $unit;
+        return $unit;*/
     }
 
     protected function queryUnits($params = array()) {
@@ -184,46 +156,34 @@ class MMService {
         }
     }
 
-    public function persistCircuit(PhoneCircuit $circuit) {
-        if($circuit->getNumber() == null) {
-            return false;
-        }
-        if($circuit->getConnectivityType() == null) {
-            throw new \Exception('No connectivity type');
-        }
-        if($circuit->getConnectivityType()->getMmSyncId() == null) {
-            $this->persistConnectivityType($circuit->getConnectivityType());
-        }
-        if($circuit->getMmSyncId() != null) {
+    public function persistUnit(Unit $unit) {
+        if($unit->getMmSyncId() != null) {
             $method = 'PUT';
-            $extraParams = array('circuit_id' => $circuit->getMmSyncId());
+            $extraParams = array('unit_id' => $unit->getMmSyncId());
         } else {
-            if(($curCircuit = $this->findCircuitByNumberAndUnit($circuit->getNumber(), $circuit->getUnit())) != null) { // Check if already exists
-                $circuit->setMmSyncId($curCircuit->circuit_id);
-                $circuit->setMmSyncLastUpdateDate(new \DateTime('now'));
+            if(($curUnit = $this->findOneUnitBy(array('name' => $unit->getName()))) != null) { // Check if already exists
+                $unit->setMmSyncId($curUnit->mm_id);
+                $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
                 return;
             }
             $method = 'POST';
             $extraParams = array();
-        }
-        if($circuit->getUnit() == null) {
-            throw new MMException('Unit cannot be null');
         }
         $params = array_merge($extraParams, array(
-               "mm_id" => $circuit->getUnit()->getMmId(),
-               "name" => $circuit->__toString(),
-               "circuit_type_id" => $circuit->getConnectivityType()->getMmSyncId(),
-               "phone_number" => $circuit->getNumber(),
-               "status" => $circuit->isActive(),
-               "activated_date" => $circuit->getActivatedAt() instanceof \DateTime ? $circuit->getActivatedAt()->format('Y-m-d H:i') : null,
-               "updated_date" => $circuit->getUpdatedAt() instanceof \DateTime ? $circuit->getUpdatedAt()->format('Y-m-d H:i') : null,
-               "deactivated_date" => $circuit->getDeletedAt() instanceof \DateTime ? $circuit->getDeletedAt()->format('Y-m-d H:i') : null,
-               "bandwidth" => $circuit->getBandwidthProfile()->getBandwidth(),
-               "readspeed" => $circuit->getRealspeed(),
-               "paid_by_psd" => $circuit->getPaidByPsd(),
+               "mm_id" => $unit->getUnit()->getMmId(),
+               "name" => $unit->__toString(),
+               "circuit_type_id" => $unit->getConnectivityType()->getMmSyncId(),
+               "phone_number" => $unit->getNumber(),
+               "status" => $unit->isActive(),
+               "activated_date" => $unit->getActivatedAt() instanceof \DateTime ? $unit->getActivatedAt()->format('Y-m-d H:i') : null,
+               "updated_date" => $unit->getUpdatedAt() instanceof \DateTime ? $unit->getUpdatedAt()->format('Y-m-d H:i') : null,
+               "deactivated_date" => $unit->getDeletedAt() instanceof \DateTime ? $unit->getDeletedAt()->format('Y-m-d H:i') : null,
+               "bandwidth" => $unit->getBandwidthProfile()->getBandwidth(),
+               "readspeed" => $unit->getRealspeed(),
+               "paid_by_psd" => $unit->getPaidByPsd(),
         ));
 
-        $curl = curl_init("http://mmsch.teiath.gr/ver4/api/circuits");
+        $curl = curl_init("http://mmsch.teiath.gr/ver4/api/units");
 
         $username = 'mmschadmin';
         $password = 'mmschadmin';
@@ -237,49 +197,11 @@ class MMService {
         $data = json_decode($origData);
         if($data->status == 200) {
             if($method == 'POST') {
-                $circuit->setMmSyncId($data->circuit_id);
-                $circuit->setMmSyncLastUpdateDate(new \DateTime('now'));
+                $unit->setMmSyncId($data->mm_id);
+                $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
             }
         } else {
-            throw new MMException('Error adding circuit: '.$origData);
-        }
-    }
-
-    public function persistConnectivityType(ConnectivityType $connectivityType) {
-        $translator = $this->container->get('translator');
-        if($connectivityType->getMmSyncId() != null) {
-            $method = 'PUT';
-            $extraParams = array('circuit_type_id' => $connectivityType->getMmSyncId());
-        } else {
-            if(($curConType = $this->findConnectivityTypeByName($translator->trans($connectivityType->getName()))) != null) { // Check if already exists
-                $connectivityType->setMmSyncId($curConType->circuit_type_id);
-                $connectivityType->setMmSyncLastUpdateDate(new \DateTime('now'));
-                return;
-            }
-            $method = 'POST';
-            $extraParams = array();
-        }
-        $params = array_merge($extraParams, array("circuit_type" => $translator->trans($connectivityType->getName())));
-
-        $curl = curl_init("http://mmsch.teiath.gr/ver4/api/circuit_types");
-
-        $username = 'mmschadmin';
-        $password = 'mmschadmin';
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD,  $username.":".$password);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode( $params ));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $origData = curl_exec($curl);
-        $data = json_decode($origData);
-        if($data->status == 200) {
-            if($method == 'POST') {
-                $connectivityType->setMmSyncId($data->circuit_type_id);
-                $connectivityType->setMmSyncLastUpdateDate(new \DateTime('now'));
-            }
-        } else {
-            throw new MMException('Error adding connectivity type: '.$origData);
+            throw new MMException('Error adding unit: '.$origData);
         }
     }
 }

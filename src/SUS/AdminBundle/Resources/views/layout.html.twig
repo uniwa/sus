@@ -15,21 +15,6 @@
         {#<img src="{{ asset(admin_pool.titlelogo) }}" alt="">#}
         {{ admin_pool.title }}
     </a>
-    {#<form action="{{ url('sonata_admin_search') }}" method="GET"  class="navbar-search">
-        <div class="input-append">
-            <input type="text" name="q" value="{{ app.request.get('q') }}" class="input-large search-query" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}"/>
-        </div>
-    </form>#}
-    {#<div style="float: right; text-align: center;">
-        <div>
-            {{app.user.username}} | {% if is_granted('ROLE_KEDO') %}{{'ROLE_KEDO'|trans({})}}{% elseif is_granted('ROLE_HELPDESK') %}{{'ROLE_HELPDESK'|trans({})}}{% else %}{{'ROLE_USER'|trans({})}}{% endif %}
-        </div>
-        <div>
-            <a href="{{ url('fos_user_security_logout') }}" style="float: right;">
-                {{'Logout'|trans()}}
-            </a>
-        </div>
-    </div>#}
 {% endblock %}
 
 {#{% block sonata_top_nav_menu %}
@@ -37,7 +22,7 @@
 {% endblock %}#}
 
 {% block footer %}
-<p class="text-right" style="margin-right: 20px;">Εφαρμογή Διαχείρισης Τηλεπικοινωνιακών Κυκλωμάτων ΠΣΔ</p>
+<p class="text-right" style="margin-right: 20px;">Υποσύστημα Διαχείρησης Άλλων Μονάδων ΠΣΔ</p>
 <script>
 jQuery(document).ready(function(){
     jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "" ] );

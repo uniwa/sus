@@ -2,15 +2,17 @@
 
 namespace SUS\SiteBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Units
  *
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @ORM\Table(name="units")
  * @ORM\Entity
  */
-class Unit
+class Unit extends MMSyncableEntity
 {
     /**
      * @var integer
@@ -20,20 +22,6 @@ class Unit
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $unitId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="mm_id", type="integer", nullable=true)
-     */
-    private $mmId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="gluc", type="string", length=255, nullable=true)
-     */
-    private $gluc;
 
     /**
      * @var string
@@ -48,20 +36,6 @@ class Unit
      * @ORM\Column(name="special_name", type="string", length=255, nullable=true)
      */
     private $specialName;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=true)
-     */
-    private $active;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="suspended", type="boolean", nullable=true)
-     */
-    private $suspended;
 
     /**
      * @var string
@@ -188,16 +162,6 @@ class Unit
     private $unitType;
 
     /**
-     * @var \Workers
-     *
-     * @ORM\ManyToOne(targetEntity="Workers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="manager_id", referencedColumnName="worker_id")
-     * })
-     */
-    private $manager;
-
-    /**
      * @var \Prefectures
      *
      * @ORM\ManyToOne(targetEntity="Prefectures")
@@ -206,16 +170,6 @@ class Unit
      * })
      */
     private $prefecture;
-
-    /**
-     * @var \TransferAreas
-     *
-     * @ORM\ManyToOne(targetEntity="TransferAreas")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="transfer_area_id", referencedColumnName="transfer_area_id")
-     * })
-     */
-    private $transferArea;
 
     /**
      * @var \States
@@ -238,16 +192,6 @@ class Unit
     private $category;
 
     /**
-     * @var \WorkerPositions
-     *
-     * @ORM\ManyToOne(targetEntity="WorkerPositions")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="manager_position_id", referencedColumnName="worker_position_id")
-     * })
-     */
-    private $managerPosition;
-
-    /**
      * @var \Municipalities
      *
      * @ORM\ManyToOne(targetEntity="Municipalities")
@@ -256,6 +200,11 @@ class Unit
      * })
      */
     private $municipality;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $deletedAt;
 
     public function getUnitId() {
         return $this->unitId;
@@ -273,14 +222,6 @@ class Unit
         $this->mmId = $mmId;
     }
 
-    public function getGluc() {
-        return $this->gluc;
-    }
-
-    public function setGluc($gluc) {
-        $this->gluc = $gluc;
-    }
-
     public function getName() {
         return $this->name;
     }
@@ -295,22 +236,6 @@ class Unit
 
     public function setSpecialName($specialName) {
         $this->specialName = $specialName;
-    }
-
-    public function getActive() {
-        return $this->active;
-    }
-
-    public function setActive($active) {
-        $this->active = $active;
-    }
-
-    public function getSuspended() {
-        return $this->suspended;
-    }
-
-    public function setSuspended($suspended) {
-        $this->suspended = $suspended;
     }
 
     public function getStreetAddress() {
@@ -405,7 +330,7 @@ class Unit
         return $this->foundationDate;
     }
 
-    public function setFoundationDate(\DateTime $foundationDate) {
+    public function setFoundationDate(\DateTime $foundationDate=null) {
         $this->foundationDate = $foundationDate;
     }
 
@@ -441,28 +366,12 @@ class Unit
         $this->unitType = $unitType;
     }
 
-    public function getManager() {
-        return $this->manager;
-    }
-
-    public function setManager(\Workers $manager) {
-        $this->manager = $manager;
-    }
-
     public function getPrefecture() {
         return $this->prefecture;
     }
 
     public function setPrefecture(\Prefectures $prefecture) {
         $this->prefecture = $prefecture;
-    }
-
-    public function getTransferArea() {
-        return $this->transferArea;
-    }
-
-    public function setTransferArea(\TransferAreas $transferArea) {
-        $this->transferArea = $transferArea;
     }
 
     public function getState() {
@@ -481,19 +390,19 @@ class Unit
         $this->category = $category;
     }
 
-    public function getManagerPosition() {
-        return $this->managerPosition;
-    }
-
-    public function setManagerPosition(\WorkerPositions $managerPosition) {
-        $this->managerPosition = $managerPosition;
-    }
-
     public function getMunicipality() {
         return $this->municipality;
     }
 
     public function setMunicipality(\Municipalities $municipality) {
         $this->municipality = $municipality;
+    }
+
+    public function isActive() {
+        return !isset($this->deletedAt);
+    }
+
+    public function __toString() {
+        return $this->getName();
     }
 }

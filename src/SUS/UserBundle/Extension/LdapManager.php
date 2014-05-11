@@ -45,7 +45,7 @@ class LdapManager extends BaseLdapManager
     {
         // Object isn't cached
         parent::hydrate($user, $entry);
-        $em = $this->container->get('doctrine')->getManager();
+        /*$em = $this->container->get('doctrine')->getManager();
         $em->getConnection()->executeQuery('DELETE FROM Users WHERE username = "'.$entry['uid'][0].'"');
         // If the user is has the eduPerson objectClass then they get ROLE_USER
         $kedo = false;
@@ -69,6 +69,6 @@ class LdapManager extends BaseLdapManager
             $user->setUnit($unit);
         } else {
             throw new \Exception('Δεν βρέθηκε η μονάδα (mm_id) του χρήστη');
-        }
+        }*/
     }
 }

@@ -28,5 +28,23 @@ class TaxOffices
      */
     private $name;
 
+    public function getTaxOfficeId() {
+        return $this->taxOfficeId;
+    }
 
+    public function setTaxOfficeId($taxOfficeId) {
+        $this->taxOfficeId = $taxOfficeId;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
 }

@@ -21,7 +21,7 @@ sonata_block:
         sonata.admin.block.search_result:
           
 sonata_admin:
-    title:      LMS
+    title:      SUS
     title_logo: /lms/images/psd_logo.png
     templates:
         # default global templates

@@ -41,20 +41,8 @@ class AdminAclVoter extends AclVoter
         }
 
         if(($user = $token->getUser()) instanceof UserInterface) {
-            if($user->hasRole('ROLE_HELPDESK')) {
-                foreach ($attributes as $attribute) {
-                    $class = get_class($object);
-                    if(strpos($class, 'Admin') === false || strpos($class, 'Helpdesk') !== false) {
-                        return self::ACCESS_GRANTED;
-                    }
-                }
-            } else if($user->hasRole('ROLE_KEDO')) {
-                foreach ($attributes as $attribute) {
-                    $class = get_class($object);
-                    if(strpos($class, 'Admin') === false || strpos($class, 'Kedo') !== false) {
-                        return self::ACCESS_GRANTED;
-                    }
-                }
+            if($user->hasRole('ROLE_USER')) {
+                return self::ACCESS_GRANTED;
             }
         }
         //return self::ACCESS_ABSTAIN;

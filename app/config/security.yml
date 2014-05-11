@@ -16,8 +16,6 @@ security:
 
     role_hierarchy:
         ROLE_USER:      ROLE_USER
-        ROLE_HELPDESK:  [ROLE_USER, ROLE_HELPDESK]
-        ROLE_KEDO:      [ROLE_USER, ROLE_KEDO]
 
     providers:
       fr3d_ldapbundle:

@@ -38,5 +38,31 @@ class OperationShifts
      */
     private $category;
 
+    public function getOperationShiftId() {
+        return $this->operationShiftId;
+    }
 
+    public function setOperationShiftId($operationShiftId) {
+        $this->operationShiftId = $operationShiftId;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function getCategory() {
+        return $this->category;
+    }
+
+    public function setCategory(\UnitCategory $category) {
+        $this->category = $category;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
 }

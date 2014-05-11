@@ -49,5 +49,47 @@ class UnitTypes
      */
     private $educationLevelId;
 
+    public function getUnitTypeId() {
+        return $this->unitTypeId;
+    }
 
+    public function setUnitTypeId($unitTypeId) {
+        $this->unitTypeId = $unitTypeId;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function getInitials() {
+        return $this->initials;
+    }
+
+    public function setInitials($initials) {
+        $this->initials = $initials;
+    }
+
+    public function getCategoryId() {
+        return $this->categoryId;
+    }
+
+    public function setCategoryId($categoryId) {
+        $this->categoryId = $categoryId;
+    }
+
+    public function getEducationLevelId() {
+        return $this->educationLevelId;
+    }
+
+    public function setEducationLevelId($educationLevelId) {
+        $this->educationLevelId = $educationLevelId;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
 }

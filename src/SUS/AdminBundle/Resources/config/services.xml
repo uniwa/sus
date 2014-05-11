@@ -2,6 +2,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="sonata.admin.dnna.model_manager" class="SUS\AdminBundle\Model\DnnaModelManager">
+            <argument type="service" id="doctrine" />
+        </service>
+        <service id="sonata.admin.dnna.datagridbuilder" class="SUS\AdminBundle\Builder\DnnaDatagridBuilder">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="sonata.admin.builder.filter.factory" />
+            <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain" />
+        </service>
         <service id="security.acl.voter.admin_permissions" class="SUS\AdminBundle\Voter\AdminAclVoter" public="false">
             <tag name="monolog.logger" channel="security" />
             <argument type="service" id="security.acl.provider" />
@@ -11,14 +19,6 @@
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="security.voter" priority="255" />
         </service>
-        <service id="sonata.admin.dnna.model_manager" class="SUS\AdminBundle\Model\DnnaModelManager">
-            <argument type="service" id="doctrine" />
-        </service>
-        <service id="sonata.admin.dnna.datagridbuilder" class="SUS\AdminBundle\Builder\DnnaDatagridBuilder">
-            <argument type="service" id="form.factory" />
-            <argument type="service" id="sonata.admin.builder.filter.factory" />
-            <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain" />
-        </service>
         <service id="sonata.admin.unit" class="SUS\AdminBundle\Admin\UnitAdmin">
            <tag name="sonata.admin"
                 manager_type="orm"
@@ -27,7 +27,7 @@
                 />
            <argument />
            <argument>SUS\SiteBundle\Entity\Unit</argument>
-           <argument>SUSAdminBundle:Unit</argument>
+           <argument>SonataAdminBundle:CRUD</argument>
        </service>
    </services>
 </container>

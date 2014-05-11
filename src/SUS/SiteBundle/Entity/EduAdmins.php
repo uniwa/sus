@@ -35,16 +35,31 @@ class EduAdmins
      */
     private $regionEduAdminId;
 
-    /**
-     * @var \UnitFy
-     *
-     * @ORM\ManyToOne(targetEntity="UnitFy")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="implementation_entity_id", referencedColumnName="implementation_entity_id", nullable=true)
-     * })
-     */
-    private $implementationEntityId;
+    public function getEduAdminId() {
+        return $this->eduAdminId;
+    }
 
+    public function setEduAdminId($eduAdminId) {
+        $this->eduAdminId = $eduAdminId;
+    }
 
+    public function getName() {
+        return $this->name;
+    }
 
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function getRegionEduAdminId() {
+        return $this->regionEduAdminId;
+    }
+
+    public function setRegionEduAdminId($regionEduAdminId) {
+        $this->regionEduAdminId = $regionEduAdminId;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
 }
