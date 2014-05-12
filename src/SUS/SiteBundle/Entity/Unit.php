@@ -398,6 +398,14 @@ class Unit extends MMSyncableEntity
         $this->municipality = $municipality;
     }
 
+    public function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+    }
+
     public function isActive() {
         return !isset($this->deletedAt);
     }
