@@ -19,6 +19,8 @@ class UnitAdmin extends Admin
     {
         $collection
             ->remove('acl')
+            ->remove('delete') // Deletes are disabled because we don't know how to handle it in MM
+            ->remove('remove')
         ;
     }
 

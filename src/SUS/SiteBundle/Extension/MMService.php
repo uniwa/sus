@@ -60,11 +60,12 @@ class MMService {
             $params['mm_id'] = '1000003';
         }
         $mmUnitEntries = $this->queryUnits($params);
-        foreach($mmUnitEntries as $curMmUnitEntry) {
+        /*foreach($mmUnitEntries as $curMmUnitEntry) {
             $results[] = $this->hydrateUnit($curMmUnitEntry);
         }
         $this->container->get('doctrine')->getManager()->flush($results);
-        return $results;
+        return $results;*/
+        return $mmUnitEntries;
     }
 
     public function findOneUnitBy(array $filters = array()) {
@@ -161,7 +162,8 @@ class MMService {
             $method = 'PUT';
             $extraParams = array('unit_id' => $unit->getMmSyncId());
         } else {
-            if(($curUnit = $this->findOneUnitBy(array('name' => $unit->getName()))) != null) { // Check if already exists
+            $curUnit = $this->findUnitsBy(array('name' => $unit->getName()));
+            if(isset($curUnit[0])) { // Check if already exists
                 $unit->setMmSyncId($curUnit->mm_id);
                 $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
                 return;
@@ -170,20 +172,40 @@ class MMService {
             $extraParams = array();
         }
         $params = array_merge($extraParams, array(
-               "mm_id" => $unit->getUnit()->getMmId(),
-               "name" => $unit->__toString(),
-               "circuit_type_id" => $unit->getConnectivityType()->getMmSyncId(),
-               "phone_number" => $unit->getNumber(),
-               "status" => $unit->isActive(),
-               "activated_date" => $unit->getActivatedAt() instanceof \DateTime ? $unit->getActivatedAt()->format('Y-m-d H:i') : null,
-               "updated_date" => $unit->getUpdatedAt() instanceof \DateTime ? $unit->getUpdatedAt()->format('Y-m-d H:i') : null,
-               "deactivated_date" => $unit->getDeletedAt() instanceof \DateTime ? $unit->getDeletedAt()->format('Y-m-d H:i') : null,
-               "bandwidth" => $unit->getBandwidthProfile()->getBandwidth(),
-               "readspeed" => $unit->getRealspeed(),
-               "paid_by_psd" => $unit->getPaidByPsd(),
+                "mm_id" => $unit->getMmSyncId(),
+                "name" => $unit->__toString(),
+                "source" => 'SUS',
+                "category" => $unit->getCategory()->getCategoryId(),
+                "state" => $unit->getState()->getStateId(),
+                //"education_level" => $unit->getEducationLevel()->getEducationalLevelId(),
+                "special_name" => $unit->getSpecialName(),
+                "region_edu_admin" => $unit->getRegionEduAdmin()->getRegionEduAdminId(),
+                "edu_admin" => $unit->getEduAdmin()->getEduAdminId(),
+                //"implementation_entity" => $unit->getEduAdmin()->getImplementationEntity()->getImplementationEntityId(),
+                //"transfer_area" => $unit->getTransferArea()->getId(),
+                "municipality" => $unit->getMunicipality() != null ? $unit->getMunicipality()->getMunicipalityId() : null,
+                "prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getPrefectureId() : null,
+                "unit_type" => $unit->getUnitType() != null ? $unit->getUnitType()->getUnitTypeId() : null,
+                //"operation_shift" => $unit->getOperationShift()->getOperationShiftId(),
+                //"legal_character" => $unit->getLegalCharacter()->getLegalCharacterId(),
+                //"orientation_type" => $unit->getOrientationType()->getOrientationTypeId(),
+                //"special_type" => $unit->getSpecialType()->getSpecialTypeId(),
+                "postal_code" => $unit->getPostalCode(),
+                //"area_team_number" => $unit->getAreaTeamNumber(),
+                "email" => $unit->getEmail(),
+                "fax_number" => $unit->getFaxNumber(),
+                "street_address" => $unit->getStreetAddress(),
+                "phone_number" => $unit->getPhoneNumber(),
+                "tax_number" => $unit->getTaxNumber(),
+                "tax_office" => $unit->getTaxOffice() != null ? $unit->getTaxOffice()->getTaxOfficeId() : null,
+                "comments" => $unit->getComments(),
+                //"latitude" => '',
+                //"longitude" => '',
+                "positioning" => $unit->getPositioning(),
+                //"fek" => '',
         ));
 
-        $curl = curl_init("http://mmsch.teiath.gr/ver4/api/units");
+        $curl = curl_init("http://mmsch.teiath.gr/ver3git/api/units");
 
         $username = 'mmschadmin';
         $password = 'mmschadmin';
