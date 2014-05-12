@@ -1,11 +1,11 @@
-set :application, "lms"
+set :application, "sus"
 set :user,        "root"
 set :domain,      "mmsch.teiath.gr"
-set :deploy_to,   "/var/www/lms"
+set :deploy_to,   "/var/www/sus"
 set :app_path,    "app"
 ssh_options[:port] = "599"
 
-set :repository,  "git@github.com:teiath/lms.git"
+set :repository,  "git@github.com:teiath/sus.git"
 set :scm,         :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, or `none`
 
