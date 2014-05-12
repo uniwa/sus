@@ -122,7 +122,7 @@ class Unit extends MMSyncableEntity
     private $foundationDate;
 
     /**
-     * @var \TaxOffices
+     * @var TaxOffices
      *
      * @ORM\ManyToOne(targetEntity="TaxOffices")
      * @ORM\JoinColumns({
@@ -132,7 +132,7 @@ class Unit extends MMSyncableEntity
     private $taxOffice;
 
     /**
-     * @var \EduAdmins
+     * @var EduAdmins
      *
      * @ORM\ManyToOne(targetEntity="EduAdmins")
      * @ORM\JoinColumns({
@@ -142,7 +142,7 @@ class Unit extends MMSyncableEntity
     private $eduAdmin;
 
     /**
-     * @var \RegionEduAdmins
+     * @var RegionEduAdmins
      *
      * @ORM\ManyToOne(targetEntity="RegionEduAdmins")
      * @ORM\JoinColumns({
@@ -152,7 +152,7 @@ class Unit extends MMSyncableEntity
     private $regionEduAdmin;
 
     /**
-     * @var \UnitTypes
+     * @var UnitTypes
      *
      * @ORM\ManyToOne(targetEntity="UnitTypes")
      * @ORM\JoinColumns({
@@ -162,7 +162,7 @@ class Unit extends MMSyncableEntity
     private $unitType;
 
     /**
-     * @var \Prefectures
+     * @var Prefectures
      *
      * @ORM\ManyToOne(targetEntity="Prefectures")
      * @ORM\JoinColumns({
@@ -172,7 +172,7 @@ class Unit extends MMSyncableEntity
     private $prefecture;
 
     /**
-     * @var \States
+     * @var States
      *
      * @ORM\ManyToOne(targetEntity="States")
      * @ORM\JoinColumns({
@@ -182,7 +182,7 @@ class Unit extends MMSyncableEntity
     private $state;
 
     /**
-     * @var \UnitCategory
+     * @var UnitCategory
      *
      * @ORM\ManyToOne(targetEntity="UnitCategory")
      * @ORM\JoinColumns({
@@ -192,7 +192,7 @@ class Unit extends MMSyncableEntity
     private $category;
 
     /**
-     * @var \Municipalities
+     * @var Municipalities
      *
      * @ORM\ManyToOne(targetEntity="Municipalities")
      * @ORM\JoinColumns({
@@ -338,7 +338,7 @@ class Unit extends MMSyncableEntity
         return $this->taxOffice;
     }
 
-    public function setTaxOffice(\TaxOffices $taxOffice) {
+    public function setTaxOffice(TaxOffices $taxOffice) {
         $this->taxOffice = $taxOffice;
     }
 
@@ -346,7 +346,7 @@ class Unit extends MMSyncableEntity
         return $this->eduAdmin;
     }
 
-    public function setEduAdmin(\EduAdmins $eduAdmin) {
+    public function setEduAdmin(EduAdmins $eduAdmin) {
         $this->eduAdmin = $eduAdmin;
     }
 
@@ -354,7 +354,7 @@ class Unit extends MMSyncableEntity
         return $this->regionEduAdmin;
     }
 
-    public function setRegionEduAdmin(\RegionEduAdmins $regionEduAdmin) {
+    public function setRegionEduAdmin(RegionEduAdmins $regionEduAdmin) {
         $this->regionEduAdmin = $regionEduAdmin;
     }
 
@@ -362,7 +362,7 @@ class Unit extends MMSyncableEntity
         return $this->unitType;
     }
 
-    public function setUnitType(\UnitTypes $unitType) {
+    public function setUnitType(UnitTypes $unitType) {
         $this->unitType = $unitType;
     }
 
@@ -370,7 +370,7 @@ class Unit extends MMSyncableEntity
         return $this->prefecture;
     }
 
-    public function setPrefecture(\Prefectures $prefecture) {
+    public function setPrefecture(Prefectures $prefecture) {
         $this->prefecture = $prefecture;
     }
 
@@ -378,7 +378,7 @@ class Unit extends MMSyncableEntity
         return $this->state;
     }
 
-    public function setState(\States $state) {
+    public function setState(States $state) {
         $this->state = $state;
     }
 
@@ -386,7 +386,7 @@ class Unit extends MMSyncableEntity
         return $this->category;
     }
 
-    public function setCategory(\UnitCategory $category) {
+    public function setCategory(UnitCategory $category) {
         $this->category = $category;
     }
 
@@ -394,7 +394,7 @@ class Unit extends MMSyncableEntity
         return $this->municipality;
     }
 
-    public function setMunicipality(\Municipalities $municipality) {
+    public function setMunicipality(Municipalities $municipality) {
         $this->municipality = $municipality;
     }
 
