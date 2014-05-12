@@ -176,6 +176,7 @@ class MMService {
                 "name" => $unit->__toString(),
                 "source" => 'SUS',
                 "category" => $unit->getCategory()->getCategoryId(),
+                "suspended" => $unit->getDeletedAt() instanceof \DateTime ? true : false,
                 "state" => $unit->getState()->getStateId(),
                 //"education_level" => $unit->getEducationLevel()->getEducationalLevelId(),
                 "special_name" => $unit->getSpecialName(),
