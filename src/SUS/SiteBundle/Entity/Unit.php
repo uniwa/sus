@@ -152,6 +152,16 @@ class Unit extends MMSyncableEntity
     private $regionEduAdmin;
 
     /**
+     * @var ImplementationEntities
+     *
+     * @ORM\ManyToOne(targetEntity="ImplementationEntities")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="implementation_entity_id", referencedColumnName="implementation_entity_id")
+     * })
+     */
+    private $implementationEntity;
+
+    /**
      * @var UnitTypes
      *
      * @ORM\ManyToOne(targetEntity="UnitTypes")
