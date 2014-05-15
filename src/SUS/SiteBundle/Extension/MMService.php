@@ -221,8 +221,8 @@ class MMService {
         if($data->status == 200) {
             if($method == 'POST') {
                 $unit->setMmSyncId($data->mm_id);
-                $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
             }
+            $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
         } else {
             throw new MMException('Error adding unit: '.$origData);
         }
