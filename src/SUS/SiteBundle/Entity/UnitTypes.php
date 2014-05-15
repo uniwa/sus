@@ -29,13 +29,6 @@ class UnitTypes
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="initials", type="string", length=255, nullable=false)
-     */
-    private $initials;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
@@ -63,14 +56,6 @@ class UnitTypes
 
     public function setName($name) {
         $this->name = $name;
-    }
-
-    public function getInitials() {
-        return $this->initials;
-    }
-
-    public function setInitials($initials) {
-        $this->initials = $initials;
     }
 
     public function getCategoryId() {
