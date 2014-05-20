@@ -212,6 +212,13 @@ class Unit extends MMSyncableEntity
     private $municipality;
 
     /**
+     * @var Workers
+     *
+     * @ORM\OneToOne(targetEntity="Workers", mappedBy="unit")
+     */
+    private $manager;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $deletedAt;
@@ -368,6 +375,14 @@ class Unit extends MMSyncableEntity
         $this->regionEduAdmin = $regionEduAdmin;
     }
 
+    public function getImplementationEntity() {
+        return $this->implementationEntity;
+    }
+
+    public function setImplementationEntity(ImplementationEntities $implementationEntity) {
+        $this->implementationEntity = $implementationEntity;
+    }
+
     public function getUnitType() {
         return $this->unitType;
     }
@@ -406,6 +421,14 @@ class Unit extends MMSyncableEntity
 
     public function setMunicipality(Municipalities $municipality) {
         $this->municipality = $municipality;
+    }
+
+    public function getManager() {
+        return $this->manager;
+    }
+
+    public function setManager(Workers $manager) {
+        $this->manager = $manager;
     }
 
     public function getDeletedAt() {
