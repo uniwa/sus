@@ -77,5 +77,79 @@ class ImplementationEntities
      */
     private $url;
 
+    public function getImplementationEntityId() {
+        return $this->implementationEntityId;
+    }
 
+    public function setImplementationEntityId($implementationEntityId) {
+        $this->implementationEntityId = $implementationEntityId;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function getInitials() {
+        return $this->initials;
+    }
+
+    public function setInitials($initials) {
+        $this->initials = $initials;
+    }
+
+    public function getStreetAddress() {
+        return $this->streetAddress;
+    }
+
+    public function setStreetAddress($streetAddress) {
+        $this->streetAddress = $streetAddress;
+    }
+
+    public function getPostalCode() {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode($postalCode) {
+        $this->postalCode = $postalCode;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function getPhoneNumber() {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber($phoneNumber) {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getDomain() {
+        return $this->domain;
+    }
+
+    public function setDomain($domain) {
+        $this->domain = $domain;
+    }
+
+    public function getUrl() {
+        return $this->url;
+    }
+
+    public function setUrl($url) {
+        $this->url = $url;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
 }
