@@ -419,7 +419,7 @@ class Unit extends MMSyncableEntity
         return $this->municipality;
     }
 
-    public function setMunicipality(Municipalities $municipality) {
+    public function setMunicipality(Municipalities $municipality = null) {
         $this->municipality = $municipality;
     }
 

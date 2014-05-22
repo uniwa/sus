@@ -26,7 +26,8 @@ class ImportCSVCommand extends ContainerAwareCommand
     {
         $output->writeln('Starting ImportCSV process');
         $this->container = $this->getContainer();
-        $em = $this->container->get('doctrine')->getManager();
+        $this->em = $this->container->get('doctrine')->getManager();
+        $this->pdo = new \PDO('mysql:host=localhost;dbname=mmsch;charset=utf8', 'root', '');
         $mmservice = $this->container->get('sus.mm.service');
         $this->cvsParsingOptions = array(
             'ignoreFirstLine' => true
@@ -36,7 +37,7 @@ class ImportCSVCommand extends ContainerAwareCommand
         $headers = $this->parseHeadersToArray($headersRow);
         foreach ($xls->getRowIterator(2) as $row) {
             $fields = $this->parseRowToArray($row, $headers);
-            $unit = $em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
+            $unit = $this->em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
                 'name' => ($fields['NAME']),
             ));
             if(isset($unit)) {
@@ -45,35 +46,54 @@ class ImportCSVCommand extends ContainerAwareCommand
             }
             $unit = new Unit();
             $unit->setName($fields['NAME']);
-            $unit->setCategory($em->getRepository('SUS\SiteBundle\Entity\UnitCategory')->findOneBy(array('name' => 'ΔΙΚΤΥΑΚΕΣ ΟΝΤΟΤΗΤΕΣ ΠΣΔ')));
-            $unit->setUnitType($em->getRepository('SUS\SiteBundle\Entity\UnitTypes')->findOneBy(array('name' => 'ΚΟΜΒΟΣ ΠΣΔ')));
+            $unit->setCategory($this->em->getRepository('SUS\SiteBundle\Entity\UnitCategory')->findOneBy(array('name' => 'ΔΙΚΤΥΑΚΕΣ ΟΝΤΟΤΗΤΕΣ ΠΣΔ')));
+            $unit->setUnitType($this->em->getRepository('SUS\SiteBundle\Entity\UnitTypes')->findOneBy(array('name' => 'ΚΟΜΒΟΣ ΠΣΔ')));
             $unit->setStreetAddress($fields['street_address'].' '.$fields['street_address_num']);
             $unit->setPostalCode($fields['TK']);
-            var_dump($unit);
-            die();
-            $unit->setMunicipality($fields['MUNICIPALITY_ID']);
-            $unit->setPrefecture($fields['PERFECTURE_ID']);
-            $unit->setImplementationEntity($fields['IMPLEMENTATION_ENTITY_ID']);
+            $unit->setMunicipality($this->findEntityFromMMDictionary('municipalities', 'municipality_id', $fields['MUNICIPALITY_ID'], 'SUS\SiteBundle\Entity\Municipalities', 'name', 'name'));
+            $unit->setPrefecture($this->findEntityFromMMDictionary('prefectures', 'prefecture_id', $fields['PERFECTURE_ID'], 'SUS\SiteBundle\Entity\Prefectures', 'name', 'name'));
+            $unit->setImplementationEntity($this->findEntityFromMMDictionary('implementation_entities', 'implementation_entity_id', $fields['IMPLEMENTATION_ENTITY_ID'], 'SUS\SiteBundle\Entity\ImplementationEntities', 'name', 'name'));
             $unit->setPhoneNumber($fields['TELEPHONE']);
+            $unit->setState($this->em->getRepository('SUS\SiteBundle\Entity\States')->find(1));
 
-            $unit->setCreatedBy('lmsadmin');
-            $unit->setUpdatedBy('lmsadmin');
-            $em->persist($unit);
-            $em->flush($unit);
+            $this->em->persist($unit);
+            $this->em->flush($unit);
+            $output->writeln('Unit added: '.$unit->getUnitId());
 
             if($fields['RESPONSIBLE'] != '') {
-                $worker = new Workers();
-                $worker->setUnit($unit);
+                $worker = $this->em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
+                    'lLastname' => $names[0],
+                    'firstname' => $names[1],
+                ));
+                if(!isset($worker)) {
+                    $worker = new Workers();
+                    $worker->setUnit($unit);
+                    $output->writeln('Worker found: '.$fields['RESPONSIBLE']);
+                } else {
+                    $output->writeln('Worker added: '.$fields['RESPONSIBLE']);
+                }
                 $names = explode(' ', $fields['RESPONSIBLE']);
                 $worker->setLastname($names[0]);
                 if(isset($names[1])) { $worker->setFirstname($names[1]); }
                 $unit->setManager($worker);
-                $em->persist($worker);
-                $em->flush(array($unit, $worker));
+                $this->em->persist($worker);
+                $this->em->flush(array($unit, $worker));
             }
         }
 
         $output->writeln('Units imported successfully');
+    }
+
+    private function findEntityFromMMDictionary($table, $idField, $value, $repo, $fieldToSearchDb, $fieldToSearchRepo) {
+        if($value == '') { return null; }
+        $query = 'SELECT * from '.$table.' WHERE '.$idField.' = '.$value;
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        if(!$row) { throw new \Exception($query."\n".var_export($stmt->errorinfo(), true)); }
+        $entity = $this->em->getRepository($repo)->findOneBy(array($fieldToSearchRepo => $row[$fieldToSearchDb]));
+        if(!isset($entity)) { throw new \Exception('Entity not found: '.$table.'.'.$value); }
+        return $entity;
     }
 
     private function parseHeadersToArray($headersRow) {

@@ -130,7 +130,7 @@ class MMService {
     protected function queryMM($resource, $params = array()) {
         $username = "mmsch";
         $password = "mmsch";
-        $server = 'http://mmsch.teiath.gr/ver4/api/'.$resource;
+        $server = 'http://localhost/api/'.$resource;
 
         $curl = curl_init ($server);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -206,7 +206,7 @@ class MMService {
                 //"fek" => '',
         ));
 
-        $curl = curl_init("http://mmsch.teiath.gr/ver3git/api/units");
+        $curl = curl_init("http://localhost/api/units");
 
         $username = 'mmschadmin';
         $password = 'mmschadmin';
