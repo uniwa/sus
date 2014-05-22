@@ -61,9 +61,10 @@ class ImportCSVCommand extends ContainerAwareCommand
             $output->writeln('Unit added: '.$unit->getUnitId());
 
             if($fields['RESPONSIBLE'] != '') {
-                $worker = $this->em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
-                    'lLastname' => $names[0],
-                    'firstname' => $names[1],
+                $names = explode(' ', $fields['RESPONSIBLE']);
+                $worker = $this->em->getRepository('SUS\SiteBundle\Entity\Workers')->findOneBy(array(
+                    'lastname' => $names[0],
+                    'firstname' => (isset($names[1]) ? $names[1] : null),
                 ));
                 if(!isset($worker)) {
                     $worker = new Workers();
@@ -72,7 +73,6 @@ class ImportCSVCommand extends ContainerAwareCommand
                 } else {
                     $output->writeln('Worker added: '.$fields['RESPONSIBLE']);
                 }
-                $names = explode(' ', $fields['RESPONSIBLE']);
                 $worker->setLastname($names[0]);
                 if(isset($names[1])) { $worker->setFirstname($names[1]); }
                 $unit->setManager($worker);
