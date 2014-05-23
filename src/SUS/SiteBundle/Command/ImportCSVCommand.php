@@ -16,7 +16,7 @@ class ImportCSVCommand extends ContainerAwareCommand
     {
 
         $this
-            ->setName('lms:importcsv')
+            ->setName('sus:importcsv')
             ->setDescription('Import a CSV with line data')
             ->addOption('file', null, InputOption::VALUE_REQUIRED, 'xls file to import from')
             ;

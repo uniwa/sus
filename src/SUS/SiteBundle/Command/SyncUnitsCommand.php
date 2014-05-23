@@ -12,7 +12,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
     {
 
         $this
-            ->setName('lms:syncunits')
+            ->setName('sus:syncunits')
             ->setDescription('Sync units with MM')
             ;
     }
