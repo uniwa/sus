@@ -164,7 +164,7 @@ class MMService {
         } else {
             $curUnit = $this->findUnitsBy(array('name' => $unit->getName()));
             if(isset($curUnit[0])) { // Check if already exists
-                $unit->setMmSyncId($curUnit->mm_id);
+                $unit->setMmSyncId($curUnit[0]->mm_id);
                 $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
                 return;
             }
