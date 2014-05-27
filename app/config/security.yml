@@ -26,8 +26,8 @@ security:
             pattern: ^/
             trusted_sso:
               manager: admin_sso
-              login_action: BeSimpleSsoAuthBundle:TrustedSso:login
-              logout_action: BeSimpleSsoAuthBundle:TrustedSso:logout
+              login_action: SUSAdminBundle:Auth:login
+              logout_action: SUSAdminBundle:Auth:logout
               create_users: true
               created_users_roles: [ROLE_USER]
               failure_path: /debug
