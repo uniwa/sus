@@ -444,6 +444,6 @@ class Unit extends MMSyncableEntity
     }
 
     public function __toString() {
-        return $this->getName();
+        return $this->getMmSyncId().' | '.$this->getName();
     }
 }

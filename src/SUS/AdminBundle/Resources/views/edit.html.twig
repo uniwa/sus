@@ -1,5 +1,13 @@
 {% extends 'SonataAdminBundle:CRUD:edit.html.twig' %}
 
+{% block title %}
+    {% if admin.id(object) is not null %}
+        {{ "title_edit"|trans({'%name%': admin.toString(object)}, 'SonataAdminBundle') }}
+    {% else %}
+        {{ "title_create"|trans({}, 'SonataAdminBundle') }}
+    {% endif %}
+{% endblock%}
+
 {% block footer %}
     {{ parent() }}
     {#{{ tinymce_init() }}#}
