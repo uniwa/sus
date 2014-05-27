@@ -58,7 +58,7 @@ class UnitAdmin extends Admin
                 ->add('state', null, array('label' => 'Κατάσταση'))
                 ->add('category', null, array('label' => 'Κατηγορία'))
                 ->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
-                ->add('manager', null, array('label' => 'Υπεύθυνος'))
+                ->add('manager', null, array('label' => 'Υπεύθυνος', 'required' => false))
                 ->add('comments', null, array('label' => 'Σχόλια'))
             ->end()
 
@@ -102,7 +102,7 @@ class UnitAdmin extends Admin
             ->add('unitId', 'string')
             ->add('name', 'string', array('label' => 'Ονομασία'))
             ->add('state.name', 'string', array('label' => 'Κατάσταση'))
-            ->add('manager.surname', 'string', array('label' => 'Υπεύθυνος'))
+            ->add('manager.lastname', 'string', array('label' => 'Υπεύθυνος'))
         ;
     }
 

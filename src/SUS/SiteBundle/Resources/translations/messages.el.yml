@@ -8,6 +8,8 @@ ROLE_USER: Μονάδα
 
 # Unit
 Unit: Μονάδα
+Unit Id: Κωδικός SUS Μονάδας
+Unit List: Λίστα Μονάδων
 Mm Id: Κωδικός ΜΜ Μονάδας
 Unit Mm Id: Κωδικός ΜΜ Μονάδας # Για φίλτρα
 Unit Name: Όνομα Μονάδας
@@ -17,3 +19,6 @@ Unit Category Name: Κατηγορία Μονάδας
 Unit Fy: Φορέας Υλοποίησης
 Unit Fy Name: Φορέας Υλοποίησης
 Unit Registry No: Κωδικός ΥΠΕΠΘ
+
+Action: Ενέργεια
+Actions: Ενέργειες
