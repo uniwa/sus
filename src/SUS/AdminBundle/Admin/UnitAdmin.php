@@ -100,6 +100,7 @@ class UnitAdmin extends Admin
                     'edit' => array(),
             )))
             ->add('unitId', 'string')
+            ->add('mmSyncId', 'string')
             ->add('name', 'string', array('label' => 'Ονομασία'))
             ->add('state.name', 'string', array('label' => 'Κατάσταση'))
             ->add('manager.lastname', 'string', array('label' => 'Υπεύθυνος'))
