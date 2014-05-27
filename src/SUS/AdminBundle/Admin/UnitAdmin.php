@@ -115,6 +115,9 @@ class UnitAdmin extends Admin
     {
         $datagridMapper
             ->add('unitId', null, array())
+            ->add('name', null, array())
+            ->add('category', null, array())
+            ->add('unitType', null, array())
         ;
     }
 
