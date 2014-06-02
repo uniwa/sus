@@ -119,6 +119,7 @@ class UnitAdmin extends Admin
             ->add('name', null, array())
             ->add('category', null, array())
             ->add('unitType', null, array())
+            ->add('manager', null, array('label' => 'Υπεύθυνος'))
         ;
     }
 
