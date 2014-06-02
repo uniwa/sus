@@ -103,7 +103,7 @@ class UnitAdmin extends Admin
             ->add('mmSyncId', 'string')
             ->add('name', 'string', array('label' => 'Ονομασία'))
             ->add('state.name', 'string', array('label' => 'Κατάσταση'))
-            ->add('manager.lastname', 'string', array('label' => 'Υπεύθυνος'))
+            ->add('manager', 'string', array('label' => 'Υπεύθυνος'))
         ;
     }
 
