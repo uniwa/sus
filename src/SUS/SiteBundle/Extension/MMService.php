@@ -166,6 +166,8 @@ class MMService {
             if(isset($curUnit[0])) { // Check if already exists
                 $unit->setMmSyncId($curUnit[0]->mm_id);
                 $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
+                $this->container->get('doctrine')->getManager()->persist($unit);
+                $this->container->get('doctrine')->getManager()->flush($unit);
                 return;
             }
             $method = 'POST';
