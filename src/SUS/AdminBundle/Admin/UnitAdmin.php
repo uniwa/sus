@@ -59,6 +59,7 @@ class UnitAdmin extends Admin
                 ->add('category', null, array('label' => 'Κατηγορία'))
                 ->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
                 ->add('manager', null, array('label' => 'Υπεύθυνος', 'required' => false))
+                ->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι', 'required' => false))
                 ->add('comments', null, array('label' => 'Σχόλια'))
             ->end()
 

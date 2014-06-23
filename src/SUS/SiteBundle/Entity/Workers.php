@@ -2,6 +2,8 @@
 
 namespace SUS\SiteBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +32,13 @@ class Workers
      * })
      */
     private $unit;
+
+    /**
+     * @var Unit
+     *
+     * @ORM\ManyToMany(targetEntity="Unit", mappedBy="responsibles")
+     */
+    private $responsibleUnits;
 
     /**
      * @var string
@@ -73,6 +82,10 @@ class Workers
      */
     private $sex;
 
+    public function __construct() {
+        $this->responsibleUnits = new ArrayCollection();
+    }
+
     public function getWorkerId() {
         return $this->workerId;
     }
@@ -87,6 +100,14 @@ class Workers
 
     public function setUnit(Unit $unit) {
         $this->unit = $unit;
+    }
+
+    public function getResponsibleUnits() {
+        return $this->responsibleUnits;
+    }
+
+    public function setResponsibleUnits(Unit $responsibleUnits) {
+        $this->responsibleUnits = $responsibleUnits;
     }
 
     public function getRegistryNo() {

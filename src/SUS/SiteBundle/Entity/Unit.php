@@ -2,6 +2,8 @@
 
 namespace SUS\SiteBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -219,9 +221,24 @@ class Unit extends MMSyncableEntity
     private $manager;
 
     /**
+     * @var Workers
+     *
+     * @ORM\ManyToMany(targetEntity="Workers", inversedBy="responsibleUnits", cascade={"persist"})
+     * @ORM\JoinTable(name="workers_responsibles",
+     *      joinColumns={@ORM\JoinColumn(name="unit_id", referencedColumnName="unit_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="worker_id", referencedColumnName="worker_id", onDelete="CASCADE")}
+     *      )
+     */
+    private $responsibles;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $deletedAt;
+
+    public function __construct() {
+        $this->responsibles = new ArrayCollection();
+    }
 
     public function getUnitId() {
         return $this->unitId;
@@ -429,6 +446,14 @@ class Unit extends MMSyncableEntity
 
     public function setManager(Workers $manager) {
         $this->manager = $manager;
+    }
+
+    public function getResponsibles() {
+        return $this->responsibles;
+    }
+
+    public function setResponsibles(Workers $responsibles) {
+        $this->responsibles = $responsibles;
     }
 
     public function getDeletedAt() {
