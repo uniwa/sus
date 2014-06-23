@@ -10,13 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use SUS\SiteBundle\Entity\Unit;
 use SUS\SiteBundle\Entity\Workers;
 
-class ImportWorkersCommand extends ContainerAwareCommand
+class ImportImplementationEntitiesCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
 
         $this
-            ->setName('sus:importworkers')
+            ->setName('sus:importimplementationentities')
             ->setDescription('Import a CSV with line data')
             ->addOption('file', null, InputOption::VALUE_REQUIRED, 'xls file to import from')
             ;
@@ -45,31 +45,15 @@ class ImportWorkersCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $names = explode(' ', $fields['name']);
-            $worker = $this->em->getRepository('SUS\SiteBundle\Entity\Workers')->findOneBy(array(
-                'lastname' => $names[0],
-                'firstname' => (isset($names[1]) ? $names[1] : null),
+            $implementationEntity = $this->em->getRepository('SUS\SiteBundle\Entity\ImplementationEntities')->findOneBy(array(
+                'implementationEntityId' => ($fields['FY']),
             ));
-            if(!isset($worker)) {
-                $worker = new Workers();
-                $output->writeln('Worker added: '.$fields['name']);
-            } else {
-                $output->writeln('Worker found: '.$fields['name']);
-            }
-            $worker->setLastname($names[0]);
-            if(isset($names[1])) { $worker->setFirstname($names[1]); }
-            if($fields['type'] === 'ΥΠΕΥΘΥΝΟΣ ΕΚΠΛΗΝΕΤ') {
-                $worker->setUnit($unit);
-                $unit->setManager($worker);
-            } else {
-                $unit->getResponsibles()->add($worker);
-                $worker->getResponsibleUnits()->add($unit);
-            }
-            $this->em->persist($worker);
-            $this->em->flush(array($unit, $worker));
+            $unit->setImplementationEntity($implementationEntity);
+            $this->em->persist($unit);
+            $this->em->flush(array($unit));
         }
 
-        $output->writeln('Workers imported successfully');
+        $output->writeln('Implementation entities imported successfully');
     }
 
     private function findEntityFromMMDictionary($table, $idField, $value, $repo, $fieldToSearchDb, $fieldToSearchRepo) {
