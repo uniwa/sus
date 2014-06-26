@@ -25,6 +25,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
         $mmservice = $this->container->get('sus.mm.service');
         $batchSize = 20;
         $i = 0;
+        // Units
         $q = $em->createQuery('select pc from SUS\SiteBundle\Entity\Unit pc WHERE pc.mmSyncLastUpdateDate IS NULL');
         $iterableResult = $q->iterate();
         foreach($iterableResult AS $row) {
@@ -38,7 +39,22 @@ class SyncUnitsCommand extends ContainerAwareCommand
             }
             ++$i;
         }
-
         $output->writeln('Units synced successfully');
+        // Workers
+        // Units
+        $q = $em->createQuery('select pc from SUS\SiteBundle\Entity\Workers pc WHERE pc.mmSyncLastUpdateDate IS NULL');
+        $iterableResult = $q->iterate();
+        foreach($iterableResult AS $row) {
+            $row = $row[0];
+            $output->write('Syncing worker '.$row->getWorkerId().' '.$row->getFirstname().' '.$row->getLastname().'...');
+            $mmservice->persistMM($row);
+            $output->writeln(' got '.$row->getMmSyncId());
+            if (($i % $batchSize) == 0) {
+                $em->flush();
+                $em->clear();
+            }
+            ++$i;
+        }
+        $output->writeln('Workers synced successfully');
     }
 }

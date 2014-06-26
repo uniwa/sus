@@ -4,6 +4,7 @@ namespace SUS\SiteBundle\Extension;
 
 use SUS\SiteBundle\Exception\MMException;
 use SUS\SiteBundle\Entity\Unit;
+use SUS\SiteBundle\Entity\Workers;
 use SUS\SiteBundle\Extension\MMSyncableListener;
 use SUS\SiteBundle\Entity\MMSyncableEntity;
 
@@ -68,6 +69,19 @@ class MMService {
         return $mmUnitEntries;
     }
 
+    public function findWorkersBy(array $filters = array()) {
+        $params = array();
+        if(isset($filters['registry_no']) && $filters['registry_no'] != '') {
+            $params['registry_no'] = $filters['registry_no'];
+        }
+        if(isset($filters['worker']) && $filters['worker'] != '') {
+            $params['worker'] = $filters['worker'];
+        }
+
+        $mmUnitEntries = $this->queryWorkers($params);
+        return $mmUnitEntries;
+    }
+
     public function findOneUnitBy(array $filters = array()) {
         $units = $this->findUnitsBy($filters+array('limit' => 1));
         if(!isset($units[0])) {
@@ -82,6 +96,8 @@ class MMService {
     public function persistMM(MMSyncableEntity $entity) {
         if($entity instanceof Unit) {
             return $this->persistUnit($entity);
+        } elseif($entity instanceof Workers) {
+            return $this->persistWorker($entity);
         } else {
             throw new MMException('Unsupported entity');
         }
@@ -125,6 +141,36 @@ class MMService {
             "category" => "ΣΧΟΛΙΚΕΣ ΚΑΙ ΔΙΟΙΚΗΤΙΚΕΣ ΜΟΝΑΔΕΣ",
         }*/
         return $this->queryMM('units', $params);
+    }
+
+    protected function queryWorkers($params = array()) {
+        if(!isset($params['limit']) || $params['limit'] == '') {
+            $params['count'] = 10;
+        } else {
+            $params['count'] = $params['limit'];
+        }
+        if(!isset($params['startat']) || $params['startat'] == '') {
+            $params['startat'] = 0;
+        }
+        /*if(!isset($params['category']) || $params['category'] == '') {
+            "category" => "ΣΧΟΛΙΚΕΣ ΚΑΙ ΔΙΟΙΚΗΤΙΚΕΣ ΜΟΝΑΔΕΣ",
+        }*/
+        return $this->queryMM('workers', $params);
+    }
+
+    protected function queryUnitWorkers($params = array()) {
+        if(!isset($params['limit']) || $params['limit'] == '') {
+            $params['count'] = 10;
+        } else {
+            $params['count'] = $params['limit'];
+        }
+        if(!isset($params['startat']) || $params['startat'] == '') {
+            $params['startat'] = 0;
+        }
+        /*if(!isset($params['category']) || $params['category'] == '') {
+            "category" => "ΣΧΟΛΙΚΕΣ ΚΑΙ ΔΙΟΙΚΗΤΙΚΕΣ ΜΟΝΑΔΕΣ",
+        }*/
+        return $this->queryMM('unit_workers', $params);
     }
 
     protected function queryMM($resource, $params = array()) {
@@ -225,6 +271,108 @@ class MMService {
                 $unit->setMmSyncId($data->mm_id);
             }
             $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
+        } else {
+            throw new MMException('Error adding unit: '.$origData);
+        }
+    }
+
+    public function persistWorker(Workers $worker) {
+        if($worker->getMmSyncId() != null) {
+            $method = 'PUT';
+            $extraParams = array('worker_id' => $worker->getMmSyncId());
+        } else {
+            $curWorker = $this->findWorkersBy(array('worker' => $worker->getLastname().' '.$worker->getFirstname()));
+            if(isset($curWorker[0])) { // Check if already exists
+                $worker->setMmSyncId($curWorker[0]->worker_id);
+                $worker->setMmSyncLastUpdateDate(new \DateTime('now'));
+                $this->container->get('doctrine')->getManager()->persist($worker);
+                $this->container->get('doctrine')->getManager()->flush($worker);
+                foreach($this->getWorkerUnits($worker) as $curUnit) {
+                    $this->addUnitWorker($curUnit, $worker);
+                }
+                return;
+            }
+            $method = 'POST';
+            $extraParams = array();
+        }
+        $params = array_merge($extraParams, array(
+            'worker_id' => $worker->getWorkerId(),
+            'registry_no' => $worker->getRegistryNo(),
+            'lastname' => $worker->getLastname(),
+            'firstname' => $worker->getFirstname(),
+            'fathername' => $worker->getFathername(),
+            'sex' => $worker->getSex(),
+            'source' => 'SUS',
+        ));
+
+        $curl = curl_init("http://mmsch.teiath.gr/api/workers");
+
+        $username = $this->container->getParameter('mmsch_username');
+        $password = $this->container->getParameter('mmsch_password');
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($curl, CURLOPT_USERPWD,  $username.":".$password);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode( $params ));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $origData = curl_exec($curl);
+        $data = json_decode($origData);
+        if($data->status == 200) {
+            if($method == 'POST') {
+                $worker->setMmSyncId($data->worker_id);
+            }
+            $worker->setMmSyncLastUpdateDate(new \DateTime('now'));
+            foreach($this->getWorkerUnits($worker) as $curUnit) {
+                $this->addUnitWorker($curUnit, $worker);
+            }
+        } else {
+            throw new MMException('Error adding unit: '.$origData);
+        }
+    }
+
+    private function getWorkerUnits(Workers $worker) {
+        $units = array();
+        if($worker->getUnit() != null) {
+            $units[] = $worker->getUnit();
+        }
+        foreach($worker->getResponsibleUnits() as $curUnit) {
+            $units[] = $curUnit;
+        }
+        return $units;
+    }
+
+    private function addUnitWorker(Unit $unit, Workers $worker) {
+        if($worker->getMmSyncId() == null || $unit->getMmSyncId() == null) {
+            throw new MMException('Worker or unit is not synced: '.$worker->getMmSyncId().' '.$unit->getMmSyncId());
+        }
+        $extraParams = array();
+        $curUnitWorker = $this->queryUnitWorkers(array('worker' => $worker->getFirstname().' '.$worker->getLastname(), 'unit' => $unit->getMmSyncId()));
+        if(isset($curUnitWorker[0])) { // Check if already exists
+            $method = 'PUT';
+            $extraParams['unit_worker_id'] = $curUnitWorker[0]->unit_worker_id;
+        } else {
+            $method = 'POST';
+        }
+        $params = array_merge($extraParams, array(
+            'worker' => $worker->getMmSyncId(),
+            'mm_id' => $unit->getMmSyncId(),
+            'worker_position' => $worker->getUnit() == $unit ? 'ΔΙΕΥΘΥΝΤΗΣ ΚΕΠΛΗΝΕΤ' : 'ΤΕΧΝΙΚΟΣ ΥΠΕΥΘΥΝΟΣ ΚΕΠΛΗΝΕΤ',
+        ));
+
+        $curl = curl_init("http://mmsch.teiath.gr/api/unit_workers");
+
+        $username = $this->container->getParameter('mmsch_username');
+        $password = $this->container->getParameter('mmsch_password');
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($curl, CURLOPT_USERPWD,  $username.":".$password);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode( $params ));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $origData = curl_exec($curl);
+        $data = json_decode($origData);
+        if($data->status == 200) {
+            return true;
         } else {
             throw new MMException('Error adding unit: '.$origData);
         }
