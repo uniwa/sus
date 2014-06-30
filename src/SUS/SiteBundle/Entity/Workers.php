@@ -82,6 +82,16 @@ class Workers extends MMSyncableEntity
      */
     private $sex;
 
+    /**
+     * @var \WorkerSpecializations
+     *
+     * @ORM\ManyToOne(targetEntity="WorkerSpecializations")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="worker_specialization_id", referencedColumnName="worker_specialization_id")
+     * })
+     */
+    private $workerSpecialization;
+
     public function __construct() {
         $this->responsibleUnits = new ArrayCollection();
     }
@@ -156,6 +166,14 @@ class Workers extends MMSyncableEntity
 
     public function setSex($sex) {
         $this->sex = $sex;
+    }
+
+    public function getWorkerSpecialization() {
+        return $this->workerSpecialization;
+    }
+
+    public function setWorkerSpecialization(\WorkerSpecializations $workerSpecialization) {
+        $this->workerSpecialization = $workerSpecialization;
     }
 
     public function __toString() {
