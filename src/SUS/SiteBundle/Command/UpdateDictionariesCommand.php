@@ -33,26 +33,40 @@ class UpdateDictionariesCommand extends ContainerAwareCommand
             $output->write('Updating dictionaries of unit '.$row->getUnitId().' '.$row->getName().'...');
             $mmUnit = $mmservice->findOneUnitBy(array('mm_id' => $row->getMmSyncId()));
 
-            $row->getEduAdmin()->setName($mmUnit->edu_admin);
-            $em->persist($row->getEduAdmin());
+            if($row->getEduAdmin() != null) {
+                $row->getEduAdmin()->setName($mmUnit->edu_admin);
+                $em->persist($row->getEduAdmin());
+            }
 
-            $row->getRegionEduAdmin()->setName($mmUnit->region_edu_admin);
-            $em->persist(getRegionEduAdmin());
+            if($row->getRegionEduAdmin() != null) {
+                $row->getRegionEduAdmin()->setName($mmUnit->region_edu_admin);
+                $em->persist($row->getRegionEduAdmin());
+            }
 
-            $row->getImplementationEntity()->setName($mmUnit->implementation_entity);
-            $em->persist($row->getImplementationEntity());
+            if($row->getImplementationEntity() != null) {
+                $row->getImplementationEntity()->setName($mmUnit->implementation_entity);
+                $em->persist($row->getImplementationEntity());
+            }
 
-            $row->getUnitType()->setName($mmUnit->unit_type);
-            $em->persist($row->getUnitType());
+            if($row->getUnitType() != null) {
+                $row->getUnitType()->setName($mmUnit->unit_type);
+                $em->persist($row->getUnitType());
+            }
 
-            $row->getPrefecture()->setName($mmUnit->prefecture);
-            $em->persist($row->getPrefecture());
+            if($row->getPrefecture() != null) {
+                $row->getPrefecture()->setName($mmUnit->prefecture);
+                $em->persist($row->getPrefecture());
+            }
 
-            $row->getMunicipality()->setName($mmUnit->municipality);
-            $em->persist($row->getMunicipality());
+            if($row->getMunicipality() != null) {
+                $row->getMunicipality()->setName($mmUnit->municipality);
+                $em->persist($row->getMunicipality());
+            }
 
-            $row->getCategory()->setName($mmUnit->category);
-            $em->persist($row->getCategory());
+            if($row->getCategory() != null) {
+                $row->getCategory()->setName($mmUnit->category);
+                $em->persist($row->getCategory());
+            }
             
             if (($i % $batchSize) == 0) {
                 $em->flush();
