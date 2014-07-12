@@ -33,37 +33,37 @@ class UpdateDictionariesCommand extends ContainerAwareCommand
             $output->write('Updating dictionaries of unit '.$row->getUnitId().' '.$row->getName().'...');
             $mmUnit = $mmservice->findOneUnitBy(array('mm_id' => $row->getMmSyncId()));
 
-            if($row->getEduAdmin() != null) {
+            if($row->getEduAdmin() != null && $mmUnit->edu_admin != '') {
                 $row->getEduAdmin()->setName($mmUnit->edu_admin);
                 $em->persist($row->getEduAdmin());
             }
 
-            if($row->getRegionEduAdmin() != null) {
+            if($row->getRegionEduAdmin() != null && $mmUnit->region_edu_admin != '') {
                 $row->getRegionEduAdmin()->setName($mmUnit->region_edu_admin);
                 $em->persist($row->getRegionEduAdmin());
             }
 
-            if($row->getImplementationEntity() != null) {
+            if($row->getImplementationEntity() != null && $mmUnit->implementation_entity != '') {
                 $row->getImplementationEntity()->setName($mmUnit->implementation_entity);
                 $em->persist($row->getImplementationEntity());
             }
 
-            if($row->getUnitType() != null) {
+            if($row->getUnitType() != null && $mmUnit->unit_type != '') {
                 $row->getUnitType()->setName($mmUnit->unit_type);
                 $em->persist($row->getUnitType());
             }
 
-            if($row->getPrefecture() != null) {
+            if($row->getPrefecture() != null && $mmUnit->prefecture != '') {
                 $row->getPrefecture()->setName($mmUnit->prefecture);
                 $em->persist($row->getPrefecture());
             }
 
-            if($row->getMunicipality() != null) {
+            if($row->getMunicipality() != null && $mmUnit->municipality != '') {
                 $row->getMunicipality()->setName($mmUnit->municipality);
                 $em->persist($row->getMunicipality());
             }
 
-            if($row->getCategory() != null) {
+            if($row->getCategory() != null && $mmUnit->category != '') {
                 $row->getCategory()->setName($mmUnit->category);
                 $em->persist($row->getCategory());
             }
