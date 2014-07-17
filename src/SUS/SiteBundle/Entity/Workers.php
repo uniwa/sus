@@ -83,7 +83,7 @@ class Workers extends MMSyncableEntity
     private $sex;
 
     /**
-     * @var \WorkerSpecializations
+     * @var WorkerSpecializations
      *
      * @ORM\ManyToOne(targetEntity="WorkerSpecializations")
      * @ORM\JoinColumns({
@@ -172,7 +172,7 @@ class Workers extends MMSyncableEntity
         return $this->workerSpecialization;
     }
 
-    public function setWorkerSpecialization(\WorkerSpecializations $workerSpecialization) {
+    public function setWorkerSpecialization(WorkerSpecializations $workerSpecialization) {
         $this->workerSpecialization = $workerSpecialization;
     }
 
