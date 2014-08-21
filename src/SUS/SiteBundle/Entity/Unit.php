@@ -372,7 +372,7 @@ class Unit extends MMSyncableEntity
         return $this->taxOffice;
     }
 
-    public function setTaxOffice(TaxOffices $taxOffice) {
+    public function setTaxOffice(TaxOffices $taxOffice=null) {
         $this->taxOffice = $taxOffice;
     }
 
@@ -380,7 +380,7 @@ class Unit extends MMSyncableEntity
         return $this->eduAdmin;
     }
 
-    public function setEduAdmin(EduAdmins $eduAdmin) {
+    public function setEduAdmin(EduAdmins $eduAdmin=null) {
         $this->eduAdmin = $eduAdmin;
     }
 
@@ -388,7 +388,7 @@ class Unit extends MMSyncableEntity
         return $this->regionEduAdmin;
     }
 
-    public function setRegionEduAdmin(RegionEduAdmins $regionEduAdmin) {
+    public function setRegionEduAdmin(RegionEduAdmins $regionEduAdmin=null) {
         $this->regionEduAdmin = $regionEduAdmin;
     }
 
@@ -396,7 +396,7 @@ class Unit extends MMSyncableEntity
         return $this->implementationEntity;
     }
 
-    public function setImplementationEntity(ImplementationEntities $implementationEntity) {
+    public function setImplementationEntity(ImplementationEntities $implementationEntity=null) {
         $this->implementationEntity = $implementationEntity;
     }
 
@@ -404,7 +404,7 @@ class Unit extends MMSyncableEntity
         return $this->unitType;
     }
 
-    public function setUnitType(UnitTypes $unitType) {
+    public function setUnitType(UnitTypes $unitType=null) {
         $this->unitType = $unitType;
     }
 
@@ -412,7 +412,7 @@ class Unit extends MMSyncableEntity
         return $this->prefecture;
     }
 
-    public function setPrefecture(Prefectures $prefecture) {
+    public function setPrefecture(Prefectures $prefecture=null) {
         $this->prefecture = $prefecture;
     }
 
@@ -420,7 +420,7 @@ class Unit extends MMSyncableEntity
         return $this->state;
     }
 
-    public function setState(States $state) {
+    public function setState(States $state=null) {
         $this->state = $state;
     }
 
@@ -428,7 +428,7 @@ class Unit extends MMSyncableEntity
         return $this->category;
     }
 
-    public function setCategory(UnitCategory $category) {
+    public function setCategory(UnitCategory $category=null) {
         $this->category = $category;
     }
 
@@ -444,7 +444,7 @@ class Unit extends MMSyncableEntity
         return $this->manager;
     }
 
-    public function setManager(Workers $manager) {
+    public function setManager(Workers $manager=null) {
         $this->manager = $manager;
     }
 
@@ -452,7 +452,7 @@ class Unit extends MMSyncableEntity
         return $this->responsibles;
     }
 
-    public function setResponsibles(Workers $responsibles) {
+    public function setResponsibles(Workers $responsibles=null) {
         $this->responsibles = $responsibles;
     }
 
@@ -460,7 +460,7 @@ class Unit extends MMSyncableEntity
         return $this->deletedAt;
     }
 
-    public function setDeletedAt($deletedAt) {
+    public function setDeletedAt($deletedAt=null) {
         $this->deletedAt = $deletedAt;
     }
 

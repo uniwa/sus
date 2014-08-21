@@ -12,7 +12,7 @@ class UnitAdmin extends Admin
 {
     protected $datagridValues = array(
         '_sort_order' => 'ASC', // Descendant ordering (default = 'ASC')
-        '_sort_by' => 'id' // name of the ordered field (default = the model id
+        '_sort_by' => 'unitId' // name of the ordered field (default = the model id
     );
 
     protected function configureRoutes(RouteCollection $collection)
