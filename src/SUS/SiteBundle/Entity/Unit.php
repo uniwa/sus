@@ -5,6 +5,7 @@ namespace SUS\SiteBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,6 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Unit extends MMSyncableEntity
 {
+    use TimestampableEntity;
+
     /**
      * @var integer
      *
@@ -75,13 +78,6 @@ class Unit extends MMSyncableEntity
     private $email;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="last_unit_update", type="datetime", nullable=true)
-     */
-    private $lastUnitUpdate;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="tax_number", type="string", length=255, nullable=true)
@@ -94,13 +90,6 @@ class Unit extends MMSyncableEntity
      * @ORM\Column(name="comments", type="string", length=255, nullable=true)
      */
     private $comments;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="last_update", type="datetime", nullable=true)
-     */
-    private $lastUpdate;
 
     /**
      * @var string
@@ -312,14 +301,6 @@ class Unit extends MMSyncableEntity
         $this->email = $email;
     }
 
-    public function getLastUnitUpdate() {
-        return $this->lastUnitUpdate;
-    }
-
-    public function setLastUnitUpdate(\DateTime $lastUnitUpdate) {
-        $this->lastUnitUpdate = $lastUnitUpdate;
-    }
-
     public function getTaxNumber() {
         return $this->taxNumber;
     }
@@ -334,14 +315,6 @@ class Unit extends MMSyncableEntity
 
     public function setComments($comments) {
         $this->comments = $comments;
-    }
-
-    public function getLastUpdate() {
-        return $this->lastUpdate;
-    }
-
-    public function setLastUpdate(\DateTime $lastUpdate) {
-        $this->lastUpdate = $lastUpdate;
     }
 
     public function getPositioning() {
