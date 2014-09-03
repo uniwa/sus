@@ -219,6 +219,7 @@ class MMService {
             $method = 'POST';
             $extraParams = array();
         }
+        $lastUpdate = $unit->getUpdatedAt();
         $params = array_merge($extraParams, array(
                 "mm_id" => $unit->getMmSyncId(),
                 "name" => $unit->__toString(),
@@ -241,6 +242,7 @@ class MMService {
                 //"special_type" => $unit->getSpecialType()->getSpecialTypeId(),
                 "postal_code" => $unit->getPostalCode(),
                 //"area_team_number" => $unit->getAreaTeamNumber(),
+                "last_update" => $lastUpdate instanceof \DateTime ? $lastUpdate->format('Y-m-d H:i:s') : null,
                 "email" => $unit->getEmail(),
                 "fax_number" => $unit->getFaxNumber(),
                 "street_address" => $unit->getStreetAddress(),
