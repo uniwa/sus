@@ -176,7 +176,7 @@ class MMService {
     protected function queryMM($resource, $params = array()) {
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
-        $server = 'http://mmsch.teiath.gr/api/'.$resource;
+        $server = 'https://mm.sch.gr/api/'.$resource;
 
         $curl = curl_init ($server);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -256,7 +256,7 @@ class MMService {
                 //"fek" => '',
         ));
 
-        $curl = curl_init("http://mmsch.teiath.gr/api/units");
+        $curl = curl_init("https://mm.sch.gr/api/units");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
@@ -307,7 +307,7 @@ class MMService {
             'source' => 'SUS',
         ));
 
-        $curl = curl_init("http://mmsch.teiath.gr/api/workers");
+        $curl = curl_init("https://mm.sch.gr/api/workers");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
@@ -361,7 +361,7 @@ class MMService {
             'worker_position' => $worker->getUnit() == $unit ? 'ΔΙΕΥΘΥΝΤΗΣ ΚΕΠΛΗΝΕΤ' : 'ΤΕΧΝΙΚΟΣ ΥΠΕΥΘΥΝΟΣ ΚΕΠΛΗΝΕΤ',
         ));
 
-        $curl = curl_init("http://mmsch.teiath.gr/api/unit_workers");
+        $curl = curl_init("https://mm.sch.gr/api/unit_workers");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
