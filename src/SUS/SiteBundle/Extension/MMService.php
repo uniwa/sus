@@ -222,7 +222,7 @@ class MMService {
         $lastUpdate = $unit->getUpdatedAt();
         $params = array_merge($extraParams, array(
                 "mm_id" => $unit->getMmSyncId(),
-                "name" => $unit->__toString(),
+                "name" => $unit->getName(),
                 "source" => 'SUS',
                 "category" => $unit->getCategory()->getName(),
                 "suspended" => !$unit->isActive(),
