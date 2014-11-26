@@ -96,6 +96,10 @@ class Workers extends MMSyncableEntity
         $this->responsibleUnits = new ArrayCollection();
     }
 
+    public function getId() {
+        return $this->getWorkerId();
+    }
+
     public function getWorkerId() {
         return $this->workerId;
     }

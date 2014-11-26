@@ -36,6 +36,10 @@ class WorkerSpecializations
         $this->workerSpecializationId = $workerSpecializationId;
     }
 
+    public function getId() {
+        return $this->getWorkerSpecializationId();
+    }
+
     public function getName() {
         return $this->name;
     }

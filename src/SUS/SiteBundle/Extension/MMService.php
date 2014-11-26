@@ -283,7 +283,7 @@ class MMService {
             $method = 'PUT';
             $extraParams = array('worker_id' => $worker->getMmSyncId());
         } else {
-            $curWorker = $this->findWorkersBy(array('worker' => $worker->getLastname().' '.$worker->getFirstname()));
+            $curWorker = $this->findWorkersBy(array('worker' => $worker->getLastname().' '.$worker->getFirstname(),  'searchtype' => 'EXACT'));
             if(isset($curWorker[0])) { // Check if already exists
                 $worker->setMmSyncId($curWorker[0]->worker_id);
                 $worker->setMmSyncLastUpdateDate(new \DateTime('now'));
@@ -348,7 +348,7 @@ class MMService {
             throw new MMException('Worker or unit is not synced: '.$worker->getMmSyncId().' '.$unit->getMmSyncId());
         }
         $extraParams = array();
-        $curUnitWorker = $this->queryUnitWorkers(array('worker' => $worker->getFirstname().' '.$worker->getLastname(), 'unit' => $unit->getMmSyncId()));
+        $curUnitWorker = $this->queryUnitWorkers(array('worker' => $worker->getLastname().' '.$worker->getFirstname(), 'unit' => $unit->getMmSyncId(), 'searchtype' => 'EXACT'));
         if(isset($curUnitWorker[0])) { // Check if already exists
             $method = 'PUT';
             $extraParams['unit_worker_id'] = $curUnitWorker[0]->unit_worker_id;

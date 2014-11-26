@@ -229,6 +229,10 @@ class Unit extends MMSyncableEntity
         $this->responsibles = new ArrayCollection();
     }
 
+    public function getId() {
+        return $this->getUnitId();
+    }
+
     public function getUnitId() {
         return $this->unitId;
     }
