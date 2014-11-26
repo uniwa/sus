@@ -106,9 +106,9 @@ class Unit extends MMSyncableEntity
     private $website;
 
     /**
-     * @var \DateTime
+     * @var \Year
      *
-     * @ORM\Column(name="foundation_date", type="date", nullable=true)
+     * @ORM\Column(name="foundation_date", columnDefinition="YEAR", nullable=true)
      */
     private $foundationDate;
 
@@ -341,7 +341,7 @@ class Unit extends MMSyncableEntity
         return $this->foundationDate;
     }
 
-    public function setFoundationDate(\DateTime $foundationDate=null) {
+    public function setFoundationDate($foundationDate=null) {
         $this->foundationDate = $foundationDate;
     }
 
