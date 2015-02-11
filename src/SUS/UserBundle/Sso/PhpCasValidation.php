@@ -16,12 +16,28 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
      */
     protected function validateResponse(Response $response)
     {
+        $allowedUsernames = array(
+            'sprekas',
+            'krantzos',
+            'sgialpa',
+            'elenipapapa',
+            'dandrits',
+            'vagelopoulos',
+            'apekos',
+            'ktsiolis',
+            'ubichrys',
+            'dnikoudis',
+        );
         \phpCAS::client(SAML_VERSION_1_1,"sso-test.sch.gr",443,'',false);
         \phpCAS::setNoCasServerValidation();
         \phpCAS::handleLogoutRequests(array("sso-test.sch.gr"));
         \phpCAS::setNoClearTicketsFromUrl();
         $success = true;
         if(!\phpCAS::checkAuthentication()) {
+            $success = false;
+        }
+
+        if(!in_array(\phpCAS::getUser(), $allowedUsernames)) {
             $success = false;
         }
 
