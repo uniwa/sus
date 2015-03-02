@@ -36,9 +36,12 @@ class UnitTypes
     private $categoryId;
 
     /**
-     * @var integer
+     * @var EducationLevels
      *
-     * @ORM\Column(name="education_level_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="EducationLevels")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="education_level_id", referencedColumnName="education_level_id")
+     * })
      */
     private $educationLevelId;
 
@@ -70,7 +73,7 @@ class UnitTypes
         return $this->educationLevelId;
     }
 
-    public function setEducationLevelId($educationLevelId) {
+    public function setEducationLevelId(EducationLevels $educationLevelId=null) {
         $this->educationLevelId = $educationLevelId;
     }
 

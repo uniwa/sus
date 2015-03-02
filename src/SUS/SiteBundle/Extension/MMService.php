@@ -227,7 +227,7 @@ class MMService {
                 "category" => $unit->getCategory()->getName(),
                 "suspended" => !$unit->isActive(),
                 "state" => $unit->getState()->getName(),
-                //"education_level" => $unit->getEducationLevel()->getEducationalLevelId(),
+                "education_level" => $unit->getUnitType() != null && $unit->getUnitType()->getEducationLevel() != null ? $unit->getUnitType()->getEducationLevel()->getEducationalLevelId() : null,
                 "special_name" => $unit->getSpecialName(),
                 "region_edu_admin" => $unit->getRegionEduAdmin() != null ? $unit->getRegionEduAdmin()->getName() : null,
                 "edu_admin" => $unit->getEduAdmin() != null ? $unit->getEduAdmin()->getName() : null,
