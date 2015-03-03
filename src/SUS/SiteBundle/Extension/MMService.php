@@ -222,6 +222,7 @@ class MMService {
         $lastUpdate = $unit->getUpdatedAt();
         $params = array_merge($extraParams, array(
                 "mm_id" => $unit->getMmSyncId(),
+                "registry_no" => $unit->getRegistryNo(),
                 "name" => $unit->getName(),
                 "source" => 'SUS',
                 "category" => $unit->getCategory()->getName(),

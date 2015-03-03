@@ -52,6 +52,7 @@ class UnitAdmin extends Admin
         $formMapper
             ->with('Γενικά Στοιχεία')
                 ->add('name', null, array('label' => 'Ονομασία'))
+                ->add('registryNo', null, array('label' => 'Κωδικός ΥΠΑΙΠΘ'))
                 ->add('specialName', null, array('label' => ' Ειδική Ονομασία'))
                 ->add('unitType', null, array('label' => 'Τύπος'))
                 ->add('foundationDate', 'genemu_jquerydate', array('required' => false, 'widget' => 'single_text'))

@@ -31,6 +31,14 @@ class Unit extends MMSyncableEntity
     /**
      * @var string
      *
+     * @ORM\Column(name="registry_no", type="string", length=11, nullable=true, unique=true)
+     * @Gedmo\Versioned
+     */
+    private $registryNo;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
@@ -239,6 +247,14 @@ class Unit extends MMSyncableEntity
 
     public function setUnitId($unitId) {
         $this->unitId = $unitId;
+    }
+
+    public function getRegistryNo() {
+        return $this->registryNo;
+    }
+
+    public function setRegistryNo($registryNo) {
+        $this->registryNo = $registryNo;
     }
 
     public function getMmId() {
