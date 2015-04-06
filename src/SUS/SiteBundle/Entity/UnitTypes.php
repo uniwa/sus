@@ -43,7 +43,7 @@ class UnitTypes
      *   @ORM\JoinColumn(name="education_level_id", referencedColumnName="education_level_id")
      * })
      */
-    private $educationLevelId;
+    private $educationLevel;
 
     public function getUnitTypeId() {
         return $this->unitTypeId;
@@ -69,12 +69,12 @@ class UnitTypes
         $this->categoryId = $categoryId;
     }
 
-    public function getEducationLevelId() {
-        return $this->educationLevelId;
+    public function getEducationLevel() {
+        return $this->educationLevel;
     }
 
-    public function setEducationLevelId(EducationLevels $educationLevelId=null) {
-        $this->educationLevelId = $educationLevelId;
+    public function setEducationLevel(EducationLevels $educationLevel=null) {
+        $this->educationLevel = $educationLevel;
     }
 
     public function __toString() {

@@ -19,7 +19,7 @@ class EducationLevels
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $educationLevel;
+    private $educationLevelId;
 
     /**
      * @var string
@@ -28,12 +28,12 @@ class EducationLevels
      */
     private $name;
 
-    public function getEducationLevel() {
-        return $this->educationLevel;
+    public function getEducationLevelId() {
+        return $this->educationLevelId;
     }
 
-    public function setEducationLevel($educationLevelId) {
-        $this->educationLevel = $educationLevelId;
+    public function setEducationLevelId($educationLevelId) {
+        $this->educationLevelId = $educationLevelId;
     }
 
     public function getName() {
