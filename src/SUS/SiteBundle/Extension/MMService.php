@@ -204,6 +204,7 @@ class MMService {
     }
 
     public function persistUnit(Unit $unit) {
+      
         if($unit->getMmSyncId() != null) {
             $method = 'PUT';
             $extraParams = array('unit_id' => $unit->getMmSyncId());
@@ -211,7 +212,8 @@ class MMService {
             $curUnit = $this->findUnitsBy(array('name' => $unit->getName()));
             if(isset($curUnit[0])) { // Check if already exists
                 $unit->setMmSyncId($curUnit[0]->mm_id);
-                $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
+                $modifyDateTime = new \DateTime('now');
+            	$unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
                 $this->container->get('doctrine')->getManager()->persist($unit);
                 $this->container->get('doctrine')->getManager()->flush($unit);
                 return;
@@ -273,8 +275,9 @@ class MMService {
             if($method == 'POST') {
                 $unit->setMmSyncId($data->mm_id);
             }
-            $unit->setMmSyncLastUpdateDate(new \DateTime('now'));
-        } else {
+            $modifyDateTime = new \DateTime('now');
+            $unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
+     	} else {
             throw new MMException('Error adding unit: '.$origData);
         }
     }

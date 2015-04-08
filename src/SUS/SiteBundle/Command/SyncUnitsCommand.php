@@ -26,7 +26,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
         $batchSize = 20;
         $i = 0;
         // Units
-        $q = $em->createQuery('select pc from SUS\SiteBundle\Entity\Unit pc WHERE pc.mmSyncLastUpdateDate IS NULL');
+        $q = $em->createQuery('select pc from SUS\SiteBundle\Entity\Unit pc WHERE pc.mmSyncLastUpdateDate < pc.updatedAt');
         $iterableResult = $q->iterate();
         foreach($iterableResult AS $row) {
             $row = $row[0];
