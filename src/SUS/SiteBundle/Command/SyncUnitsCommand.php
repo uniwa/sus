@@ -55,6 +55,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
             }
             ++$i;
         }
+        $em->flush();
         $output->writeln('Workers synced successfully');
     }
 }
