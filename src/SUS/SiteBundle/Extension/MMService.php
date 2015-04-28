@@ -213,7 +213,7 @@ class MMService {
             if(isset($curUnit[0])) { // Check if already exists
                 $unit->setMmSyncId($curUnit[0]->mm_id);
                 $modifyDateTime = new \DateTime('now');
-            	$unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
+                $unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
                 $this->container->get('doctrine')->getManager()->persist($unit);
                 $this->container->get('doctrine')->getManager()->flush($unit);
                 return;
