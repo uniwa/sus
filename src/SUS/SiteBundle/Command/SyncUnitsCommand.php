@@ -19,6 +19,14 @@ class SyncUnitsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        //set allowed unit types to sync with mm
+        $allowedTypes = "(  'ΚΕΣΥΠ', 'ΓΡΑΣΕΠ', 'ΣΣΝ', 'ΚΕΠΛΗΝΕΤ', 'ΕΚΦΕ', 'ΚΠΕ', 'ΠΕΚ', 
+                            'ΕΡΓΑΣΤΗΡΙΑ ΦΥΣΙΚΩΝ ΕΠΙΣΤΗΜΩΝ', 'ΣΧΟΛΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ',
+                            'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
+                            'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
+                            'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ' )";
+        
         $output->writeln('Starting SyncUnits process');
         $this->container = $this->getContainer();
         $em = $this->container->get('doctrine')->getManager();
@@ -26,7 +34,10 @@ class SyncUnitsCommand extends ContainerAwareCommand
         $batchSize = 20;
         $i = 0;
         // Units
-        $q = $em->createQuery('select pc from SUS\SiteBundle\Entity\Unit pc WHERE pc.mmSyncLastUpdateDate < pc.updatedAt');
+        $q = $em->createQuery("SELECT pc FROM SUS\SiteBundle\Entity\Unit pc
+                               JOIN pc.unitType ut
+                               WHERE (pc.mmSyncLastUpdateDate IS NULL OR pc.mmSyncLastUpdateDate < pc.updatedAt) AND ut.name IN $allowedTypes ");
+        
         $iterableResult = $q->iterate();
         foreach($iterableResult AS $row) {
             $row = $row[0];
@@ -42,7 +53,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
         $output->writeln('Units synced successfully');
         // Workers
         // Units
-        $q = $em->createQuery('select pc from SUS\SiteBundle\Entity\Workers pc WHERE pc.mmSyncLastUpdateDate IS NULL');
+        $q = $em->createQuery('SELECT pc FROM SUS\SiteBundle\Entity\Workers pc WHERE pc.mmSyncLastUpdateDate IS NULL');
         $iterableResult = $q->iterate();
         foreach($iterableResult AS $row) {
             $row = $row[0];
@@ -55,6 +66,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
             }
             ++$i;
         }
+        
         $em->flush();
         $output->writeln('Workers synced successfully');
     }
