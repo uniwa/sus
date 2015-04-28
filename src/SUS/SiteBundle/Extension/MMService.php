@@ -15,6 +15,21 @@ class MMService {
         $this->container = $container;
     }
 
+    protected function allowedUnitTypesToMMSync( $unit_type ) {
+
+        $allowed = array (  'ΚΕΣΥΠ', 'ΓΡΑΣΕΠ', 'ΣΣΝ', 'ΚΕΠΛΗΝΕΤ', 'ΕΚΦΕ', 'ΚΠΕ', 'ΠΕΚ', 
+                            'ΕΡΓΑΣΤΗΡΙΑ ΦΥΣΙΚΩΝ ΕΠΙΣΤΗΜΩΝ', 'ΣΧΟΛΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ',
+                            'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
+                            'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
+                            'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ'
+                         );
+
+        $syncToMM = (in_array($unit_type, $allowed) ? true : false );
+
+        return $syncToMM;
+    }
+
     public function findUnit($mmid) {
         $em = $this->container->get('doctrine')->getManager();
         $repo = $em->getRepository('SUS\SiteBundle\Entity\Unit');
@@ -204,7 +219,7 @@ class MMService {
     }
 
     public function persistUnit(Unit $unit) {
-      
+
         if($unit->getMmSyncId() != null) {
             $method = 'PUT';
             $extraParams = array('unit_id' => $unit->getMmSyncId());
@@ -258,31 +273,36 @@ class MMService {
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
         ));
+         
+            //check if unit has allowed unit type to sync with mm 
+            if ( !$this->allowedUnitTypesToMMSync( $unit->getUnitType()->getName()))
+                return;
+   
+            $curl = curl_init("https://mm.sch.gr/api/units");
+            $username = $this->container->getParameter('mmsch_username');
+            $password = $this->container->getParameter('mmsch_password');
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($curl, CURLOPT_USERPWD,  $username.":".$password);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode( $params ));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-        $curl = curl_init("https://mm.sch.gr/api/units");
-
-        $username = $this->container->getParameter('mmsch_username');
-        $password = $this->container->getParameter('mmsch_password');
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD,  $username.":".$password);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode( $params ));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $origData = curl_exec($curl);
-        $data = json_decode($origData);
-        if($data->status == 200) {
-            if($method == 'POST') {
-                $unit->setMmSyncId($data->mm_id);
+            $origData = curl_exec($curl);
+            $data = json_decode($origData);
+            if($data->status == 200) {
+                if($method == 'POST') {
+                    $unit->setMmSyncId($data->mm_id);
+                }
+                $modifyDateTime = new \DateTime('now');
+                $unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
+            } else {
+                throw new MMException('Error adding unit: '.$origData);
             }
-            $modifyDateTime = new \DateTime('now');
-            $unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
-     	} else {
-            throw new MMException('Error adding unit: '.$origData);
-        }
+        
     }
 
     public function persistWorker(Workers $worker) {
+
         if($worker->getMmSyncId() != null) {
             $method = 'PUT';
             $extraParams = array('worker_id' => $worker->getMmSyncId());
