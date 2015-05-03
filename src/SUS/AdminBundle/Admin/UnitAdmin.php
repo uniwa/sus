@@ -58,6 +58,7 @@ class UnitAdmin extends Admin
                 //->add('foundationDate', 'genemu_jquerydate', array('required' => false, 'widget' => 'single_text'))
                 ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
                 ->add('state', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Κατάσταση'))
+                ->add('legalCharacter', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'))
                 ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
                 ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
                 ->add('manager', null, array('label' => 'Υπεύθυνος', 'required' => false))

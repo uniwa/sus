@@ -188,6 +188,16 @@ class Unit extends MMSyncableEntity
      * })
      */
     private $state;
+    
+    /**
+     * @var LegalCharacters
+     *
+     * @ORM\ManyToOne(targetEntity="LegalCharacters")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="legal_character_id", referencedColumnName="legal_character_id")
+     * })
+     */
+    private $legalCharacter;
 
     /**
      * @var UnitCategory
@@ -416,6 +426,14 @@ class Unit extends MMSyncableEntity
         $this->state = $state;
     }
 
+    public function getLegalCharacter() {
+        return $this->legalCharacter;
+    }
+
+    public function setLegalCharacter(LegalCharacters $legalCharacter=null) {
+        $this->legalCharacter = $legalCharacter;
+    }
+   
     public function getCategory() {
         return $this->category;
     }
