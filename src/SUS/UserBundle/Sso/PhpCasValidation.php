@@ -11,11 +11,18 @@ use Buzz\Message\Response;
  */
 class PhpCasValidation extends AbstractValidation implements ValidationInterface
 {
+    protected $kernel;
+
+    public function setKernel($kernel) {
+        $this->kernel = $kernel;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function validateResponse(Response $response)
     {
+        $this->kernel->locateResource('@SUSUserBundle');
         $allowedUsernames = array(
             'sprekas',
             'krantzos',

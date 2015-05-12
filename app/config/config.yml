@@ -166,6 +166,12 @@ services:
             - { name: doctrine.event_listener, event: postLoad }
         arguments:
             - "@sus.mm.service"
+    sus.sso.protocol:
+        class: SUS\UserBundle\Sso\Protocol
+        tags:
+            - { name: be_simple.sso_auth.protocol, id: sus }
+        arguments:
+            - "@kernel"
     sus.mmsyncable.listener:
         class: SUS\SiteBundle\Extension\MMSyncableListener
         tags:
@@ -220,7 +226,7 @@ stof_doctrine_extensions:
 be_simple_sso_auth:
     admin_sso:
         protocol:
-            id: cas
+            id: sus
             version: 2
         server:
             id: cas
