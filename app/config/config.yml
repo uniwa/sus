@@ -172,6 +172,7 @@ services:
             - { name: be_simple.sso_auth.protocol, id: sus }
         arguments:
             - "@kernel"
+            - "@service_container"
     sus.mmsyncable.listener:
         class: SUS\SiteBundle\Extension\MMSyncableListener
         tags:
@@ -182,6 +183,10 @@ services:
         arguments:
             - "@sus.mm.service"
             - "@kernel"
+    sus.sso.phpCasValidation:
+        class: SUS\UserBundle\Sso\PhpCasValidation
+        arguments:
+            - "@service_container"
 
 fos_rest:
     view:

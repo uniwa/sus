@@ -1,0 +1,96 @@
+ggdvm:
+  name: Υπευθυνος ΓΓΔΒΜ
+  unit_types: [ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ,ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ,ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ]
+  permissions: [VIEW,LIST,EXPORT]
+  role: ROLE_USER1
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΓΕΝΙΚΗ ΓΡΑΜΜΑΤΕΙΑ ΕΚΠΑΙΔΕΥΣΗΣ ΕΝΗΛΙΚΩΝ
+  parent_unit_ou: ggee
+yp_diek:
+  name: Υπευθυνος Δημόσιων ΙΕΚ
+  unit_types: [ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ]
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER2
+  legal_character: [ΔΗΜΟΣΙΟ]
+  parent_unit: ΓΕΝΙΚΗ ΓΡΑΜΜΑΤΕΙΑ ΕΚΠΑΙΔΕΥΣΗΣ ΕΝΗΛΙΚΩΝ
+  parent_unit_ou: ggee
+yp_idiek:
+  name: Υπευθυνος Ιδιωτικών ΙΕΚ
+  unit_types: [ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ]
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER2
+  legal_character: [ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΓΕΝΙΚΗ ΓΡΑΜΜΑΤΕΙΑ ΕΚΠΑΙΔΕΥΣΗΣ ΕΝΗΛΙΚΩΝ
+  parent_unit_ou: ggee
+yp_sek:
+  name: Υπευθυνος ΣΕΚ
+  unit_types: [ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ]
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER2
+  legal_character: [ΔΗΜΟΣΙΟ]
+  parent_unit: ΓΕΝΙΚΗ ΓΡΑΜΜΑΤΕΙΑ ΕΚΠΑΙΔΕΥΣΗΣ ΕΝΗΛΙΚΩΝ
+  parent_unit_ou: ggee
+yp_DiekSek:
+  name: Υπευθυνος Δημόσιων ΙΕΚ και ΣΕΚ
+  unit_types: [ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ,ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ]
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER2
+  legal_character: [ΔΗΜΟΣΙΟ]
+  parent_unit: ΓΕΝΙΚΗ ΓΡΑΜΜΑΤΕΙΑ ΕΚΠΑΙΔΕΥΣΗΣ ΕΝΗΛΙΚΩΝ
+  parent_unit_ou: ggee
+ktsiolis:
+  name: Administrator
+  unit_types: [all]
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath
+dnikoudis:
+  name: Administrator
+  unit_types: []
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath
+krantzos:
+  name: Administrator
+  unit_types: []
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath
+sgialpa:
+  name: Administrator
+  unit_types: []
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath
+elenipapapa:
+  name: Administrator
+  unit_types: []
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath
+vagelopoulos:
+  name: Administrator
+  unit_types: []
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath
+apekos:
+  name: Administrator
+  unit_types: []
+  permissions: [VIEW,LIST,EXPORT,EDIT,CREATE]
+  role: ROLE_USER4
+  legal_character: [ΔΗΜΟΣΙΟ,ΙΔΙΩΤΙΚΟ]
+  parent_unit: ΤΕΙ ΑΘΗΝΑΣ
+  parent_unit_ou: teiath

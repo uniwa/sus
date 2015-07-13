@@ -11,16 +11,18 @@ use Buzz\Client\ClientInterface;
 
 class Protocol extends BaseProtocol
 {
-    protected $kernel;
+    protected $kernel;//,$container;
 
-    public function __construct($kernel) {
+public function __construct($kernel){//,$container) {
         $this->kernel = $kernel;
+       //$this->container = $container;
     }
-
+    
     public function executeValidation(ClientInterface $client, BuzzRequest $request, $credentials)
     {
         $phpCas = new PhpCasValidation(new BuzzResponse(), $credentials);
         $phpCas->setKernel($this->kernel);
+    //    $phpCas->setContainer($this->container);
         return $phpCas;
     }
 
