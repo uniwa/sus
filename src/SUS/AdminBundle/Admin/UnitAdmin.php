@@ -147,15 +147,13 @@ class UnitAdmin extends Admin
     {
         $listMapper
                 
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    //'show' => array(),
-                    'edit' => array(),
-            )))
+            ->add('_action', 'actions', array( 'actions' => array(  'show' => array(),
+                                                                    'edit' => array(),
+                                                                 )))
             ->add('unitId', 'string')
             ->add('mmSyncId', 'string')
-            //->addIdentifier('name', 'string', array('label' => 'Ονομασία'))
-            ->add('name', 'string', array('label' => 'Ονομασία'))
+            ->addIdentifier('name', 'string', array('label' => 'Ονομασία'))
+            //->add('name', 'string', array('label' => 'Ονομασία'))
             ->add('state.name', 'string', array('label' => 'Κατάσταση'))
             ->add('manager', 'string', array('label' => 'Υπεύθυνος'))
         ;
@@ -174,73 +172,73 @@ class UnitAdmin extends Admin
             ->add('category', null, array())
             ->add('unitType', null, array())
             ->add('manager', null, array('label' => 'Υπεύθυνος'))
-            //->add('full_text', 'doctrine_orm_callback', array('callback' => array($this, 'getFullTextFilter'),'field_type' => 'text'))
+            ->add('full_text', 'doctrine_orm_callback', array('callback' => array($this, 'getFullTextFilter'),'field_type' => 'text'))
         ;
     }
     
-//    public function getFullTextFilter($queryBuilder, $alias, $field, $value)
-//    {
-//        if (!$value['value']) {
-//            return;
-//        }
-//
-//        // Use `andWhere` instead of `where` to prevent overriding existing `where` conditions
-//        $queryBuilder->andWhere($queryBuilder->expr()->orX(
-//            $queryBuilder->expr()->like($alias.'.name', $queryBuilder->expr()->literal('%' . $value['value'] . '%')),
-//            $queryBuilder->expr()->like($alias.'.unitId', $queryBuilder->expr()->literal('%' . $value['value'] . '%'))
-//        ));
-//
-//        return true;
-//    }
-//
-//    protected function configureShowFields(ShowMapper $showMapper)
-//    {
-//        // Here we set the fields of the ShowMapper variable, $showMapper (but this can be called anything)
-//        $showMapper
-//
-//            /*
-//             * The default option is to just display the value as text (for boolean this will be 1 or 0)
-//             */
-//                
-//            ->with('Γενικά Στοιχεία')
-//                ->add('name', null, array('label' => 'Ονομασία'))
-//                ->add('mmSyncId',  array('label' => 'Κωδικός ΜΜ'))
-//                ->add('registryNo', null, array('label' => 'Κωδικός ΥΠΑΙΠΘ'))
-//                ->add('specialName', null, array('label' => 'Ειδική Ονομασία'))
-//                ->add('unitType', null, array('label' => 'Τύπος'))
-//                ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
-//                ->add('state', null, array( 'label' => 'Κατάσταση'))
-//                ->add('legalCharacter', null, array('label' => 'Νομικός Χαρακτήρας'))
-//                ->add('category', null, array('label' => 'Κατηγορία'))
-//                ->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
-//                ->add('manager', null, array('label' => 'Υπεύθυνος'))
-//                ->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι'))
-//                ->add('comments', null, array('label' => 'Σχόλια'))
-//            ->end()
-//
-//            ->with('Στοιχεία Τοποθεσίας')
-//                ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
-//                ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
-//                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
-//                ->add('prefecture', null, array('label' => 'Νομός'))
-//                ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
-//                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-//                ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
-//            ->end()
-//
-//            ->with('Στοιχεία Επικοινωνίας')
-//                ->add('faxNumber', null, array('label' => 'Αριθμός FAX'))
-//                ->add('phoneNumber', null, array('label' => 'Τηλέφωνο Επικοινωνίας'))
-//                ->add('email', null, array('label' => 'E-mail'))
-//                ->add('website', null, array('label' => 'Website'))
-//            ->end()
-//
-//            ->with('Φορολογικά Στοιχεία')
-//                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
-//                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
-//            ->end()
-//        ;
-//    }
+    public function getFullTextFilter($queryBuilder, $alias, $field, $value)
+    {
+        if (!$value['value']) {
+            return;
+        }
+
+        // Use `andWhere` instead of `where` to prevent overriding existing `where` conditions
+        $queryBuilder->andWhere($queryBuilder->expr()->orX(
+            $queryBuilder->expr()->like($alias.'.name', $queryBuilder->expr()->literal('%' . $value['value'] . '%')),
+            $queryBuilder->expr()->like($alias.'.unitId', $queryBuilder->expr()->literal('%' . $value['value'] . '%'))
+        ));
+
+        return true;
+    }
+
+    protected function configureShowFields(ShowMapper $showMapper)
+    {
+        // Here we set the fields of the ShowMapper variable, $showMapper (but this can be called anything)
+        $showMapper
+
+            /*
+             * The default option is to just display the value as text (for boolean this will be 1 or 0)
+             */
+                
+            ->with('Γενικά Στοιχεία')
+                ->add('name', null, array('label' => 'Ονομασία'))
+                ->add('mmSyncId',  array('label' => 'Κωδικός ΜΜ'))
+                ->add('registryNo', null, array('label' => 'Κωδικός ΥΠΑΙΠΘ'))
+                ->add('specialName', null, array('label' => 'Ειδική Ονομασία'))
+                ->add('unitType', null, array('label' => 'Τύπος'))
+                ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
+                ->add('state', null, array( 'label' => 'Κατάσταση'))
+                ->add('legalCharacter', null, array('label' => 'Νομικός Χαρακτήρας'))
+                ->add('category', null, array('label' => 'Κατηγορία'))
+                ->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
+                ->add('manager', null, array('label' => 'Υπεύθυνος'))
+                ->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι'))
+                ->add('comments', null, array('label' => 'Σχόλια'))
+            ->end()
+
+            ->with('Στοιχεία Τοποθεσίας')
+                ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
+                ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
+                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
+                ->add('prefecture', null, array('label' => 'Νομός'))
+                ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
+                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
+                ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
+            ->end()
+
+            ->with('Στοιχεία Επικοινωνίας')
+                ->add('faxNumber', null, array('label' => 'Αριθμός FAX'))
+                ->add('phoneNumber', null, array('label' => 'Τηλέφωνο Επικοινωνίας'))
+                ->add('email', null, array('label' => 'E-mail'))
+                ->add('website', null, array('label' => 'Website'))
+            ->end()
+
+            ->with('Φορολογικά Στοιχεία')
+                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
+                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
+            ->end()
+        ;
+    }
     
     /*public function getExportFields()
     {
