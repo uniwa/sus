@@ -168,6 +168,7 @@ class UnitAdmin extends Admin
     {
         $datagridMapper
             ->add('unitId', null, array())
+            ->add('mmSyncId', null, array())   
             ->add('name', null, array())
             ->add('category', null, array())
             ->add('unitType', null, array())
@@ -185,7 +186,7 @@ class UnitAdmin extends Admin
         // Use `andWhere` instead of `where` to prevent overriding existing `where` conditions
         $queryBuilder->andWhere($queryBuilder->expr()->orX(
             $queryBuilder->expr()->like($alias.'.name', $queryBuilder->expr()->literal('%' . $value['value'] . '%')),
-            $queryBuilder->expr()->like($alias.'.unitId', $queryBuilder->expr()->literal('%' . $value['value'] . '%'))
+            $queryBuilder->expr()->like($alias.'.mmSyncId', $queryBuilder->expr()->literal('%' . $value['value'] . '%'))
         ));
 
         return true;
