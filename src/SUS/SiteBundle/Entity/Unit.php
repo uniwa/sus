@@ -31,7 +31,7 @@ class Unit extends MMSyncableEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="registry_no", type="string", length=11, nullable=true, unique=true)
+     * @ORM\Column(name="registry_no", type="string", length=50, nullable=true, unique=true)
      */
     private $registryNo;
 
