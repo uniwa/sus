@@ -255,7 +255,7 @@ class MMService {
                 "prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getName() : null,
                 "unit_type" => $unit->getUnitType() != null ? $unit->getUnitType()->getName() : null,
                 //"operation_shift" => $unit->getOperationShift()->getOperationShiftId(),
-                //"legal_character" => $unit->getLegalCharacter()->getLegalCharacterId(),
+                "legal_character" => $unit->getLegalCharacter()->getName(),
                 //"orientation_type" => $unit->getOrientationType()->getOrientationTypeId(),
                 //"special_type" => $unit->getSpecialType()->getSpecialTypeId(),
                 "postal_code" => $unit->getPostalCode(),
