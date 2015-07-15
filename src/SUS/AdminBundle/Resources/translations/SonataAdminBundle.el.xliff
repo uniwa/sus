@@ -70,6 +70,10 @@
                 <source>link_list</source>
                 <target>Λίστα</target>
             </trans-unit>
+            <trans-unit id="link_filters">
+                <source>link_filters</source>
+                <target>Φίλτρα Αναζήτησης</target>
+            </trans-unit>
             <trans-unit id="link_reset_filter">
                 <source>link_reset_filter</source>
                 <target>Επαναφορά</target>
