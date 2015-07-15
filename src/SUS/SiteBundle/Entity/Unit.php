@@ -241,6 +241,13 @@ class Unit extends MMSyncableEntity
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $deletedAt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="source", type="string", length=50, nullable=true)
+     */
+    private $source;
 
     public function __construct() {
         $this->responsibles = new ArrayCollection();
@@ -478,6 +485,14 @@ class Unit extends MMSyncableEntity
         return !isset($this->deletedAt);
     }
 
+    public function getSource() {
+        return $this->source;
+    }
+
+    public function setSource($source=null) {
+        $this->source = $source;
+    }
+   
     public function __toString() {
         return 'SUS: '.$this->getUnitId().' | ΜΜ: '.$this->getMmSyncId().' | '.$this->getName();
     }
