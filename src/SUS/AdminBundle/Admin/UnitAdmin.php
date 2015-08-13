@@ -57,7 +57,7 @@ class UnitAdmin extends Admin
             ->add('activatedAt', 'date')
         ;
     }
-
+    
     /**
      * @param \Sonata\AdminBundle\Form\FormMapper $formMapper
      *
@@ -94,7 +94,7 @@ class UnitAdmin extends Admin
 //        foreach ($arrayTypes as $art) {
 //            $arrayType[] = array( $art['name'] );
 //        }
-       
+
         $formMapper
             ->with('Γενικά Στοιχεία')
                 ->add('name', null, array('required' => true, 'label' => 'Ονομασία'))
@@ -106,7 +106,7 @@ class UnitAdmin extends Admin
                 ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
                 ->add('state', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Κατάσταση'))
                 ->add('legalCharacter', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'))
-                ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
+               // ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
                 ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
                 ->add('manager', null, array('label' => 'Υπεύθυνος', 'required' => false))
                 ->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι', 'required' => false))
@@ -135,10 +135,9 @@ class UnitAdmin extends Admin
                 ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
                 ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
             ->end()
-        ;
-
+        ;        
     }
-
+    
     /**
      * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
      *
@@ -257,6 +256,23 @@ class UnitAdmin extends Admin
     {
         return array();
     }
+    
+    public function preUpdate($object)
+    {
+        $this->prePersist($object);
+    }
+
+    public function prePersist($object)
+    {
+        
+        if ($object->getUnitType() != null){
+            $category = $object->getUnitType()->getCategoryId();           
+            $fCategory = $this->container->get('doctrine')->getManager()->getRepository('SUS\SiteBundle\Entity\UnitCategory')->find($category);            
+            $object->setCategory($fCategory);
+        }
+
+    }
+    
     
     public function createQuery($context = 'list')
     {

@@ -29,9 +29,12 @@ class UnitTypes
     private $name;
 
     /**
-     * @var integer
+     * @var UnitCategory
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="UnitCategory")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="category_id", referencedColumnName="category_id")
+     * })
      */
     private $categoryId;
 
