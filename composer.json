@@ -32,7 +32,8 @@
         "besimple/sso-auth-bundle": "*",
         "jasig/phpcas": "*",
         "ruudk/capifony-tools": "dev-master",
-        "liuggio/excelbundle": "1.0.*"
+        "liuggio/excelbundle": "1.0.*",
+        "zendframework/zend-ldap": "~2.5@dev"
     },
     "scripts": {
         "post-install-cmd": [
@@ -55,5 +56,11 @@
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web"
+    },
+    "repositories": [
+    {
+        "type": "composer",
+        "url": "https://packages.zendframework.com/"
     }
+    ]
 }
