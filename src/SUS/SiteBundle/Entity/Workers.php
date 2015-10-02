@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Workers
  *
- * @ORM\Table(name="workers", uniqueConstraints={@ORM\UniqueConstraint(name="registry_no_UNIQUE", columns={"registry_no"})}, indexes={@ORM\Index(name="tax_number_idx", columns={"tax_number"}), @ORM\Index(name="lastname_idx", columns={"lastname"}), @ORM\Index(name="firstname_idx", columns={"firstname"}), @ORM\Index(name="fathername_idx", columns={"fathername"}), @ORM\Index(name="sex_idx", columns={"sex"})})
+ * @ORM\Table(name="workers", options={"comment":"Περιέχει πληροφορίες σχετικά με τα Στοιχεία Εργαζόμενων."}, uniqueConstraints={@ORM\UniqueConstraint(name="registry_no_UNIQUE", columns={"registry_no"})}, indexes={@ORM\Index(name="tax_number_idx", columns={"tax_number"}), @ORM\Index(name="lastname_idx", columns={"lastname"}), @ORM\Index(name="firstname_idx", columns={"firstname"}), @ORM\Index(name="fathername_idx", columns={"fathername"}), @ORM\Index(name="sex_idx", columns={"sex"})})
  * @ORM\Entity
  */
 class Workers extends MMSyncableEntity
@@ -17,7 +17,7 @@ class Workers extends MMSyncableEntity
     /**
      * @var integer
      *
-     * @ORM\Column(name="worker_id", type="integer", nullable=false)
+     * @ORM\Column(name="worker_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID του Εργαζόμενου."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -43,42 +43,42 @@ class Workers extends MMSyncableEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="registry_no", type="string", length=255, nullable=true)
+     * @ORM\Column(name="registry_no", type="string", length=255, nullable=true, options={"comment":"Ο Κωδικός Μητρώου του Εργαζόμενου."})
      */
     private $registryNo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tax_number", type="string", length=255, nullable=true)
+     * @ORM\Column(name="tax_number", type="string", length=255, nullable=true, options={"comment":"Το ΑΦΜ του Εργαζόμενου."})
      */
     private $taxNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=true, options={"comment":"Το Επίθετο του Εργαζόμενου."})
      */
     private $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true, options={"comment":"Το Όνομα του Εργαζόμενου."})
      */
     private $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fathername", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fathername", type="string", length=255, nullable=true, options={"comment":"Το Όνομα Πατρός του Εργαζόμενου."})
      */
     private $fathername;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sex", type="string", length=1, nullable=true)
+     * @ORM\Column(name="sex", type="string", length=1, nullable=true, options={"comment":"Το Φύλο του Εργαζόμενου."})
      */
     private $sex;
 

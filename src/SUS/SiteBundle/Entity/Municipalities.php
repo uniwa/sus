@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Municipalities
  *
- * @ORM\Table(name="municipalities")
+ * @ORM\Table(name="municipalities", options={"comment":"Λεξικό με τους Δήμους Ο.Τ.Α."})
  * @ORM\Entity
  */
 class Municipalities
@@ -15,7 +15,7 @@ class Municipalities
     /**
      * @var integer
      *
-     * @ORM\Column(name="municipality_id", type="integer", nullable=false)
+     * @ORM\Column(name="municipality_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID του Δήμου Ο.Τ.Α."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,14 +24,14 @@ class Municipalities
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true, options={"comment":"Το Όνομα του Δήμου Ο.Τ.Α."})
      */
     private $name;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="prefecture_id", type="integer", nullable=true)
+     * @ORM\Column(name="prefecture_id", type="integer", nullable=true, options={"comment":"Ο Κωδικός ID της Περιφερειακής Ενότητας του Δήμου Ο.Τ.Α."})
      */
     private $prefectureId;
 

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UnitTypes
  *
- * @ORM\Table(name="unit_types")
+ * @ORM\Table(name="unit_types", options={"comment":"Λεξικό με τους Τύπους Μονάδων."})
  * @ORM\Entity
  */
 class UnitTypes
@@ -15,7 +15,7 @@ class UnitTypes
     /**
      * @var integer
      *
-     * @ORM\Column(name="unit_type_id", type="integer", nullable=false)
+     * @ORM\Column(name="unit_type_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID του Τύπου Μονάδας."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,13 +24,13 @@ class UnitTypes
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, options={"comment":"Το Όνομα του Τύπου Μονάδας."})
      */
     private $name;
 
     /**
      * @var UnitCategory
-     *
+     * 
      * @ORM\ManyToOne(targetEntity="UnitCategory")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="category_id", referencedColumnName="category_id")

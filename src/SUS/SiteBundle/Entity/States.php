@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * States
  *
- * @ORM\Table(name="states")
+ * @ORM\Table(name="states", options={"comment":"Λεξικό με τις Λειτουργικές Καταστάσεις."})
  * @ORM\Entity
  */
 class States
@@ -15,7 +15,7 @@ class States
     /**
      * @var integer
      *
-     * @ORM\Column(name="state_id", type="integer", nullable=false)
+     * @ORM\Column(name="state_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID της Λειτουργικής Κατάστασης."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class States
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, options={"comment":"Το Όνομα της Λειτουργικής Κατάστασης."})
      */
     private $name;
 

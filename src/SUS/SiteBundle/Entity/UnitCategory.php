@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UnitCategory
  *
- * @ORM\Table(name="categories")
+ * @ORM\Table(name="categories", options={"comment":"Λεξικό με τις Κατηγορίες."})
  * @ORM\Entity
  */
 class UnitCategory
@@ -15,7 +15,7 @@ class UnitCategory
     /**
      * @var integer
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     * @ORM\Column(name="category_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID της Κατηγορίας."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class UnitCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, options={"comment":"Το Όνομα της Κατηγορίας."})
      */
     private $name;
 

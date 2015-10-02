@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping\MappedSuperclass;
 abstract class MMSyncableEntity
 {
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true, options={"comment":"Ο Κωδικός ΜΜ της Μονάδας."})
      */
     protected $mmSyncId;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, options={"comment":"Η Ημερομηνία Συγχρονισμού της Μονάδας με το ΜΜ."})
      */
     protected $mmSyncLastUpdateDate;
 

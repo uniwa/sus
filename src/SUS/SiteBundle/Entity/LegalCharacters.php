@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LegalCharacters
  *
- * @ORM\Table(name="legal_characters")
+ * @ORM\Table(name="legal_characters", options={"comment":"Λεξικό με τους Νομικούς Χαρακτήρες Μονάδων."})
  * @ORM\Entity
  */
 class LegalCharacters
@@ -15,7 +15,7 @@ class LegalCharacters
     /**
      * @var integer
      *
-     * @ORM\Column(name="legal_character_id", type="integer", nullable=false)
+     * @ORM\Column(name="legal_character_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID του Νομικού Χαρακτήρα Μονάδων."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class LegalCharacters
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, options={"comment":"Το Όνομα του Νομικού Χαρακτήρα Μονάδων."})
      */
     private $name;
     

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EduAdmins
  *
- * @ORM\Table(name="edu_admins")
+ * @ORM\Table(name="edu_admins", options={"comment":"Λεξικό με τις Διευθύνσεις Εκπαίδευσης."})
  * @ORM\Entity
  */
 class EduAdmins
@@ -15,7 +15,7 @@ class EduAdmins
     /**
      * @var integer
      *
-     * @ORM\Column(name="edu_admin_id", type="integer", nullable=false)
+     * @ORM\Column(name="edu_admin_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID της Διευθύνσης Εκπαίδευσης."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,14 +24,14 @@ class EduAdmins
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, options={"comment":"Το Όνομα της Διευθύνσης Εκπαίδευσης."})
      */
     private $name;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="region_edu_admin_id", type="integer", nullable=true)
+     * @ORM\Column(name="region_edu_admin_id", type="integer", nullable=true, options={"comment":"Ο Κωδικός ID της Περιφέρειας της Διευθύνσης Εκπαίδευσης."})
      */
     private $regionEduAdminId;
 

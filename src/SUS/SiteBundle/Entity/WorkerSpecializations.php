@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * WorkerSpecializations
  *
- * @ORM\Table(name="worker_specializations", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
+ * @ORM\Table(name="worker_specializations", options={"comment":"Λεξικό με τις Ειδικότητες Εργαζομένων."}, uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
  * @ORM\Entity
  */
 class WorkerSpecializations
@@ -15,7 +15,7 @@ class WorkerSpecializations
     /**
      * @var integer
      *
-     * @ORM\Column(name="worker_specialization_id", type="integer", nullable=false)
+     * @ORM\Column(name="worker_specialization_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID της Ειδικότητας Εργαζόμενου."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class WorkerSpecializations
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, options={"comment":"Το Όνομα της Ειδικότητας Εργαζόμενου."})
      */
     private $name;
     

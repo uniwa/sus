@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Units
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
- * @ORM\Table(name="units")
+ * @ORM\Table(name="units", options={"comment":"Περιέχει πληροφορίες σχετικά με τις Μονάδες."})
  * @ORM\Entity
  */
 class Unit extends MMSyncableEntity
@@ -22,7 +22,7 @@ class Unit extends MMSyncableEntity
     /**
      * @var integer
      *
-     * @ORM\Column(name="unit_id", type="integer", nullable=false)
+     * @ORM\Column(name="unit_id", type="integer", nullable=false, options={"comment":"Ο Κωδικός ID της Μονάδας."})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -31,91 +31,91 @@ class Unit extends MMSyncableEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="registry_no", type="string", length=50, nullable=true, unique=true)
+     * @ORM\Column(name="registry_no", type="string", length=50, nullable=true, options={"comment":"Ο Κωδικός ΥΠΕΠΘ της Μονάδας."})
      */
     private $registryNo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true, options={"comment":"Το όνομα της Μονάδας."})
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="special_name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="special_name", type="string", length=255, nullable=true, options={"comment":"Το Προσωνύμιο της Μονάδας."})
      */
     private $specialName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="street_address", type="string", length=255, nullable=true)
+     * @ORM\Column(name="street_address", type="string", length=255, nullable=true, options={"comment":"Η Διεύθυνση της Μονάδας."})
      */
     private $streetAddress;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="postal_code", type="integer", nullable=true)
+     * @ORM\Column(name="postal_code", type="integer", nullable=true, options={"comment":"Ο Ταχυδρομικός Κώδικας της Μονάδας."})
      */
     private $postalCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fax_number", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fax_number", type="string", length=255, nullable=true, options={"comment":"Ο Αριθμός Τηλεομοιοτυπίας (φαξ) της Μονάδας."})
      */
     private $faxNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true, options={"comment":"Ο Τηλεφωνικός Αρθμός της Μονάδας."})
      */
     private $phoneNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true, options={"comment":"Το Ηλεκτρονικό Ταχυδρομέιο της Μονάδας."})
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tax_number", type="string", length=255, nullable=true)
+     * @ORM\Column(name="tax_number", type="string", length=255, nullable=true, options={"comment":"Ο Αριθμός Φορολογικού Μητρώου της Μονάδας."})
      */
     private $taxNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comments", type="string", length=255, nullable=true)
+     * @ORM\Column(name="comments", type="string", length=255, nullable=true, options={"comment":"Παρατηρήσεις - Σχόλια σχετικά με την Μονάδα."})
      */
     private $comments;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="positioning", type="string", length=255, nullable=true)
+     * @ORM\Column(name="positioning", type="string", length=255, nullable=true, options={"comment":"Η Κτηριακή Θέση της Μονάδας."})
      */
     private $positioning;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     * @ORM\Column(name="website", type="string", length=255, nullable=true, options={"comment":"Η Ιστοσελίδα της Μονάδας."})
      */
     private $website;
 
     /**
      * @var \Year
      *
-     * @ORM\Column(name="foundation_date", columnDefinition="YEAR", nullable=true)
+     * @ORM\Column(name="foundation_date", columnDefinition="YEAR", nullable=true, options={"comment":"Η Χρονιά Δημιουργίας της Μονάδας."})
      */
     private $foundationDate;
 
@@ -238,14 +238,14 @@ class Unit extends MMSyncableEntity
     private $responsibles;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, options={"comment":"Η Ημερομηνία Διαγραφής της Μονάδας."})
      */
     protected $deletedAt;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="source", type="string", length=50, nullable=true)
+     * @ORM\Column(name="source", type="string", length=50, nullable=true, options={"comment":"Η Πρωτογενής Πηγή της Μονάδας."})
      */
     private $source;
 
