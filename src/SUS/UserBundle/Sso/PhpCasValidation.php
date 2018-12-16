@@ -11,18 +11,11 @@ use Buzz\Message\Response;
  */
 class PhpCasValidation extends AbstractValidation implements ValidationInterface
 {
-    protected $kernel;
-
-    public function setKernel($kernel) {
-        $this->kernel = $kernel;
-    }
-
     /**
      * {@inheritdoc}
      */
     protected function validateResponse(Response $response)
     {
-        $this->kernel->locateResource('@SUSUserBundle');
         $allowedUsernames = array(
             'sprekas',
             'krantzos',
@@ -34,10 +27,11 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
             'ktsiolis',
             'ubichrys',
             'dnikoudis',
+            'tpanou'
         );
-        \phpCAS::client(SAML_VERSION_1_1,"sso-test.sch.gr",443,'',false);
+        \phpCAS::client(SAML_VERSION_1_1,"sso.sch.gr",443,'',false);
         \phpCAS::setNoCasServerValidation();
-        \phpCAS::handleLogoutRequests(array("sso-test.sch.gr"));
+        \phpCAS::handleLogoutRequests(array("sso.sch.gr"));
         \phpCAS::setNoClearTicketsFromUrl();
         $success = true;
         if(!\phpCAS::checkAuthentication()) {

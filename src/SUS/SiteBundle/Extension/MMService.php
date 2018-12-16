@@ -22,7 +22,8 @@ class MMService {
                             'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
                             'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
                             'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
-                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ'
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ',
+                            'ΟΜΟΣΠΟΝΔΙΑ','ΕΛΜΕ','ΜΟΝΑΔΕΣ ΑΛΛΩΝ ΥΠΟΥΡΓΕΙΩΝ','ΔΗΜΟΤΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ','ΕΚΚΛΗΣΙΑΣΤΙΚΟ'
                          );
 
         $syncToMM = (in_array($unit_type, $allowed) ? true : false );
@@ -252,16 +253,18 @@ class MMService {
                 "implementation_entity" => $unit->getImplementationEntity() != null ? $unit->getImplementationEntity()->getImplementationEntityId() : null,
                 //"transfer_area" => $unit-$unit->getImplementationEntity()>getTransferArea()->getId(),
                 "municipality" => $unit->getMunicipality() != null ? $unit->getMunicipality()->getName() : null,
-                "prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getName() : null,
+                "municipality_community" => $unit->getMunicipalityCommunity() != null ? $unit->getMunicipalityCommunity()->getName() : null,
+		"prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getName() : null,
                 "unit_type" => $unit->getUnitType() != null ? $unit->getUnitType()->getName() : null,
                 //"operation_shift" => $unit->getOperationShift()->getOperationShiftId(),
-                //"legal_character" => $unit->getLegalCharacter()->getLegalCharacterId(),
+                "legal_character" => $unit->getLegalCharacter()->getLegalCharacterId(),
                 //"orientation_type" => $unit->getOrientationType()->getOrientationTypeId(),
                 //"special_type" => $unit->getSpecialType()->getSpecialTypeId(),
                 "postal_code" => $unit->getPostalCode(),
                 //"area_team_number" => $unit->getAreaTeamNumber(),
                 "last_update" => $lastUpdate instanceof \DateTime ? $lastUpdate->format('Y-m-d H:i:s') : null,
-                "email" => $unit->getEmail(),
+                "last_sync" => $lastUpdate instanceof \DateTime ? $lastUpdate->format('Y-m-d H:i:s') : null,
+		"email" => $unit->getEmail(),
                 "fax_number" => $unit->getFaxNumber(),
                 "street_address" => $unit->getStreetAddress(),
                 "phone_number" => $unit->getPhoneNumber(),
