@@ -75,6 +75,7 @@ class UnitAdmin extends Admin
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
                 ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
                 ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
+                ->add('latlng', 'oh_google_maps', array('label' => 'Αναζήτηση Συντεταγμένων', 'required' => false, 'include_jquery' => false,))
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')

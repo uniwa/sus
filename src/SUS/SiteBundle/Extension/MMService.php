@@ -271,8 +271,8 @@ class MMService {
                 "tax_number" => $unit->getTaxNumber(),
                 "tax_office" => $unit->getTaxOffice() != null ? $unit->getTaxOffice()->getName() : null,
                 "comments" => $unit->getComments(),
-                //"latitude" => '',
-                //"longitude" => '',
+                "latitude" => $unit->getLatitude(),
+                "longitude" => $unit->getLongitude(),
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
         ));
