@@ -47,6 +47,8 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             // Liuggio Excel Bundle
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            // Oh Google Maps Form Bundle
+            new Oh\GoogleMapFormTypeBundle\OhGoogleMapFormTypeBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

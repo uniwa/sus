@@ -123,6 +123,23 @@ class UnitAdmin extends Admin
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
                 ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
                 ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
+                ->add('latlng', 'oh_google_maps', array(
+                    'label' => 'Αναζήτηση Συντεταγμένων',
+                    'required' => false,
+                    'include_jquery' => false,
+                    'lat_options' => array(
+                        'label' => 'Latitude',
+                        'required' => false,
+                        'empty_data' => 0
+                    ),
+                    'lng_options' => array(
+                        'label' => 'Longitude',
+                        'required' => false,
+                        'empty_data' => 0
+                    ),
+                    'default_lat' => 37.984042,
+                    'default_lng' => 23.728179,
+                ))
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
@@ -169,7 +186,7 @@ class UnitAdmin extends Admin
     {
         $datagridMapper
             ->add('unitId', null, array())
-            ->add('mmSyncId', null, array())   
+            ->add('mmSyncId', null, array())
             ->add('name', null, array())
             ->add('category', null, array())
             ->add('unitType', null, array())

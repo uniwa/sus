@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Oh\GoogleMapFormTypeBundle\Validator\Constraints as OhAssert;
 
 /**
  * Units
@@ -31,7 +33,7 @@ class Unit extends MMSyncableEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="registry_no", type="string", length=50, nullable=true, options={"comment":"Ο Κωδικός ΥΠΕΠΘ της Μονάδας."})
+     * @ORM\Column(name="registry_no", type="string", length=50, nullable=true, unique=true, options={"comment":"Ο Κωδικός ΥΠΕΠΘ της Μονάδας."})
      */
     private $registryNo;
 
@@ -229,6 +231,20 @@ class Unit extends MMSyncableEntity
      */
     private $municipalityCommunity;
     
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="latitude", type="string", length=255, nullable=true)
+     */
+    private $latitude;
+    
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="longitude", type="string", length=255, nullable=true)
+     */
+    private $longitude;
+
     /**
      * @var Workers
      *
@@ -474,7 +490,7 @@ class Unit extends MMSyncableEntity
     public function setMunicipalityCommunity(MunicipalityCommunities $municipalityCommunity = null) {
         $this->municipalityCommunity = $municipalityCommunity;
     }
-    
+
     public function getManager() {
         return $this->manager;
     }
@@ -510,7 +526,39 @@ class Unit extends MMSyncableEntity
     public function setSource($source=null) {
         $this->source = $source;
     }
-   
+
+    public function getLatitude() {
+        return $this->latitude;
+    }
+
+    public function setLatitude($latitude) {
+        $this->latitude = $latitude;
+    }
+
+    public function getLongitude() {
+        return $this->longitude;
+    }
+
+    public function setLongitude($longitude) {
+        $this->longitude = $longitude;
+    }
+
+    public function setLatLng($latlng)
+    {
+        $this->setLatitude($latlng['lat']);
+        $this->setLongitude($latlng['lng']);
+        return $this;
+    }
+
+    /**
+     * @Assert\NotBlank()
+     * @OhAssert\LatLng()
+     */
+    public function getLatLng()
+    {
+        return array('lat'=>$this->getLatitude(),'lng'=>$this->getLongitude());
+    }
+
     public function __toString() {
         return 'SUS: '.$this->getUnitId().' | ΜΜ: '.$this->getMmSyncId().' | '.$this->getName();
     }

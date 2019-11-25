@@ -21,8 +21,9 @@ class MMService {
                             'ΕΡΓΑΣΤΗΡΙΑ ΦΥΣΙΚΩΝ ΕΠΙΣΤΗΜΩΝ', 'ΣΧΟΛΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ',
                             'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
                             'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
-                            'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
-                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ'
+                            'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ',
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ',
+                            'ΟΜΟΣΠΟΝΔΙΑ','ΕΛΜΕ','ΜΟΝΑΔΕΣ ΑΛΛΩΝ ΥΠΟΥΡΓΕΙΩΝ','ΔΗΜΟΤΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ','ΕΚΚΛΗΣΙΑΣΤΙΚΟ'
                          );
 
         $syncToMM = (in_array($unit_type, $allowed) ? true : false );
@@ -262,15 +263,16 @@ class MMService {
                 "postal_code" => $unit->getPostalCode(),
                 //"area_team_number" => $unit->getAreaTeamNumber(),
                 "last_update" => $lastUpdate instanceof \DateTime ? $lastUpdate->format('Y-m-d H:i:s') : null,
-                "email" => $unit->getEmail(),
+                "last_sync" => $lastUpdate instanceof \DateTime ? $lastUpdate->format('Y-m-d H:i:s') : null,
+		        "email" => $unit->getEmail(),
                 "fax_number" => $unit->getFaxNumber(),
                 "street_address" => $unit->getStreetAddress(),
                 "phone_number" => $unit->getPhoneNumber(),
                 "tax_number" => $unit->getTaxNumber(),
                 "tax_office" => $unit->getTaxOffice() != null ? $unit->getTaxOffice()->getName() : null,
                 "comments" => $unit->getComments(),
-                //"latitude" => '',
-                //"longitude" => '',
+                "latitude" => $unit->getLatitude(),
+                "longitude" => $unit->getLongitude(),
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
         ));

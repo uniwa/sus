@@ -13,7 +13,6 @@ use Buzz\Message\Response;
  */
 class PhpCasValidation extends AbstractValidation implements ValidationInterface
 {
-  
     protected $kernel;
 //    private $container;
 
@@ -24,13 +23,12 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
 //    public function setContainer($container) {
 //        $this->container = $container;
 //    }
-    
+
     /**
      * {@inheritdoc}
      */    
     protected function validateResponse(Response $response)
     {
-        
         //        $allowedUsernames = array(
         //            'krantzos',
         //            'sgialpa',
@@ -45,9 +43,9 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
         //            $success = false;
         //        }
         
-        \phpCAS::client(SAML_VERSION_1_1,"sso-test.sch.gr",443,'',false);
+        \phpCAS::client(SAML_VERSION_1_1,"sso.sch.gr",443,'',false);
         \phpCAS::setNoCasServerValidation();
-        \phpCAS::handleLogoutRequests(array("sso-test.sch.gr"));
+        \phpCAS::handleLogoutRequests(array("sso.sch.gr"));
         \phpCAS::setNoClearTicketsFromUrl();
 
         $success = true;

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -34,7 +35,8 @@ class AuthController extends Controller {
             $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
-        var_dump($error); die();
+        /** @var BadCredentialsException $error */
+        var_dump($error->getMessage()); die();
 
         //return $this->render('Lille3TestBundle:Default:security.html.twig',array('error'=>$error));
     }

@@ -16,6 +16,7 @@ class Protocol extends BaseProtocol
 public function __construct($kernel){//,$container) {
         $this->kernel = $kernel;
        //$this->container = $container;
+        parent::__construct();
     }
     
     public function executeValidation(ClientInterface $client, BuzzRequest $request, $credentials)
