@@ -6,7 +6,6 @@ imports:
 
 parameters:
     be_simple.sso_auth.client.option.curlopt_ssl_verifypeer.value: FALSE
-    be_simple.sso_auth.protocol.cas.class: SUS\UserBundle\Sso\Protocol
 
 framework:
     #esi:             ~
@@ -174,9 +173,10 @@ services:
             - { name: doctrine.event_listener, event: postLoad }
         arguments:
             - "@sus.mm.service"
-    sus.sso.protocol:
+    be_simple.sso_auth.protocol.cas:
         class: SUS\UserBundle\Sso\Protocol
         tags:
+            - { name: be_simple.sso_auth.protocol, id: cas }
             - { name: be_simple.sso_auth.protocol, id: sus }
         arguments:
             - "@kernel"
