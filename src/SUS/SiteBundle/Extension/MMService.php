@@ -22,7 +22,8 @@ class MMService {
                             'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
                             'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
                             'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
-                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ'
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ',
+                            'ΟΜΟΣΠΟΝΔΙΑ','ΕΛΜΕ','ΜΟΝΑΔΕΣ ΑΛΛΩΝ ΥΠΟΥΡΓΕΙΩΝ'
                          );
 
         $syncToMM = (in_array($unit_type, $allowed) ? true : false );
@@ -191,7 +192,7 @@ class MMService {
     protected function queryMM($resource, $params = array()) {
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
-        $server = 'https://mm.sch.gr/api/'.$resource;
+        $server = 'http://mmsch.teiath.gr/api/'.$resource;
 
         $curl = curl_init ($server);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -252,10 +253,11 @@ class MMService {
                 "implementation_entity" => $unit->getImplementationEntity() != null ? $unit->getImplementationEntity()->getImplementationEntityId() : null,
                 //"transfer_area" => $unit-$unit->getImplementationEntity()>getTransferArea()->getId(),
                 "municipality" => $unit->getMunicipality() != null ? $unit->getMunicipality()->getName() : null,
-                "prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getName() : null,
+                "municipality_community" => $unit->getMunicipalityCommunity() != null ? $unit->getMunicipalityCommunity()->getName() : null,
+		"prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getName() : null,
                 "unit_type" => $unit->getUnitType() != null ? $unit->getUnitType()->getName() : null,
                 //"operation_shift" => $unit->getOperationShift()->getOperationShiftId(),
-                //"legal_character" => $unit->getLegalCharacter()->getLegalCharacterId(),
+                "legal_character" => $unit->getLegalCharacter()->getLegalCharacterId(),
                 //"orientation_type" => $unit->getOrientationType()->getOrientationTypeId(),
                 //"special_type" => $unit->getSpecialType()->getSpecialTypeId(),
                 "postal_code" => $unit->getPostalCode(),
@@ -272,13 +274,14 @@ class MMService {
                 //"longitude" => '',
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
+                "last_sync" => $lastUpdate instanceof \DateTime ? $lastUpdate->format('Y-m-d H:i:s') : null
         ));
          
             //check if unit has allowed unit type to sync with mm 
             if ( !$this->allowedUnitTypesToMMSync( $unit->getUnitType()->getName()))
                 return;
    
-            $curl = curl_init("https://mm.sch.gr/api/units");
+            $curl = curl_init("http://mmsch.teiath.gr/api/units");
             $username = $this->container->getParameter('mmsch_username');
             $password = $this->container->getParameter('mmsch_password');
             curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -331,7 +334,7 @@ class MMService {
             'source' => 'SUS',
         ));
 
-        $curl = curl_init("https://mm.sch.gr/api/workers");
+        $curl = curl_init("http://mmsch.teiath.gr/api/workers");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
@@ -385,7 +388,7 @@ class MMService {
             'worker_position' => $worker->getUnit() == $unit ? 'ΔΙΕΥΘΥΝΤΗΣ ΚΕΠΛΗΝΕΤ' : 'ΤΕΧΝΙΚΟΣ ΥΠΕΥΘΥΝΟΣ ΚΕΠΛΗΝΕΤ',
         ));
 
-        $curl = curl_init("https://mm.sch.gr/api/unit_workers");
+        $curl = curl_init("http://mmsch.teiath.gr/api/unit_workers");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');

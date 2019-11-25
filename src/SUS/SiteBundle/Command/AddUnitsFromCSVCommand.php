@@ -10,13 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use SUS\SiteBundle\Entity\Unit;
 use SUS\SiteBundle\Entity\Workers;
 
-class ImportImplementationEntitiesCommand extends ContainerAwareCommand
+class AddUnitsFromCSVCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
 
         $this
-            ->setName('sus:importimplementationentities')
+            ->setName('sus:addunitsfromcsv')
             ->setDescription('Import a CSV with line data')
             ->addOption('file', null, InputOption::VALUE_REQUIRED, 'xls file to import from')
             ;
@@ -28,7 +28,6 @@ class ImportImplementationEntitiesCommand extends ContainerAwareCommand
         $this->container = $this->getContainer();
         $this->em = $this->container->get('doctrine')->getManager();
         $this->pdo = new \PDO('mysql:host=localhost;dbname=mmsch;charset=utf8', 'root', 'co38mw74vn');
-        $mmservice = $this->container->get('sus.mm.service');
         $this->cvsParsingOptions = array(
             'ignoreFirstLine' => true
         );
@@ -38,27 +37,59 @@ class ImportImplementationEntitiesCommand extends ContainerAwareCommand
         foreach ($xls->getRowIterator(2) as $row) {
             $fields = $this->parseRowToArray($row, $headers);
             $unit = $this->em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
-                'mmSyncId' => ($fields['MM_id']),
+                'name' => ($fields['ONOMASIA']),
             ));
-            if(!isset($unit)) {
-                $output->writeln('Skipping unit: '.$fields['MM_id']);
+            if(isset($unit)) {
+                $output->writeln('Skipping unit: '.$unit->getName());
                 continue;
             }
+            $unit = new Unit();
+            $unit->setName($fields['ONOMASIA']);
+            $unit->setCategory($this->em->getRepository('SUS\SiteBundle\Entity\UnitCategory')->findOneBy(array('name' => 'ΣΧΟΛΙΚΕΣ ΜΟΝΑΔΕΣ')));
+            $unit->setUnitType($this->em->getRepository('SUS\SiteBundle\Entity\UnitTypes')->findOneBy(array('name' => 'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ')));
+//            $unit->setStreetAddress($fields['street_address'].' '.$fields['street_address_num']);
+//            $unit->setPostalCode($fields['TK']);
+//            $unit->setMunicipality($this->findEntityFromMMDictionary('municipalities', 'municipality_id', $fields['MUNICIPALITY_ID'], 'SUS\SiteBundle\Entity\Municipalities', 'name', 'name'));
+if($fields['ONOMA_NOM'] == 'ΑΤΤΙΚΗΣ') { $fields['ONOMA_NOM'] = 'ΑΝΑΤΟΛΙΚΗΣ ΑΤΤΙΚΗΣ'; } 
+if($fields['ONOMA_NOM'] == 'ΔΩΔΕΚΑΝΗΣΟΥ') { $fields['ONOMA_NOM'] = 'ΡΟΔΟΥ'; }
+if($fields['ONOMA_NOM'] == 'ΚΥΚΛΑΔΩΝ') { $fields['ONOMA_NOM'] = 'ΣΥΡΟΥ'; }
+            $unit->setPrefecture($this->findEntityFromMMDictionary('prefectures', 'name', $fields['ONOMA_NOM'], 'SUS\SiteBundle\Entity\Prefectures', 'name', 'name'));
+//            $unit->setImplementationEntity($this->findEntityFromMMDictionary('implementation_entities', 'implementation_entity_id', $fields['IMPLEMENTATION_ENTITY_ID'], 'SUS\SiteBundle\Entity\ImplementationEntities', 'name', 'name'));
+            $unit->setPhoneNumber($fields['Τηλ']);
+            $unit->setComments('GLUC:'.$fields['GLUC']);
+            $unit->setState($this->em->getRepository('SUS\SiteBundle\Entity\States')->find(1));
 
-            $implementationEntity = $this->em->getRepository('SUS\SiteBundle\Entity\ImplementationEntities')->findOneBy(array(
-                'implementationEntityId' => ($fields['FY']),
-            ));
-            $unit->setImplementationEntity($implementationEntity);
             $this->em->persist($unit);
-            $this->em->flush(array($unit));
+            $this->em->flush($unit);
+            $output->writeln('Unit added: '.$unit->getUnitId());
+
+            if($fields['RESPONSIBLE'] != '') {
+                $names = explode(' ', $fields['RESPONSIBLE']);
+                $worker = $this->em->getRepository('SUS\SiteBundle\Entity\Workers')->findOneBy(array(
+                    'lastname' => $names[0],
+                    'firstname' => (isset($names[1]) ? $names[1] : null),
+                ));
+                if(!isset($worker)) {
+                    $worker = new Workers();
+                    $worker->setUnit($unit);
+                    $output->writeln('Worker found: '.$fields['RESPONSIBLE']);
+                } else {
+                    $output->writeln('Worker added: '.$fields['RESPONSIBLE']);
+                }
+                $worker->setLastname($names[0]);
+                if(isset($names[1])) { $worker->setFirstname($names[1]); }
+                $unit->setManager($worker);
+                $this->em->persist($worker);
+                $this->em->flush(array($unit, $worker));
+            }
         }
 
-        $output->writeln('Implementation entities imported successfully');
+        $output->writeln('Units imported successfully');
     }
 
     private function findEntityFromMMDictionary($table, $idField, $value, $repo, $fieldToSearchDb, $fieldToSearchRepo) {
         if($value == '') { return null; }
-        $query = 'SELECT * from '.$table.' WHERE '.$idField.' = '.$value;
+        $query = 'SELECT * from '.$table.' WHERE '.$idField.' = "'.$value.'"';
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch();
@@ -100,7 +131,7 @@ class ImportImplementationEntitiesCommand extends ContainerAwareCommand
         foreach ($finder as $file) { $csv = $file; }
 
         $phpExcelObject = $this->getContainer()->get('xls.load_xls2007')->load($csv->getRealPath());
-        $sheet = $phpExcelObject->getSheet(0);
+        $sheet = $phpExcelObject->getSheet(1);
         //$objReader = PHPExcel_IOFactory::createReader($inputFileType);
         return $sheet;
     }

@@ -70,7 +70,8 @@ class UnitAdmin extends Admin
                 ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
                 ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
                 ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
-                ->add('prefecture', null, array('label' => 'Νομός'))
+               // ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
+		->add('prefecture', null, array('label' => 'Νομός'))
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
                 ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
                 ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
@@ -120,6 +121,7 @@ class UnitAdmin extends Admin
     {
         $datagridMapper
             ->add('unitId', null, array())
+            ->add('mmSyncId',null,array())
             ->add('name', null, array())
             ->add('category', null, array())
             ->add('unitType', null, array())

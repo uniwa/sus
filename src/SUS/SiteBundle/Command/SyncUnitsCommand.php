@@ -25,7 +25,8 @@ class SyncUnitsCommand extends ContainerAwareCommand
                             'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
                             'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
                             'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
-                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ' )";
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ',
+                            'ΟΜΟΣΠΟΝΔΙΑ','ΕΛΜΕ','ΜΟΝΑΔΕΣ ΑΛΛΩΝ ΥΠΟΥΡΓΕΙΩΝ' )";
         
         $output->writeln('Starting SyncUnits process');
         $this->container = $this->getContainer();
@@ -44,6 +45,7 @@ class SyncUnitsCommand extends ContainerAwareCommand
             $output->write('Syncing unit '.$row->getUnitId().' '.$row->getName().'...');
             $mmservice->persistMM($row);
             $output->writeln(' got '.$row->getMmSyncId());
+            //row->getMmSyncId()==null)? $output->writeln(' NULL FAILURE '):$output->writeln(' SUCCESS ');
             if (($i % $batchSize) == 0) {
                 $em->flush();
                 $em->clear();

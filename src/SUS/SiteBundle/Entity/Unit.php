@@ -31,7 +31,7 @@ class Unit extends MMSyncableEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="registry_no", type="string", length=11, nullable=true, unique=true)
+     * @ORM\Column(name="registry_no", type="string", length=50, nullable=true, unique=true)
      */
     private $registryNo;
 
@@ -218,6 +218,16 @@ class Unit extends MMSyncableEntity
      * })
      */
     private $municipality;
+
+    /**
+     * @var MunicipalityCommunities
+     *
+     * @ORM\ManyToOne(targetEntity="MunicipalityCommunities")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="municipality_community_id", referencedColumnName="municipality_community_id")
+     * })
+     */
+    private $municipalityCommunity;
 
     /**
      * @var Workers
@@ -448,6 +458,14 @@ class Unit extends MMSyncableEntity
 
     public function setMunicipality(Municipalities $municipality = null) {
         $this->municipality = $municipality;
+    }
+
+    public function getMunicipalityCommunity() {
+        return $this->municipalityCommunity;
+    }
+
+    public function setMunicipalityCommunity(MunicipalityCommunities $municipalityCommunity = null) {
+        $this->municipalityCommunity = $municipalityCommunity;
     }
 
     public function getManager() {

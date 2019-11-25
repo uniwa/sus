@@ -17,16 +17,17 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
     protected function validateResponse(Response $response)
     {
         $allowedUsernames = array(
-            'sprekas',
-            'krantzos',
-            'sgialpa',
-            'elenipapapa',
-            'dandrits',
-            'vagelopoulos',
-            'apekos',
+          //  'sprekas',
+          //  'krantzos',
+          //  'sgialpa',
+          //  'elenipapapa',
+          //  'dandrits',
+          //  'vagelopoulos',
+         //   'apekos',
             'ktsiolis',
-            'ubichrys',
+         //   'ubichrys',
             'dnikoudis',
+         //   'tpanou'
         );
         \phpCAS::client(SAML_VERSION_1_1,"sso-test.sch.gr",443,'',false);
         \phpCAS::setNoCasServerValidation();
