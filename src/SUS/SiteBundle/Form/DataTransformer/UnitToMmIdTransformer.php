@@ -7,8 +7,8 @@ use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
-use Psdtg\SiteBundle\Entity\Unit;
-use Psdtg\SiteBundle\Extension\MMService;
+use SUS\SiteBundle\Entity\Unit;
+use SUS\SiteBundle\Extension\MMService;
 
 /**
  * Transforms between a UserInterface instance and a username string.

@@ -220,6 +220,16 @@ class Unit extends MMSyncableEntity
     private $municipality;
 
     /**
+     * @var MunicipalityCommunities
+     *
+     * @ORM\ManyToOne(targetEntity="MunicipalityCommunities")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="municipality_community_id", referencedColumnName="municipality_community_id")
+     * })
+     */
+    private $municipalityCommunity;
+    
+    /**
      * @var Workers
      *
      * @ORM\OneToOne(targetEntity="Workers", mappedBy="unit")
@@ -457,6 +467,14 @@ class Unit extends MMSyncableEntity
         $this->municipality = $municipality;
     }
 
+    public function getMunicipalityCommunity() {
+        return $this->municipalityCommunity;
+    }
+
+    public function setMunicipalityCommunity(MunicipalityCommunities $municipalityCommunity = null) {
+        $this->municipalityCommunity = $municipalityCommunity;
+    }
+    
     public function getManager() {
         return $this->manager;
     }

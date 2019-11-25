@@ -22,7 +22,7 @@ class MMService {
                             'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
                             'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
                             'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 
-                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ'
+                            'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ'
                          );
 
         $syncToMM = (in_array($unit_type, $allowed) ? true : false );
@@ -191,7 +191,7 @@ class MMService {
     protected function queryMM($resource, $params = array()) {
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
-        $server = 'https://mm.sch.gr/api/'.$resource;
+        $server = 'http://mmsch.teiath.gr/teiath_git/mmsch/api/'.$resource;
 
         $curl = curl_init ($server);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -245,13 +245,14 @@ class MMService {
                 "category" => $unit->getCategory()->getName(),
                 "suspended" => !$unit->isActive(),
                 "state" => $unit->getState()->getName(),
-                "education_level" => $unit->getUnitType() != null && $unit->getUnitType()->getEducationLevel() != null ? $unit->getUnitType()->getEducationLevel()->getEducationLevelId() : null,
+                "education_level" => $unit->getUnitType() != null && $unit->getUnitType()->getEducationLevel() != null ? $unit->getUnitType()->getEducationLevel()->getName() : null,
                 "special_name" => $unit->getSpecialName(),
                 "region_edu_admin" => $unit->getRegionEduAdmin() != null ? $unit->getRegionEduAdmin()->getName() : null,
                 "edu_admin" => $unit->getEduAdmin() != null ? $unit->getEduAdmin()->getName() : null,
                 "implementation_entity" => $unit->getImplementationEntity() != null ? $unit->getImplementationEntity()->getImplementationEntityId() : null,
                 //"transfer_area" => $unit-$unit->getImplementationEntity()>getTransferArea()->getId(),
                 "municipality" => $unit->getMunicipality() != null ? $unit->getMunicipality()->getName() : null,
+                "municipality_community" => $unit->getMunicipalityCommunity() != null ? $unit->getMunicipalityCommunity()->getName() : null,
                 "prefecture" => $unit->getPrefecture() != null ? $unit->getPrefecture()->getName() : null,
                 "unit_type" => $unit->getUnitType() != null ? $unit->getUnitType()->getName() : null,
                 //"operation_shift" => $unit->getOperationShift()->getOperationShiftId(),
@@ -273,12 +274,12 @@ class MMService {
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
         ));
-         
+
             //check if unit has allowed unit type to sync with mm 
             if ( !$this->allowedUnitTypesToMMSync( $unit->getUnitType()->getName()))
                 return;
    
-            $curl = curl_init("https://mm.sch.gr/api/units");
+            $curl = curl_init("http://mmsch.teiath.gr/teiath_git/mmsch/api/units");
             $username = $this->container->getParameter('mmsch_username');
             $password = $this->container->getParameter('mmsch_password');
             curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -331,7 +332,7 @@ class MMService {
             'source' => 'SUS',
         ));
 
-        $curl = curl_init("https://mm.sch.gr/api/workers");
+        $curl = curl_init("http://mmsch.teiath.gr/teiath_git/mmsch/api/workers");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');
@@ -385,7 +386,7 @@ class MMService {
             'worker_position' => $worker->getUnit() == $unit ? 'ΔΙΕΥΘΥΝΤΗΣ ΚΕΠΛΗΝΕΤ' : 'ΤΕΧΝΙΚΟΣ ΥΠΕΥΘΥΝΟΣ ΚΕΠΛΗΝΕΤ',
         ));
 
-        $curl = curl_init("https://mm.sch.gr/api/unit_workers");
+        $curl = curl_init("http://mmsch.teiath.gr/teiath_git/mmsch/api/unit_workers");
 
         $username = $this->container->getParameter('mmsch_username');
         $password = $this->container->getParameter('mmsch_password');

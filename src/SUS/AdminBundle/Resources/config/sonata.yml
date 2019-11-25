@@ -3,11 +3,11 @@ sonata_cache:
         esi:
             servers:
                 - varnishadm -T 127.0.0.1:2000 {{ COMMAND }} "{{ EXPRESSION }}"
-        apc:
-            token:  s3cur3   # token used to clear the related cache
-            prefix: test     # prefix to ensure there is no clash between instances
-            servers:
-                - { domain: kooqit.local, ip: 127.0.0.1, port: 80}
+        #apc:
+        #    token:  s3cur3   # token used to clear the related cache
+        #    prefix: test     # prefix to ensure there is no clash between instances
+        #    servers:
+        #        - { domain: kooqit.local, ip: 127.0.0.1, port: 80}
 
 sonata_block:
     default_contexts: [cms]
