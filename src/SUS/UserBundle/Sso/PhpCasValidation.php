@@ -14,15 +14,15 @@ use Buzz\Message\Response;
 class PhpCasValidation extends AbstractValidation implements ValidationInterface
 {
     protected $kernel;
-//    private $container;
+    private $container;
 
     public function setKernel($kernel) {
         $this->kernel = $kernel;
     }
 
-//    public function setContainer($container) {
-//        $this->container = $container;
-//    }
+    public function setContainer($container) {
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}
@@ -53,22 +53,23 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
             $success = false; 
         }
 
-//        $username = \phpCAS::getUser();
-//               
-//        //check user uid with roles.yml file
-//        //check for USER1,USER2,USER4
+        $username = \phpCAS::getUser();
+
+        //check user uid with roles.yml file
+        //check for USER1,USER2,USER4
 //        $path = $this->kernel->locateResource('@SUSUserBundle').'\Resources\config\roles.yml';
-//        $userRoles = new YamlUserLoader();   
+//        $userRoles = new YamlUserLoader();
 //        $roles = $userRoles->load($path);
 //        if (array_key_exists($username,$roles)){
 //            $success = true;
 //        }
-//
-////        //check for USER3
-//        if (array_key_exists($username, $roles)!=true){
-//            $mm_id = $this->container->get('security.user.permissions')->checkPrincipal($username);
-//            if ($mm_id != null) $success = true;
-//        }
+        $roles = [];
+
+//        //check for USER3
+        if (array_key_exists($username, $roles)!=true){
+            $mm_id = $this->container->get('security.user.permissions')->checkPrincipal($username);
+            if ($mm_id != null) $success = true;
+        }
 
         if ($success) {
             $this->username = \phpCAS::getUser();
