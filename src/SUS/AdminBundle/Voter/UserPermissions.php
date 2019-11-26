@@ -61,7 +61,7 @@ class UserPermissions {
                                 "physicaldeliveryofficename" => $uidRows[0]["physicaldeliveryofficename"][0],
                                 "dn" => $uidRows[0]["dn"],
                                 "l" => $uidRows[0]["l"][0],
-                                "labeledUri" => $uidRows[0]["labeleduri"][0]
+                                //"labeledUri" => $uidRows[0]["labeleduri"][0]
                             );
             
         } else if ($uidResult->count() == 0) 
