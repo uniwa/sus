@@ -5,6 +5,8 @@ namespace SUS\UserBundle\Sso;
 use BeSimple\SsoAuthBundle\Sso\AbstractValidation;
 use BeSimple\SsoAuthBundle\Sso\ValidationInterface;
 use Buzz\Message\Response;
+use SUS\UserBundle\Loader\YamlUserLoader;
+
 //use SUS\UserBundle\Loader\YamlUserLoader;
 
 
