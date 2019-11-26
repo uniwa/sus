@@ -311,6 +311,9 @@ class UnitAdmin extends Admin
         if (array_key_exists($username,$roles)){
             $legalCharacterName = $roles[$username]['legal_character'];
             $unitTypeName = $roles[$username]['unit_types'];
+            if ($roles[$username]['name'] === 'Administrator' && empty($unitTypeName)) {
+                $unitTypeName[0] = 'all';
+            }
             $proxyQuery = parent::createQuery($context);
             $proxyQuery->join($proxyQuery->getRootAlias().'.unitType', 'ut');
             $proxyQuery->join($proxyQuery->getRootAlias().'.legalCharacter', 'lc');
