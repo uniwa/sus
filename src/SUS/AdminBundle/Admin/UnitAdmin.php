@@ -230,8 +230,8 @@ class UnitAdmin extends Admin
                 ->add('legalCharacter', null, array('label' => 'Νομικός Χαρακτήρας'))
                 ->add('category', null, array('label' => 'Κατηγορία'))
                 ->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
-                ->add('manager', null, array('label' => 'Υπεύθυνος'))
-                ->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι'))
+                //->add('manager', null, array('label' => 'Υπεύθυνος'))
+                //->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι'))
                 ->add('comments', null, array('label' => 'Σχόλια'))
             ->end()
 
