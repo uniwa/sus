@@ -82,7 +82,7 @@ class AdminAclVoter extends AclVoter
                 //$mm_id = '1019474';
                 return self::ACCESS_DENIED;
             } else {
-                $sus_user->setRoles('ROLE_USER3');
+                $sus_user->setRoles(array('ROLE_USER3'));
                 $this->em = $this->container->get('doctrine')->getManager();
                 $this->em->persist($sus_user);
                 $this->em->flush($sus_user);
