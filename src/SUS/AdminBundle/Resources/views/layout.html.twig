@@ -8,6 +8,11 @@
 {% block javascripts %}
 {{parent()}}
 {% if form is defined %}{{ form_javascript(form) }}{% endif %}
+<script>
+  $(document).ready(function() {
+    $('.sidebar p:first').text(' Sch Units Subsystem').css({'color': '#fff'});
+  });
+</script>
 {% endblock %}
 
 {% block logo %}
