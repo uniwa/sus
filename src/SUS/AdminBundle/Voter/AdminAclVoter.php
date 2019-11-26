@@ -64,7 +64,7 @@ class AdminAclVoter extends AclVoter
     
         //check user uid with roles.yml file
         //check for USER1,USER2,USER4
-        $path = $this->kernel->locateResource('@SUSUserBundle').'\Resources\config\roles.yml';
+        $path = $this->kernel->locateResource('@SUSUserBundle').'/Resources/config/roles.yml';
         $userRoles = new YamlUserLoader();   
         $roles = $userRoles->load($path);
         if (array_key_exists($username, $roles)){

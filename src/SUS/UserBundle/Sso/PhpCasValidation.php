@@ -57,13 +57,12 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
 
         //check user uid with roles.yml file
         //check for USER1,USER2,USER4
-//        $path = $this->kernel->locateResource('@SUSUserBundle').'\Resources\config\roles.yml';
-//        $userRoles = new YamlUserLoader();
-//        $roles = $userRoles->load($path);
-//        if (array_key_exists($username,$roles)){
-//            $success = true;
-//        }
-        $roles = [];
+        $path = $this->kernel->locateResource('@SUSUserBundle').'/Resources/config/roles.yml';
+        $userRoles = new YamlUserLoader();
+        $roles = $userRoles->load($path);
+        if (array_key_exists($username,$roles)){
+            $success = true;
+        }
 
 //        //check for USER3
         if (array_key_exists($username, $roles)!=true){
