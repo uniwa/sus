@@ -267,13 +267,6 @@ class Unit extends MMSyncableEntity
      * @ORM\Column(type="datetime", nullable=true, options={"comment":"Η Ημερομηνία Διαγραφής της Μονάδας."})
      */
     protected $deletedAt;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="source", type="string", length=50, nullable=true, options={"comment":"Η Πρωτογενής Πηγή της Μονάδας."})
-     */
-    private $source;
 
     public function __construct() {
         $this->responsibles = new ArrayCollection();
@@ -517,14 +510,6 @@ class Unit extends MMSyncableEntity
 
     public function isActive() {
         return !isset($this->deletedAt);
-    }
-
-    public function getSource() {
-        return $this->source;
-    }
-
-    public function setSource($source=null) {
-        $this->source = $source;
     }
 
     public function getLatitude() {
