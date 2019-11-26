@@ -111,7 +111,7 @@ class UnitAdmin extends Admin
                 ->add('manager', null, array('label' => 'Υπεύθυνος', 'required' => false))
                 ->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι', 'required' => false))
                 ->add('comments', null, array('label' => 'Σχόλια'))
-                ->add('source', 'choice', array('label' => 'Πρωτογενής Πηγή','choices' => array('aegeanDB' => 'AegeanDB', 'mySchool' => 'MySchool', 'minEdu' => 'MinEdu'),'preferred_choices' => array('aegeanDB')))
+                //->add('source', 'choice', array('label' => 'Πρωτογενής Πηγή','choices' => array('aegeanDB' => 'AegeanDB', 'mySchool' => 'MySchool', 'minEdu' => 'MinEdu'),'preferred_choices' => array('aegeanDB')))
             ->end()
 
             ->with('Στοιχεία Τοποθεσίας')
