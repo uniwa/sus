@@ -32,6 +32,7 @@
         "besimple/sso-auth-bundle": "*",
         "jasig/phpcas": "*",
         "ruudk/capifony-tools": "dev-master",
+        "oh/google-map-form-type-bundle": "*",
         "liuggio/excelbundle": "1.0.*",
         "zendframework/zend-ldap": "~2.5@dev"
     },
