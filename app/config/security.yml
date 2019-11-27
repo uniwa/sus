@@ -31,6 +31,8 @@ security:
               create_users: true
               created_users_roles: [ROLE_USER]
               failure_path: /debug
+              default_target_path: admin_sus_site_unit_list
+              always_use_default_target_path: true
             logout:       true
             anonymous:    true
 
