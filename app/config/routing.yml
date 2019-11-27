@@ -45,6 +45,13 @@ adminredirts:
         route: sonata_admin_dashboard
         permanent: true # this is for 301
 
+admindashboardredirts:
+    pattern:	/admin/dashboard
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: admin_sus_site_unit_list
+        permanent: true # this is for 301
+
 homeredirts:
     pattern:	/
     defaults:
