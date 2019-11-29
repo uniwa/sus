@@ -184,15 +184,21 @@ class UnitAdmin extends Admin
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper
-            ->add('unitId', null, array())
-            ->add('mmSyncId', null, array())
-            ->add('name', null, array())
-            ->add('category', null, array())
-            ->add('unitType', null, array())
-            ->add('manager', null, array('label' => 'Υπεύθυνος'))
-            ->add('full_text', 'doctrine_orm_callback', array('callback' => array($this, 'getFullTextFilter'),'field_type' => 'text'))
-        ;
+        $user = $this->securityContext->getToken()->getUser();
+        if ($user->hasRole('ROLE_USER4')) {
+            $datagridMapper
+                ->add('unitId', null, array())
+                ->add('mmSyncId', null, array())
+                ->add('name', null, array())
+                ->add('category', null, array())
+                ->add('unitType', null, array())
+                ->add('manager', null, array('label' => 'Υπεύθυνος'))
+                ->add(
+                    'full_text',
+                    'doctrine_orm_callback',
+                    array('callback' => array($this, 'getFullTextFilter'), 'field_type' => 'text')
+                );
+        }
     }
     
     public function getFullTextFilter($queryBuilder, $alias, $field, $value)
