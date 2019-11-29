@@ -94,6 +94,7 @@ class UnitAdmin extends Admin
 //        foreach ($arrayTypes as $art) {
 //            $arrayType[] = array( $art['name'] );
 //        }
+        $user = $this->securityContext->getToken()->getUser();
 
         $formMapper
             ->with('Γενικά Στοιχεία')
@@ -148,12 +149,15 @@ class UnitAdmin extends Admin
                 ->add('email', null, array('label' => 'E-mail'))
                 ->add('website', null, array('label' => 'Website'))
             ->end()
+            ;
 
-            ->with('Φορολογικά Στοιχεία')
+        if ($user->hasRole('ROLE_USER4')) {
+            $formMapper
+                ->with('Φορολογικά Στοιχεία')
                 ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
                 ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
-            ->end()
-        ;        
+                ->end();
+        }
     }
     
     /**
