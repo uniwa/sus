@@ -485,6 +485,9 @@ class Unit extends MMSyncableEntity
     }
 
     public function getManager() {
+        if (!isset($this->manager)) {
+            $this->manager = new Workers();
+        }
         return $this->manager;
     }
 
