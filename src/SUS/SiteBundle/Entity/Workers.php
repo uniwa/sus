@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="workers", options={"comment":"Περιέχει πληροφορίες σχετικά με τα Στοιχεία Εργαζόμενων."}, uniqueConstraints={@ORM\UniqueConstraint(name="registry_no_UNIQUE", columns={"registry_no"})}, indexes={@ORM\Index(name="tax_number_idx", columns={"tax_number"}), @ORM\Index(name="lastname_idx", columns={"lastname"}), @ORM\Index(name="firstname_idx", columns={"firstname"}), @ORM\Index(name="fathername_idx", columns={"fathername"}), @ORM\Index(name="sex_idx", columns={"sex"})})
  * @ORM\Entity
  */
-class Workers extends MMSyncableEntity
+//class Workers extends MMSyncableEntity
+class Workers
 {
     /**
      * @var integer
