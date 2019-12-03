@@ -248,7 +248,7 @@ class Unit extends MMSyncableEntity
     /**
      * @var Workers
      *
-     * @ORM\OneToOne(targetEntity="Workers", mappedBy="unit")
+     * @ORM\OneToOne(targetEntity="Workers", mappedBy="unit", cascade={"persist"})
      */
     private $manager;
 
