@@ -548,6 +548,12 @@ class Unit extends MMSyncableEntity
         return array('lat'=>$this->getLatitude(),'lng'=>$this->getLongitude());
     }
 
+    public function getMapUrl()
+    {
+        $latLng = $this->getLatLng();
+        return 'https://maps.google.com/?q=' . $latLng['lat'] . ',' . $latLng['lng'];
+    }
+
     public function __toString() {
         return 'SUS: '.$this->getUnitId().' | ΜΜ: '.$this->getMmSyncId().' | '.$this->getName();
     }

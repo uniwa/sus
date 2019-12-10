@@ -79,10 +79,13 @@ class UnitAdmin extends Admin
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
+            ->add('manager.name', null, array('label' => 'Όνομα Υπευθύνου'))
+            ->add('manager.surname', null, array('label' => 'Επώνυμο Υπευθύνου'))
             ->add('faxNumber', null, array('label' => 'Αριθμός FAX'))
             ->add('phoneNumber', null, array('label' => 'Τηλέφωνο Επικοινωνίας'))
             ->add('email', null, array('label' => 'E-mail'))
             ->add('website', null, array('label' => 'Website'))
+            ->add('mapUrl', null, array('label' => 'Χάρτης'))
             ->end()
         ;
 
