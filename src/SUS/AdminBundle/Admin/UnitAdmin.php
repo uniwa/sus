@@ -85,7 +85,7 @@ class UnitAdmin extends Admin
             ->add('phoneNumber', null, array('label' => 'Τηλέφωνο Επικοινωνίας'))
             ->add('email', null, array('label' => 'E-mail'))
             ->add('website', null, array('label' => 'Website'))
-            ->add('mapUrl', null, array('label' => 'Χάρτης'))
+            ->add('mapUrl', 'url', array('label' => 'Χάρτης'))
             ->end()
         ;
 
