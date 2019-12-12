@@ -69,7 +69,7 @@ class UnitAdmin extends Admin
 
             ->with('Στοιχεία Τοποθεσίας')
             ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
-            ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
+            ->add('postalCode', 'text', array('label' => 'Ταχυδρομικός Κώδικας'))
             ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
             ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
             ->add('prefecture', null, array('label' => 'Νομός'))
@@ -79,8 +79,8 @@ class UnitAdmin extends Admin
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
-            ->add('manager.name', null, array('label' => 'Όνομα Υπευθύνου'))
-            ->add('manager.surname', null, array('label' => 'Επώνυμο Υπευθύνου'))
+            ->add('manager.firstName', null, array('label' => 'Όνομα Υπευθύνου'))
+            ->add('manager.lastName', null, array('label' => 'Επώνυμο Υπευθύνου'))
             ->add('faxNumber', null, array('label' => 'Αριθμός FAX'))
             ->add('phoneNumber', null, array('label' => 'Τηλέφωνο Επικοινωνίας'))
             ->add('email', null, array('label' => 'E-mail'))
