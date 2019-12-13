@@ -20,8 +20,7 @@ framework:
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     default_locale:  %locale%
     session:
-        handler_id: session.handler.native_file
-        save_path: "%kernel.root_dir%/cache/%kernel.environment%/sessions"
+        handler_id: session.handler.pdo
 
 # Twig Configuration
 twig:
@@ -127,6 +126,12 @@ oh_google_map_form_type:
 services:
     cache:
         class: Doctrine\Common\Cache\ApcCache
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        public:    false
+        arguments:
+            - 'mysql:host=%database_host%;port=%database_port%;dbname=%database_name%'
+            - { db_username: '%database_user%', db_password: '%database_password%' }
     sus.user_provider:
        class: SUS\UserBundle\Model\UserProvider
        public: false
