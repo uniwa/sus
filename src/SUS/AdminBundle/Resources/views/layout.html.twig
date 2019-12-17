@@ -10,7 +10,7 @@
 {% if form is defined %}{{ form_javascript(form) }}{% endif %}
 <script>
   $(document).ready(function() {
-    $('.sidebar p:first').text(' Sch Units Subsystem').css({'color': '#fff'});
+    $('.sidebar p:first').text('Υποσύστημα Διαχείρισης Μονάδων ΠΣΔ').css({'color': '#fff'});
   });
 </script>
 {% endblock %}
@@ -22,9 +22,27 @@
     </a>
 {% endblock %}
 
-{#{% block sonata_top_nav_menu %}
-Υποσύστημα Διαχείρισης Μονάδων ΠΣΔ
-{% endblock %}#}
+{% block sonata_top_nav_menu %}
+    <div class="navbar-right">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-plus-square fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                {% include admin_pool.getTemplate('add_block') %}
+            </li>
+            <li class="dropdown user-menu">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    {{ app.user.username }}
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    {% include admin_pool.getTemplate('user_block') %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
 
 {% block footer %}
 <p class="text-right" style="margin-right: 20px;">Υποσύστημα Διαχείρησης Άλλων Μονάδων ΠΣΔ</p>
