@@ -25,16 +25,21 @@
 {% block sonata_top_nav_menu %}
     <div class="navbar-right">
         <ul class="nav navbar-nav">
-            <li class="dropdown">
+            <li>
+                <a href="{{ asset('Οδηγός_Χρήσης_SUS_v1.2.docx') }}">Οδηγίες</a>
+            </li>
+            <li>
+                <a href="{{ asset('SUS_Όροι_Χρήσης_v1.docx') }}">Όροι Χρήσης</a>
+            </li>
+            {#<li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-plus-square fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 {% include admin_pool.getTemplate('add_block') %}
-            </li>
+            </li>#}
             <li class="dropdown user-menu">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    {{ app.user.username }}
+                    <i class="fa fa-user fa-fw"></i> {{ app.user.username }} &nbsp;<i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
                     {% include admin_pool.getTemplate('user_block') %}
