@@ -60,6 +60,7 @@ class UnitAdmin extends Admin
             ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
             ->add('state', null, array( 'label' => 'Κατάσταση'))
             ->add('legalCharacter', null, array('label' => 'Νομικός Χαρακτήρας'))
+            ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
             ->add('regionEduAdmin', null, array('label' => 'Περιφέρειακή Διεύθυνση'))
             ->add('category', null, array('label' => 'Κατηγορία'))
             //->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
@@ -74,9 +75,8 @@ class UnitAdmin extends Admin
             ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
             ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
             ->add('prefecture', null, array('label' => 'Νομός'))
+            ->add('region', null, array('label' => 'Περιφεριακή Ενότητα'))
             ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
-            ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-            ->add('region', null, array('label' => 'Περιφέρεια'))
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
@@ -148,6 +148,7 @@ class UnitAdmin extends Admin
                 ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
                 ->add('state', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Κατάσταση'))
                 ->add('legalCharacter', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'))
+                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
                 ->add('regionEduAdmin', null, array('label' => 'Περιφερειακή Διεύθυνση'))
                // ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
                // ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
@@ -164,9 +165,8 @@ class UnitAdmin extends Admin
                 ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
                 ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
                 ->add('prefecture', null, array('label' => 'Νομός'))
+                ->add('region', null, array('label' => 'Περιφεριακή Ενότητα'))
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
-                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-                ->add('region', null, array('label' => 'Περιφέρεια'))
                 ->add('latlng', 'oh_google_maps', array(
                     'label' => 'Αναζήτηση Συντεταγμένων',
                     'required' => false,
