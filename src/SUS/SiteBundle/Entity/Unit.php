@@ -152,6 +152,16 @@ class Unit extends MMSyncableEntity
     private $regionEduAdmin;
 
     /**
+     * @var RegionEduAdmins
+     *
+     * @ORM\ManyToOne(targetEntity="Regions")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="region_id", referencedColumnName="region_id")
+     * })
+     */
+    private $region;
+
+    /**
      * @var ImplementationEntities
      *
      * @ORM\ManyToOne(targetEntity="ImplementationEntities")
@@ -418,6 +428,14 @@ class Unit extends MMSyncableEntity
 
     public function setRegionEduAdmin(RegionEduAdmins $regionEduAdmin=null) {
         $this->regionEduAdmin = $regionEduAdmin;
+    }
+
+    public function getRegion() {
+        return $this->region;
+    }
+
+    public function setRegion(Regions $region=null) {
+        $this->region = $region;
     }
 
     public function getImplementationEntity() {
