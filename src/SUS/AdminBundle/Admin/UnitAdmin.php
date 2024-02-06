@@ -76,6 +76,7 @@ class UnitAdmin extends Admin
             ->add('prefecture', null, array('label' => 'Νομός'))
             ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
             ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
+            ->add('region', null, array('label' => 'Περιφέρεια'))
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
@@ -147,6 +148,7 @@ class UnitAdmin extends Admin
                 ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
                 ->add('state', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Κατάσταση'))
                 ->add('legalCharacter', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'))
+                ->add('regionEduAdmin', null, array('label' => 'Περιφερειακή Διεύθυνση'))
                // ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
                // ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
                 ->add('manager.firstName', 'text', array('label' => 'Όνομα Υπευθύνου', 'required' => false))
@@ -164,7 +166,7 @@ class UnitAdmin extends Admin
                 ->add('prefecture', null, array('label' => 'Νομός'))
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
                 ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-                ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
+                ->add('region', null, array('label' => 'Περιφέρεια'))
                 ->add('latlng', 'oh_google_maps', array(
                     'label' => 'Αναζήτηση Συντεταγμένων',
                     'required' => false,
