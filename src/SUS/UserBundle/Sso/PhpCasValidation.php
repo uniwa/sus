@@ -45,9 +45,9 @@ class PhpCasValidation extends AbstractValidation implements ValidationInterface
         //            $success = false;
         //        }
         
-        \phpCAS::client(SAML_VERSION_1_1,"sso.sch.gr",443,'',false);
+        \phpCAS::client(SAML_VERSION_1_1,"sso-01.sch.gr",443,'',false);
         \phpCAS::setNoCasServerValidation();
-        \phpCAS::handleLogoutRequests(array("sso.sch.gr"));
+        \phpCAS::handleLogoutRequests(array("sso-01.sch.gr"));
         \phpCAS::setNoClearTicketsFromUrl();
 
         $success = true;
