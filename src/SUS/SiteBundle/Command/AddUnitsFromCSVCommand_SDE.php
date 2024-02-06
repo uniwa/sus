@@ -27,8 +27,8 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         $output->writeln('Starting ImportCSV process');
         $this->container = $this->getContainer();
         $this->em = $this->container->get('doctrine')->getManager();
-        $this->pdo = new \PDO('mysql:host=vardb;dbname=mitr_sus;charset=utf8', 'mmuser', 'drHW()34@#'); 
-	$this->cvsParsingOptions = array(
+        $this->pdo = new \PDO('mysql:host=localhost;dbname=mmsch;charset=utf8', 'root', 'co38mw74vn');
+        $this->cvsParsingOptions = array(
             'ignoreFirstLine' => true
         );
         $xls = $this->parseCSV($input->getOption('file'));
@@ -37,30 +37,51 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         foreach ($xls->getRowIterator(2) as $row) {
             $fields = $this->parseRowToArray($row, $headers);
             $unit = $this->em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
-                'name' => ($fields['name']),
+                'name' => ($fields['ONOMASIA']),
             ));
             if(isset($unit)) {
                 $output->writeln('Skipping unit: '.$unit->getName());
                 continue;
             }
             $unit = new Unit();
-            $unit->setName($fields['name']);
-            $unit->setSpecialName($fields['special_name']);
-            $unit->setRegistryNo($fields['registry_no']);
-            $unit->setStreetAddress($fields['street_address']);
-            $unit->setPhoneNumber($fields['phone_number']);   
-            $unit->setEmail($fields['email']);
+            $unit->setName($fields['ONOMASIA']);
             $unit->setCategory($this->em->getRepository('SUS\SiteBundle\Entity\UnitCategory')->findOneBy(array('name' => 'ΣΧΟΛΙΚΕΣ ΜΟΝΑΔΕΣ')));
-            $unit->setUnitType($this->findEntityFromMMDictionary('unit_types', 'name', $fields['unit_type'], 'SUS\SiteBundle\Entity\UnitTypes', 'name', 'name'));
+            $unit->setUnitType($this->em->getRepository('SUS\SiteBundle\Entity\UnitTypes')->findOneBy(array('name' => 'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ')));
+//            $unit->setStreetAddress($fields['street_address'].' '.$fields['street_address_num']);
+//            $unit->setPostalCode($fields['TK']);
+//            $unit->setMunicipality($this->findEntityFromMMDictionary('municipalities', 'municipality_id', $fields['MUNICIPALITY_ID'], 'SUS\SiteBundle\Entity\Municipalities', 'name', 'name'));
+if($fields['ONOMA_NOM'] == 'ΑΤΤΙΚΗΣ') { $fields['ONOMA_NOM'] = 'ΑΝΑΤΟΛΙΚΗΣ ΑΤΤΙΚΗΣ'; } 
+if($fields['ONOMA_NOM'] == 'ΔΩΔΕΚΑΝΗΣΟΥ') { $fields['ONOMA_NOM'] = 'ΡΟΔΟΥ'; }
+if($fields['ONOMA_NOM'] == 'ΚΥΚΛΑΔΩΝ') { $fields['ONOMA_NOM'] = 'ΣΥΡΟΥ'; }
+            $unit->setPrefecture($this->findEntityFromMMDictionary('prefectures', 'name', $fields['ONOMA_NOM'], 'SUS\SiteBundle\Entity\Prefectures', 'name', 'name'));
+//            $unit->setImplementationEntity($this->findEntityFromMMDictionary('implementation_entities', 'implementation_entity_id', $fields['IMPLEMENTATION_ENTITY_ID'], 'SUS\SiteBundle\Entity\ImplementationEntities', 'name', 'name'));
+            $unit->setPhoneNumber($fields['Τηλ']);
+            $unit->setComments('GLUC:'.$fields['GLUC']);
             $unit->setState($this->em->getRepository('SUS\SiteBundle\Entity\States')->find(1));
-            $unit->setLegalCharacter($this->em->getRepository('SUS\SiteBundle\Entity\LegalCharacters')->find(1));
-            $unit->setImplementationEntity($this->em->getRepository('SUS\SiteBundle\Entity\ImplementationEntities')->findOneBy(array('name' => 'ΙΝΣΤΙΤΟΥΤΟ ΤΕΧΝΟΛΟΓΙΑΣ ΥΠΟΛΟΓΙΣΤΩΝ')));
-            $unit->setRegionEduAdmin($this->em->getRepository('SUS\SiteBundle\Entity\RegionEduAdmins')->findOneBy(array('name' => 'ΔΙΠΟΔΕ')));
-            $unit->setEduAdmin($this->findEntityFromMMDictionary('edu_admins', 'name', $fields['edu_admin'], 'SUS\SiteBundle\Entity\EduAdmins', 'name', 'name'));
 
             $this->em->persist($unit);
             $this->em->flush($unit);
             $output->writeln('Unit added: '.$unit->getUnitId());
+
+            if($fields['RESPONSIBLE'] != '') {
+                $names = explode(' ', $fields['RESPONSIBLE']);
+                $worker = $this->em->getRepository('SUS\SiteBundle\Entity\Workers')->findOneBy(array(
+                    'lastname' => $names[0],
+                    'firstname' => (isset($names[1]) ? $names[1] : null),
+                ));
+                if(!isset($worker)) {
+                    $worker = new Workers();
+                    $worker->setUnit($unit);
+                    $output->writeln('Worker found: '.$fields['RESPONSIBLE']);
+                } else {
+                    $output->writeln('Worker added: '.$fields['RESPONSIBLE']);
+                }
+                $worker->setLastname($names[0]);
+                if(isset($names[1])) { $worker->setFirstname($names[1]); }
+                $unit->setManager($worker);
+                $this->em->persist($worker);
+                $this->em->flush(array($unit, $worker));
+            }
         }
 
         $output->writeln('Units imported successfully');
@@ -110,7 +131,7 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         foreach ($finder as $file) { $csv = $file; }
 
         $phpExcelObject = $this->getContainer()->get('xls.load_xls2007')->load($csv->getRealPath());
-        $sheet = $phpExcelObject->getSheet(0);
+        $sheet = $phpExcelObject->getSheet(1);
         //$objReader = PHPExcel_IOFactory::createReader($inputFileType);
         return $sheet;
     }
@@ -122,26 +143,33 @@ Fix incorrect type ids
 # Dialup with 2mbps
 UPDATE Circuit SET type_id = 2 WHERE type_id = 1 and LOWER(bandwidth) = '2mbps';
 UPDATE Circuit SET type_id = 2 WHERE type_id = 1 and LOWER(bandwidth) = '2 mbps';
+
 # Dialup with 24mbps
 UPDATE Circuit SET type_id = 2 WHERE type_id = 1 and LOWER(bandwidth) = '24mbps';
 UPDATE Circuit SET type_id = 2 WHERE type_id = 1 and LOWER(bandwidth) = '24 mbps';
+
 # ISDN with 2mbps
 UPDATE Circuit SET type_id = 5 WHERE type_id = 4 and LOWER(bandwidth) = '2mbps';
 UPDATE Circuit SET type_id = 5 WHERE type_id = 4 and LOWER(bandwidth) = '2 mbps';
+
 # ISDN with 24mbps
 UPDATE Circuit SET type_id = 5 WHERE type_id = 4 and LOWER(bandwidth) = '24mbps';
 UPDATE Circuit SET type_id = 5 WHERE type_id = 4 and LOWER(bandwidth) = '24 mbps';
+
 # ISDN ADSL with 128kbps
 UPDATE Circuit SET bandwidth = '24mbps' WHERE type_id = 5 and LOWER(bandwidth) = '128kbps';
 UPDATE Circuit SET bandwidth = '24mbps' WHERE type_id = 5 and LOWER(bandwidth) = '128 kbps';
+
 Set bandwidth profiles
 ----------------------------------------
 # ADSL 2 Mbps
 UPDATE Circuit SET bandwidth_profile_id = 10, bandwidth = NULL WHERE type_id = 2 and LOWER(bandwidth) = '2mbps';
 UPDATE Circuit SET bandwidth_profile_id = 10, bandwidth = NULL WHERE type_id = 2 and LOWER(bandwidth) = '2 mbps';
+
 # ADSL 24 Mbps
 UPDATE Circuit SET bandwidth_profile_id = 10, bandwidth = NULL WHERE type_id = 2 and LOWER(bandwidth) = '24mbps';
 UPDATE Circuit SET bandwidth_profile_id = 10, bandwidth = NULL WHERE type_id = 2 and LOWER(bandwidth) = '24 mbps';
+
 # ISDN 128kbps
 UPDATE Circuit SET bandwidth_profile_id = 2, bandwidth = NULL WHERE type_id = 4 and LOWER(bandwidth) = '128kbps';
 UPDATE Circuit SET bandwidth_profile_id = 2, bandwidth = NULL WHERE type_id = 4 and LOWER(bandwidth) = '128 kbps';

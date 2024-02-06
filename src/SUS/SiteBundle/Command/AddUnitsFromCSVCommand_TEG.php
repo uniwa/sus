@@ -27,8 +27,8 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         $output->writeln('Starting ImportCSV process');
         $this->container = $this->getContainer();
         $this->em = $this->container->get('doctrine')->getManager();
-        $this->pdo = new \PDO('mysql:host=vardb;dbname=mitr_sus;charset=utf8', 'mmuser', 'drHW()34@#'); 
-	$this->cvsParsingOptions = array(
+        $this->pdo = new \PDO('mysql:host=vardb;dbname=mitr_sus;charset=utf8', 'mmuser', 'drHW()34@#');
+        $this->cvsParsingOptions = array(
             'ignoreFirstLine' => true
         );
         $xls = $this->parseCSV($input->getOption('file'));
@@ -37,26 +37,21 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         foreach ($xls->getRowIterator(2) as $row) {
             $fields = $this->parseRowToArray($row, $headers);
             $unit = $this->em->getRepository('SUS\SiteBundle\Entity\Unit')->findOneBy(array(
-                'name' => ($fields['name']),
+                'name' => ($fields['UNIT_NAME']),
             ));
             if(isset($unit)) {
                 $output->writeln('Skipping unit: '.$unit->getName());
                 continue;
             }
             $unit = new Unit();
-            $unit->setName($fields['name']);
-            $unit->setSpecialName($fields['special_name']);
-            $unit->setRegistryNo($fields['registry_no']);
-            $unit->setStreetAddress($fields['street_address']);
-            $unit->setPhoneNumber($fields['phone_number']);   
-            $unit->setEmail($fields['email']);
+            $unit->setName($fields['UNIT_NAME']);
             $unit->setCategory($this->em->getRepository('SUS\SiteBundle\Entity\UnitCategory')->findOneBy(array('name' => 'ΣΧΟΛΙΚΕΣ ΜΟΝΑΔΕΣ')));
-            $unit->setUnitType($this->findEntityFromMMDictionary('unit_types', 'name', $fields['unit_type'], 'SUS\SiteBundle\Entity\UnitTypes', 'name', 'name'));
+            $unit->setUnitType($this->em->getRepository('SUS\SiteBundle\Entity\UnitTypes')->findOneBy(array('name' => 'ΤΜΗΜΑ ΕΛΛΗΝΙΚΗΣ ΓΛΩΣΣΑΣ')));
             $unit->setState($this->em->getRepository('SUS\SiteBundle\Entity\States')->find(1));
             $unit->setLegalCharacter($this->em->getRepository('SUS\SiteBundle\Entity\LegalCharacters')->find(1));
             $unit->setImplementationEntity($this->em->getRepository('SUS\SiteBundle\Entity\ImplementationEntities')->findOneBy(array('name' => 'ΙΝΣΤΙΤΟΥΤΟ ΤΕΧΝΟΛΟΓΙΑΣ ΥΠΟΛΟΓΙΣΤΩΝ')));
             $unit->setRegionEduAdmin($this->em->getRepository('SUS\SiteBundle\Entity\RegionEduAdmins')->findOneBy(array('name' => 'ΔΙΠΟΔΕ')));
-            $unit->setEduAdmin($this->findEntityFromMMDictionary('edu_admins', 'name', $fields['edu_admin'], 'SUS\SiteBundle\Entity\EduAdmins', 'name', 'name'));
+            $unit->setEduAdmin($this->findEntityFromMMDictionary('edu_admins', 'name', $fields['EDU_ADMIN'], 'SUS\SiteBundle\Entity\EduAdmins', 'name', 'name'));
 
             $this->em->persist($unit);
             $this->em->flush($unit);
@@ -68,7 +63,7 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
 
     private function findEntityFromMMDictionary($table, $idField, $value, $repo, $fieldToSearchDb, $fieldToSearchRepo) {
         if($value == '') { return null; }
-        $query = 'SELECT * from '.$table.' WHERE '.$idField.' = "'.$value.'"';
+        $query = 'SELECT * from '.$table.' WHERE '.$idField.' = "'.trim($value).'"';
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch();
@@ -83,7 +78,7 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         $cellIterator->setIterateOnlyExistingCells(false); 
         $result = array();
         foreach ($cellIterator as $cell) {
-            $result[] = $cell->getValue();
+            $result[] = trim($cell->getValue());
         }
         return $result;
     }
