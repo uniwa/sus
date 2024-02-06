@@ -248,9 +248,9 @@ be_simple_sso_auth:
             version: 2
         server:
             id: cas
-            login_url: https://sso.sch.gr/login
-            logout_url: https://sso.sch.gr/logout
-            validation_url: https://sso.sch.gr/samlValidate
+            login_url: https://sso-01.sch.gr/login
+            logout_url: https://sso-01.sch.gr/logout
+            validation_url: https://sso-01.sch.gr/samlValidate
 
 genemu_form:
     select2: ~
