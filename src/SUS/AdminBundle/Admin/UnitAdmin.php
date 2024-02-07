@@ -74,8 +74,8 @@ class UnitAdmin extends Admin
             ->add('postalCode', 'text', array('label' => 'Ταχυδρομικός Κώδικας'))
             ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
             ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
-            ->add('prefecture', null, array('label' => 'Νομός'))
-            ->add('region', null, array('label' => 'Περιφεριακή Ενότητα'))
+            ->add('prefecture', null, array('label' => 'Περιφεριακή Ενότητα'))
+            ->add('region', null, array('label' => 'Περιφέρεια'))
             ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
             ->end()
 
@@ -148,8 +148,12 @@ class UnitAdmin extends Admin
                 ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
                 ->add('state', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Κατάσταση'))
                 ->add('legalCharacter', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'))
-                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-                ->add('regionEduAdmin', null, array('label' => 'Περιφερειακή Διεύθυνση'))
+                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
+                ->add('regionEduAdmin', null, array('label' => 'Περιφερειακή Διεύθυνση', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
                // ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
                // ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
                 ->add('manager.firstName', 'text', array('label' => 'Όνομα Υπευθύνου', 'required' => false))
@@ -162,10 +166,14 @@ class UnitAdmin extends Admin
             ->with('Στοιχεία Τοποθεσίας')
                 ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
                 ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
-                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
+                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
                 ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
-                ->add('prefecture', null, array('label' => 'Νομός'))
-                ->add('region', null, array('label' => 'Περιφεριακή Ενότητα'))
+                ->add('prefecture', null, array('label' => 'Περιφεριακή Ενότητα'))
+                ->add('region', null, array('label' => 'Περιφέρεια', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
                 ->add('latlng', 'oh_google_maps', array(
                     'label' => 'Αναζήτηση Συντεταγμένων',
