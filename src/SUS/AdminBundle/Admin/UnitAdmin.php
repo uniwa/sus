@@ -90,13 +90,13 @@ class UnitAdmin extends Admin
             ->end()
         ;
 
-        if ($user->hasRole('ROLE_USER4')) {
-            $showMapper
-                ->with('Φορολογικά Στοιχεία')
-                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
-                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
-                ->end();
-        }
+//        if ($user->hasRole('ROLE_USER4')) {
+//            $showMapper
+//                ->with('Φορολογικά Στοιχεία')
+//                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
+//                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
+//                ->end();
+//        }
     }
 
     /**
@@ -202,13 +202,13 @@ class UnitAdmin extends Admin
             ->end()
             ;
 
-        if ($user->hasRole('ROLE_USER4')) {
-            $formMapper
-                ->with('Φορολογικά Στοιχεία')
-                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
-                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
-                ->end();
-        }
+//        if ($user->hasRole('ROLE_USER4')) {
+//            $formMapper
+//                ->with('Φορολογικά Στοιχεία')
+//                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
+//                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
+//                ->end();
+//        }
     }
     
     /**
