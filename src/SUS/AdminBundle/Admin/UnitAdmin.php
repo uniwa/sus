@@ -62,7 +62,7 @@ class UnitAdmin extends Admin
             ->add('legalCharacter', null, array('label' => 'Νομικός Χαρακτήρας'))
             ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
             ->add('regionEduAdmin', null, array('label' => 'Περιφέρειακή Διεύθυνση'))
-            ->add('category', null, array('label' => 'Κατηγορία'))
+            //->add('category', null, array('label' => 'Κατηγορία'))
             //->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
             //->add('manager', null, array('label' => 'Υπεύθυνος'))
             //->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι'))
@@ -74,7 +74,7 @@ class UnitAdmin extends Admin
             ->add('postalCode', 'text', array('label' => 'Ταχυδρομικός Κώδικας'))
             ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
             ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
-            ->add('prefecture', null, array('label' => 'Περιφεριακή Ενότητα'))
+            ->add('prefecture', null, array('label' => 'Περιφερειακή Ενότητα'))
             ->add('region', null, array('label' => 'Περιφέρεια'))
             ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
             ->end()
@@ -170,7 +170,7 @@ class UnitAdmin extends Admin
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }))
                 ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
-                ->add('prefecture', null, array('label' => 'Περιφεριακή Ενότητα'))
+                ->add('prefecture', null, array('label' => 'Περιφερειακή Ενότητα'))
                 ->add('region', null, array('label' => 'Περιφέρεια', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }))
@@ -245,7 +245,7 @@ class UnitAdmin extends Admin
                 ->add('unitId', null, array())
                 ->add('mmSyncId', null, array())
                 ->add('name', null, array())
-                ->add('category', null, array())
+                //->add('category', null, array())
                 ->add('unitType', null, array())
                 ->add('manager', null, array('label' => 'Υπεύθυνος'))
                 ->add(
