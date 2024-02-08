@@ -245,7 +245,7 @@ class MMService {
                 "registry_no" => $unit->getRegistryNo(),
                 "name" => $unit->getName(),
                 "source" => 'SUS',
-                "category" => $unit->getCategory()->getName(),
+                "category" => $unit->getCategory() ? $unit->getCategory()->getName() : null,
                 "suspended" => !$unit->isActive(),
                 "state" => $unit->getState()->getName(),
                 "education_level" => $unit->getUnitType() != null && $unit->getUnitType()->getEducationLevel() != null ? $unit->getUnitType()->getEducationLevel()->getName() : null,
