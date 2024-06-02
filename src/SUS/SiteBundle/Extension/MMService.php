@@ -275,6 +275,7 @@ class MMService {
                 "comments" => $unit->getComments(),
                 "latitude" => $unit->getLatitude(),
                 "longitude" => $unit->getLongitude(),
+                "country" => $unit->getCountry(),
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
         ));
