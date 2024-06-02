@@ -256,6 +256,13 @@ class Unit extends MMSyncableEntity
     private $longitude;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=2, nullable=true)
+     */
+    private $country = 'GR';
+
+    /**
      * @var Workers
      *
      * @ORM\OneToOne(targetEntity="Workers", mappedBy="unit", cascade={"persist"})
@@ -548,6 +555,14 @@ class Unit extends MMSyncableEntity
 
     public function setLongitude($longitude) {
         $this->longitude = $longitude;
+    }
+
+    public function getCountry() {
+        return $this->country;
+    }
+
+    public function setCountry($country) {
+        $this->country = $country;
     }
 
     public function setLatLng($latlng)

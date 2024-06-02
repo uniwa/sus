@@ -77,6 +77,7 @@ class UnitAdmin extends Admin
             ->add('prefecture', null, array('label' => 'Περιφερειακή Ενότητα'))
             ->add('region', null, array('label' => 'Περιφέρεια'))
             ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
+            ->add('country', null, array('label' => 'Χώρα'))
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
@@ -192,6 +193,10 @@ class UnitAdmin extends Admin
                     'default_lat' => 37.984042,
                     'default_lng' => 23.728179,
                 ))
+                ->add('country', 'country_picker', [
+                    'label' => 'Country',
+                    'required' => true,
+                ])
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
