@@ -27,7 +27,7 @@ class AddUnitsFromCSVCommand extends ContainerAwareCommand
         $output->writeln('Starting ImportCSV process');
         $this->container = $this->getContainer();
         $this->em = $this->container->get('doctrine')->getManager();
-        $this->pdo = new \PDO('mysql:host=vardb;dbname=mitr_sus;charset=utf8', 'mmuser', 'getenv('DATABASE_PASSWORD')'); 
+        $this->pdo = new \PDO('mysql:host=vardb;dbname=mitr_sus;charset=utf8', 'mmuser', getenv('DB_IMPORT_PASSWORD')); 
 	$this->cvsParsingOptions = array(
             'ignoreFirstLine' => true
         );
