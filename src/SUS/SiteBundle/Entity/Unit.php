@@ -152,6 +152,16 @@ class Unit extends MMSyncableEntity
     private $regionEduAdmin;
 
     /**
+     * @var RegionEduAdmins
+     *
+     * @ORM\ManyToOne(targetEntity="Regions")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="region_id", referencedColumnName="region_id")
+     * })
+     */
+    private $region;
+
+    /**
      * @var ImplementationEntities
      *
      * @ORM\ManyToOne(targetEntity="ImplementationEntities")
@@ -244,6 +254,13 @@ class Unit extends MMSyncableEntity
      * @ORM\Column(name="longitude", type="string", length=255, nullable=true)
      */
     private $longitude;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=2, nullable=true)
+     */
+    private $country = 'GR';
 
     /**
      * @var Workers
@@ -420,6 +437,14 @@ class Unit extends MMSyncableEntity
         $this->regionEduAdmin = $regionEduAdmin;
     }
 
+    public function getRegion() {
+        return $this->region;
+    }
+
+    public function setRegion(Regions $region=null) {
+        $this->region = $region;
+    }
+
     public function getImplementationEntity() {
         return $this->implementationEntity;
     }
@@ -530,6 +555,14 @@ class Unit extends MMSyncableEntity
 
     public function setLongitude($longitude) {
         $this->longitude = $longitude;
+    }
+
+    public function getCountry() {
+        return $this->country;
+    }
+
+    public function setCountry($country) {
+        $this->country = $country;
     }
 
     public function setLatLng($latlng)

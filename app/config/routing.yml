@@ -67,3 +67,9 @@ categories:
 debug:
     path:    /debug
     defaults:   { _controller: SUSAdminBundle:Auth:debug }
+
+units_extra:
+#    resource: SUS\AdminBundle\Controller\UnitApiController
+#    type:     rest
+     resource: "@SUSAdminBundle/Controller/UnitApiController.php"
+     type:     annotation

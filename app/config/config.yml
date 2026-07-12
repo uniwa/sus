@@ -200,6 +200,10 @@ services:
         class: SUS\UserBundle\Sso\PhpCasValidation
         arguments:
             - "@service_container"
+    sus.form.type.country_picker:
+        class: SUS\SiteBundle\Form\Type\CountryPickerType
+        tags:
+            - { name: form.type, alias: country_picker }
 
 fos_rest:
     view:

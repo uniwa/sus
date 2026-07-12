@@ -17,14 +17,17 @@ class MMService {
 
     protected function allowedUnitTypesToMMSync( $unit_type ) {
 
-        $allowed = array (  'ΚΕΣΥΠ', 'ΓΡΑΣΕΠ', 'ΣΣΝ', 'ΚΕΠΛΗΝΕΤ', 'ΕΚΦΕ', 'ΚΠΕ', 'ΠΕΚ', 
+        $allowed = array (  'ΚΕΣΥΠ', 'ΓΡΑΣΕΠ', 'ΣΣΝ', 'ΚΕΠΛΗΝΕΤ', 'ΕΚΦΕ', 'ΚΠΕ/ΚΕΠΕΑ', 'ΠΕΚ', 
                             'ΕΡΓΑΣΤΗΡΙΑ ΦΥΣΙΚΩΝ ΕΠΙΣΤΗΜΩΝ', 'ΣΧΟΛΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ',
                             'ΓΕΝΙΚΟ ΑΡΧΕΙΟ ΚΡΑΤΟΥΣ', 'ΔΗΜΟΣΙΕΣ ΒΙΒΛΙΟΘΗΚΕΣ', 'ΚΟΜΒΟΣ ΠΣΔ', 
                             'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΠΡΩΤΟΒΑΘΜΙΑΣ', 'ΣΧΟΛΙΚΗ ΕΠΙΤΡΟΠΗ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ',
                             'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ', 'ΙΝΣΤΙΤΟΥΤΟ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ',
                             'ΣΧΟΛΗ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'HELPDESK ΦΟΡΕΩΝ ΥΛΟΠΟΙΗΣΗΣ ΤΟΥ ΠΣΔ',
-                            'ΟΜΟΣΠΟΝΔΙΑ','ΕΛΜΕ','ΜΟΝΑΔΕΣ ΑΛΛΩΝ ΥΠΟΥΡΓΕΙΩΝ','ΔΗΜΟΤΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ','ΕΚΚΛΗΣΙΑΣΤΙΚΟ'
-                         );
+                            'ΟΜΟΣΠΟΝΔΙΑ','ΕΛΜΕ','ΜΟΝΑΔΕΣ ΑΛΛΩΝ ΥΠΟΥΡΓΕΙΩΝ','ΔΗΜΟΤΙΚΕΣ ΒΙΒΛΙΟΘΗΚΕΣ','ΕΚΚΛΗΣΙΑΣΤΙΚΟ', 
+                            'ΤΜΗΜΑ ΕΛΛΗΝΙΚΗΣ ΓΛΩΣΣΑΣ', 'ΝΗΠΙΑΓΩΓΕΙΟ', 'ΔΗΜΟΤΙΚΟ', 'ΓΥΜΝΑΣΙΟ', 'ΓΕΝΙΚΟ ΛΥΚΕΙΟ',
+			    'ΣΥΝΤΟΝΙΣΤΙΚΕΣ ΜΟΝΑΔΕΣ ΕΚΠΑΙΔΕΥΣΗΣ ΕΞΩΤΕΡΙΚΟΥ', 'ΠΕ.Κ.Ε.Σ.','ΕΠΑΓΓΕΛΜΑΤΙΚΗ ΣΧΟΛΗ ΚΑΤΑΡΤΙΣΗΣ',
+                            'ΣΧΟΛΕΣ ΑΝΩΤΕΡΗΣ ΕΠΑΓΓΕΛΜΑΤΙΚΗΣ ΚΑΤΑΡΤΙΣΗΣ', 'ΓΥΜΝΑΣΤΗΡΙΟ', 'ΣΧΟΛΕΣ ΜΑΘΗΤΕΙΑΣ ΥΠΟΨΗΦΙΩΝ ΚΛΗΡΙΚΩΝ',
+                            'ΚΕΝΤΡΟ ΚΑΙΝΟΤΟΜΙΑΣ' );
 
         $syncToMM = (in_array($unit_type, $allowed) ? true : false );
 
@@ -55,7 +58,7 @@ class MMService {
 
     public function findUnitsBy(array $filters = array()) {
         $results = array();
-        $params = array();
+        $params = array('searchtype' => 'EXACT');
         if(isset($filters['mm_id']) && $filters['mm_id'] != '') {
             $params['mm_id'] = $filters['mm_id'];
         }
@@ -243,7 +246,7 @@ class MMService {
                 "registry_no" => $unit->getRegistryNo(),
                 "name" => $unit->getName(),
                 "source" => 'SUS',
-                "category" => $unit->getCategory()->getName(),
+                "category" => $unit->getCategory() ? $unit->getCategory()->getName() : null,
                 "suspended" => !$unit->isActive(),
                 "state" => $unit->getState()->getName(),
                 "education_level" => $unit->getUnitType() != null && $unit->getUnitType()->getEducationLevel() != null ? $unit->getUnitType()->getEducationLevel()->getName() : null,
@@ -273,6 +276,7 @@ class MMService {
                 "comments" => $unit->getComments(),
                 "latitude" => $unit->getLatitude(),
                 "longitude" => $unit->getLongitude(),
+                "country" => $unit->getCountry(),
                 "positioning" => $unit->getPositioning(),
                 //"fek" => '',
         ));

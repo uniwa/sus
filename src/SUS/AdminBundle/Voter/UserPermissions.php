@@ -60,7 +60,7 @@ class UserPermissions {
             $results = array (  "uid" => $uidRows[0]["uid"][0],
                                 "physicaldeliveryofficename" => $uidRows[0]["physicaldeliveryofficename"][0],
                                 "dn" => $uidRows[0]["dn"],
-                                "l" => $uidRows[0]["l"][0],
+                                "l" => $uidRows[0]["l"][0]
                                 //"labeledUri" => $uidRows[0]["labeleduri"][0]
                             );
             
@@ -71,9 +71,9 @@ class UserPermissions {
 
         //check if physicaldeliveryofficename = EPISHMOS LOGARIASMOS
         if ($uidRows[0]["physicaldeliveryofficename"][0] !== 'ΕΠΙΣΗΜΟΣ ΛΟΓΑΡΙΑΣΜΟΣ'){
-            return null;
+           return null;
         }
-            
+      
         //ldap query found unit
         //$l = explode(',','ou=10gym-perist,ou=att-g,ou=units,dc=sch,dc=gr');
         $l = explode(',',$uidRows[0]["l"][0]);
@@ -82,8 +82,7 @@ class UserPermissions {
 
         $lResult = $ldap->search('('.$l[0].')',$baseDn, \Zend\Ldap\Ldap::SEARCH_SCOPE_SUB);
         $lRows = iterator_to_array($lResult);
-        $mm_id = ( array_key_exists('gsnregistrycode',$lRows[0]) ) ? $lRows[0]["gsnregistrycode"][0] : null;
-        
+        $mm_id = ( array_key_exists('gsnregistrycode',$lRows[0]) ) ? $lRows[0]["gsnregistrycode"][0] : null;   
         return $mm_id;
         
     }

@@ -60,8 +60,10 @@ class UnitAdmin extends Admin
             ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
             ->add('state', null, array( 'label' => 'Κατάσταση'))
             ->add('legalCharacter', null, array('label' => 'Νομικός Χαρακτήρας'))
-            ->add('category', null, array('label' => 'Κατηγορία'))
-            ->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
+            ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
+            ->add('regionEduAdmin', null, array('label' => 'Περιφέρειακή Διεύθυνση'))
+            //->add('category', null, array('label' => 'Κατηγορία'))
+            //->add('implementationEntity', null, array('label' => 'Φορέας Υλοποίησης'))
             //->add('manager', null, array('label' => 'Υπεύθυνος'))
             //->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι'))
             ->add('comments', null, array('label' => 'Σχόλια'))
@@ -72,10 +74,10 @@ class UnitAdmin extends Admin
             ->add('postalCode', 'text', array('label' => 'Ταχυδρομικός Κώδικας'))
             ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
             ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
-            ->add('prefecture', null, array('label' => 'Νομός'))
+            ->add('prefecture', null, array('label' => 'Περιφερειακή Ενότητα'))
+            ->add('region', null, array('label' => 'Περιφέρεια'))
             ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
-            ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-            ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
+            ->add('country', null, array('label' => 'Χώρα'))
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
@@ -89,13 +91,13 @@ class UnitAdmin extends Admin
             ->end()
         ;
 
-        if ($user->hasRole('ROLE_USER4')) {
-            $showMapper
-                ->with('Φορολογικά Στοιχεία')
-                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
-                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
-                ->end();
-        }
+//        if ($user->hasRole('ROLE_USER4')) {
+//            $showMapper
+//                ->with('Φορολογικά Στοιχεία')
+//                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
+//                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
+//                ->end();
+//        }
     }
 
     /**
@@ -147,8 +149,14 @@ class UnitAdmin extends Admin
                 ->add('foundationDate', null, array('label' => 'Έτος Ίδρυσης'))
                 ->add('state', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Κατάσταση'))
                 ->add('legalCharacter', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'))
+                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
+                ->add('regionEduAdmin', null, array('label' => 'Περιφερειακή Διεύθυνση', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
                // ->add('category', null, array('empty_value'=> '-', 'required' => true,'label' => 'Κατηγορία'))
-                ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
+               // ->add('implementationEntity', null, array('empty_value'=> '-', 'required' => true, 'label' => 'Φορέας Υλοποίησης'))
                 ->add('manager.firstName', 'text', array('label' => 'Όνομα Υπευθύνου', 'required' => false))
                 ->add('manager.lastName', 'text', array('label' => 'Επώνυμο Υπευθύνου', 'required' => false))
                 //->add('responsibles', null, array('label' => 'Τεχνικοί Υπεύθυνοι', 'required' => false))
@@ -159,12 +167,15 @@ class UnitAdmin extends Admin
             ->with('Στοιχεία Τοποθεσίας')
                 ->add('streetAddress', null, array('label' => 'Οδός, Αριθμός'))
                 ->add('postalCode', null, array('label' => 'Ταχυδρομικός Κώδικας'))
-                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ'))
+                ->add('municipality', null, array('label' => 'Δήμος ΟΤΑ', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
                 ->add('municipalityCommunity', null, array('label' => 'Δημοτική Ενότητα'))
-                ->add('prefecture', null, array('label' => 'Νομός'))
+                ->add('prefecture', null, array('label' => 'Περιφερειακή Ενότητα'))
+                ->add('region', null, array('label' => 'Περιφέρεια', 'query_builder' => function (\Doctrine\ORM\EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }))
                 ->add('positioning', null, array('label' => 'Κτηριακή Θέση'))
-                ->add('eduAdmin', null, array('label' => 'Διεύθυνση Εκπαίδευσης'))
-                ->add('regionEduAdmin', null, array('label' => 'Περιφέρεια'))
                 ->add('latlng', 'oh_google_maps', array(
                     'label' => 'Αναζήτηση Συντεταγμένων',
                     'required' => false,
@@ -182,6 +193,10 @@ class UnitAdmin extends Admin
                     'default_lat' => 37.984042,
                     'default_lng' => 23.728179,
                 ))
+                ->add('country', 'country_picker', [
+                    'label' => 'Country',
+                    'required' => true,
+                ])
             ->end()
 
             ->with('Στοιχεία Επικοινωνίας')
@@ -192,13 +207,13 @@ class UnitAdmin extends Admin
             ->end()
             ;
 
-        if ($user->hasRole('ROLE_USER4')) {
-            $formMapper
-                ->with('Φορολογικά Στοιχεία')
-                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
-                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
-                ->end();
-        }
+//        if ($user->hasRole('ROLE_USER4')) {
+//            $formMapper
+//                ->with('Φορολογικά Στοιχεία')
+//                ->add('taxNumber', null, array('label' => 'Αριθμός Φορολογικού Μητρώου (ΑΦΜ)'))
+//                ->add('taxOffice', null, array('label' => 'Δ.Ο.Υ.'))
+//                ->end();
+//        }
     }
     
     /**
@@ -235,7 +250,7 @@ class UnitAdmin extends Admin
                 ->add('unitId', null, array())
                 ->add('mmSyncId', null, array())
                 ->add('name', null, array())
-                ->add('category', null, array())
+                //->add('category', null, array())
                 ->add('unitType', null, array())
                 ->add('manager', null, array('label' => 'Υπεύθυνος'))
                 ->add(
