@@ -1,0 +1,6 @@
+{# Port of old `SUSAdminBundle::user_block.html.twig`. The logout link pointed at
+   `fos_user_security_logout`; FOSUserBundle is dropped, so it now targets the `logout`
+   placeholder route (path /logout, intercepted by the firewall — CAS logout). #}
+{% block user_block %}
+<li><a href="{{ url('logout') }}">Αποσύνδεση</a></li>
+{% endblock %}

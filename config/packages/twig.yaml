@@ -1,0 +1,13 @@
+twig:
+    file_name_pattern: '*.twig'
+    # Global form themes, port of old config.yml twig.form.resources:
+    #  - 'OhGoogleMapFormTypeBundle:Form:fields.html.twig' — dropped with the bundle (the
+    #    lat/lng map widget needs a re-implementation; see docs/port-inventory/templates.md §5.1)
+    #  - 'SUSAdminBundle::fields.html.twig'       → form/fields.html.twig (ported)
+    #  - 'SUSAdminBundle::field_mmunit.html.twig' — dead (ghost mmunit/mmfy/mmcategory types), not ported
+    form_themes:
+        - 'form/fields.html.twig'
+
+when@test:
+    twig:
+        strict_variables: true

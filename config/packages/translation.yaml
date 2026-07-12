@@ -1,0 +1,8 @@
+# Old app: framework.default_locale = el, translator fallback = el (parameters.yml `locale: el`).
+framework:
+    default_locale: el
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks:
+            - el
+        providers:

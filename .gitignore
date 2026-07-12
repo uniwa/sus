@@ -1,11 +1,12 @@
-web/bundles/
-web/upload/*
-app/bootstrap.php.cache
-app/cache/*
-app/logs/*
-build/
-vendor
-composer.phar
-*parameters.yml*
-/nbproject/private/
-.idea
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+/WORKPLAN.md
+/docs/port-inventory/

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Αποτυχία σύνδεσης{% endblock %}
+
+{% block body %}
+    {# Replaces the old CAS failure_path /debug (a var_dump leftover) with a proper page. #}
+    <div style="max-width: 40em; margin: 4em auto; font-family: sans-serif;">
+        <h1>Αποτυχία σύνδεσης</h1>
+        <p>Η ταυτοποίηση μέσω της Υπηρεσίας Κεντρικής Πιστοποίησης (SSO) απέτυχε.</p>
+        {% if error %}
+            <p><strong>{{ error }}</strong></p>
+        {% endif %}
+        <p><a href="{{ path('login') }}">Προσπαθήστε ξανά</a></p>
+    </div>
+{% endblock %}

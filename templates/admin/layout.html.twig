@@ -1,0 +1,57 @@
+{# Port of old `SUSAdminBundle::layout.html.twig` (Sonata global layout override), re-anchored on
+   Sonata Admin 4's standard_layout block structure. Differences vs. the old file, all forced by
+   the Sonata 2.3 → 4 / Symfony 7 upgrade (see docs/port-inventory/templates.md §3.3, §6):
+    - GenemuFormBundle `form_stylesheet(form)` / `form_javascript(form)` calls dropped (bundle
+      dropped; they only served the dead mmunit/mmfy/mmcategory select2 types).
+    - The jQuery hack that retitled `$('.sidebar p:first')` cannot work on the AdminLTE 3 sidebar;
+      the same Greek title is rendered via the `side_bar_after_nav_content` block instead.
+    - `admin_pool.title` / `admin_pool.getTemplate('user_block')` are gone in Sonata 4 →
+      `sonata_config.title` / `get_global_template('user_block')`.
+    - Sonata 4's standard_layout has no `footer` block; the old footer text is appended after the
+      wrapper. The jQuery-UI datepicker regional init was dropped: jQuery UI is no longer shipped
+      and no datepicker field exists in the UnitAdmin form.
+    - The logout link lives in user_block (`templates/admin/user_block.html.twig`), as before. #}
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block logo %}
+    <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
+        {# old override showed the title as text (title_logo img was commented out) — kept #}
+        <span>{{ sonata_config.title }}</span>
+    </a>
+{% endblock %}
+
+{% block sonata_top_nav_menu %}
+    <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+            <li>
+                <a href="{{ asset('user_guide_SUS.pdf') }}">Εγχειρίδιο Χρήσης</a>
+            </li>
+            <li>
+                <a href="{{ asset('term_of_use_SUS.pdf') }}">Όροι Χρήσης</a>
+            </li>
+            {% if app.user %}
+                {% block sonata_top_nav_menu_user_block %}
+                    <li class="dropdown user-menu">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fas fa-user fa-fw" aria-hidden="true"></i> {{ app.user.username }} &nbsp;<i class="fas fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            {{ include(get_global_template('user_block')) }}
+                        </ul>
+                    </li>
+                {% endblock %}
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block side_bar_after_nav_content %}
+    Μητρώο Υποστηρικτικών δομών - Μη Σχολικών Μονάδων
+{% endblock %}
+
+{% block sonata_wrapper %}
+    {{ parent() }}
+    <footer class="main-footer">
+        <p class="text-right" style="margin-right: 20px;">Υποσύστημα Διαχείρησης Άλλων Μονάδων ΠΣΔ</p>
+    </footer>
+{% endblock %}
