@@ -1,0 +1,62 @@
+# Port of the old app/config/security.yml (docs/port-inventory/security.md §2, §15).
+# Authentication is CAS SSO only — the old FOS form login / encoders / ACL config were dead
+# code and are intentionally not ported.
+security:
+    # No password authentication exists (CAS only); kept for the interface the User entity
+    # implements. The old sha512/plaintext encoders were never exercised.
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # Old file had the degenerate `ROLE_USER: ROLE_USER`. The app roles ROLE_USER1..4 are
+    # mapped to ROLE_USER for parity (User::getRoles() also always appends ROLE_USER, like
+    # FOS ROLE_DEFAULT did — access_control depends on it).
+    role_hierarchy:
+        ROLE_USER1: ROLE_USER
+        ROLE_USER2: ROLE_USER
+        ROLE_USER3: ROLE_USER
+        ROLE_USER4: ROLE_USER
+
+    providers:
+        # replaces the old `sus.user_provider` (FOS user manager lookup on username_canonical);
+        # the CasAuthenticator loads/creates users itself via CasUserProvisioner, this provider
+        # mainly serves refreshUser() on subsequent requests.
+        app_users:
+            entity:
+                class: App\Entity\User
+                property: usernameCanonical
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            lazy: true
+            provider: app_users
+            # replaces the old BeSimple `trusted_sso` listener stack
+            custom_authenticators:
+                - App\Security\CasAuthenticator
+            entry_point: App\Security\CasAuthenticator
+            logout:
+                path: /logout            # same path as before (old firewall `logout: true`)
+                invalidate_session: true
+                # CAS redirect after logout: App\Security\CasLogoutListener
+                # (logout CSRF stays off — parity with the Symfony 2.8 default the old app used)
+
+    # Old rules minus the dead FOS ones (/register, /resetting). /login stays public,
+    # /units_extra is an intentionally anonymous JSON API consumed by external systems
+    # (security.md §13) — listed explicitly so it never gets locked down by accident.
+    access_control:
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/login_check, roles: PUBLIC_ACCESS }
+        - { path: ^/units_extra, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/, roles: ROLE_USER }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

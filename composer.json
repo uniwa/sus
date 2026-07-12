@@ -1,68 +1,97 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "description": "The \"Symfony Standard Edition\" distribution",
-    "autoload": {
-        "psr-0": { "": "src/" }
-    },
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
-        "php": ">=7.0.0",
-        "symfony/symfony": "2.8.*",
-        "doctrine/orm": "2.*",
-        "doctrine/doctrine-bundle": "*",
-        "doctrine/common": "*",
-        "genemu/form-bundle": "2.1.*",
-        "twig/extensions": "1.*",
-        "symfony/assetic-bundle": "2.*",
-        "symfony/swiftmailer-bundle": "2.*",
-        "symfony/monolog-bundle": "2.*",
-        "sensio/distribution-bundle": "*",
-        "sensio/framework-extra-bundle": "*",
-        "sensio/generator-bundle": "*",
-        "jms/security-extra-bundle": "1.5.*",
-        "jms/di-extra-bundle": "dev-master",
-        "knplabs/knp-menu-bundle": "*",
-        "friendsofsymfony/user-bundle": "*",
-        "friendsofsymfony/rest-bundle": "0.12.*",
-        "friendsofsymfony/rest": "0.8.*",
-        "jms/serializer-bundle": "*",
-        "sonata-project/core-bundle": "~2.3@dev",
-        "sonata-project/doctrine-orm-admin-bundle": "~2.3@dev",
-        "sonata-project/cache-bundle": "~2.3@dev",
-        "sonata-project/intl-bundle": "~2.3@dev",
-        "stof/doctrine-extensions-bundle": "*",
-        "besimple/sso-auth-bundle": "*",
-        "jasig/phpcas": "*",
-        "ruudk/capifony-tools": "dev-master",
-        "oh/google-map-form-type-bundle": "*",
-        "liuggio/excelbundle": "1.0.*",
-        "zendframework/zend-ldap": "~2.5@dev"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ],
-        "post-update-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ]
+        "php": ">=8.2",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "apereo/phpcas": "^1.6",
+        "doctrine/doctrine-bundle": "^2.18",
+        "doctrine/orm": "^3.6",
+        "phpoffice/phpspreadsheet": "^5.9",
+        "sonata-project/admin-bundle": "^4",
+        "sonata-project/doctrine-orm-admin-bundle": "^4",
+        "stof/doctrine-extensions-bundle": "^1.15",
+        "symfony/console": "7.3.*",
+        "symfony/dotenv": "7.3.*",
+        "symfony/flex": "^2",
+        "symfony/form": "7.3.*",
+        "symfony/framework-bundle": "7.3.*",
+        "symfony/http-client": "7.3.*",
+        "symfony/ldap": "7.3.*",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/runtime": "7.3.*",
+        "symfony/security-bundle": "7.3.*",
+        "symfony/translation": "7.3.*",
+        "symfony/twig-bundle": "7.3.*",
+        "symfony/validator": "7.3.*",
+        "symfony/yaml": "7.3.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
-        "bin-dir": "bin"
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "bump-after-update": true,
+        "sort-packages": true,
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        },
+        "platform": {
+            "ext-gd": "8.3.0",
+            "ext-ldap": "8.3.0"
+        }
     },
-    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-web-dir": "web"
+        "symfony": {
+            "allow-contrib": "true",
+            "require": "7.3.*"
+        }
     },
-    "repositories": [
-    {
-        "type": "composer",
-        "url": "https://packages.zendframework.com/"
+    "require-dev": {
+        "symfony/maker-bundle": "^1.67",
+        "symfony/web-profiler-bundle": "7.3.*"
     }
-    ]
 }

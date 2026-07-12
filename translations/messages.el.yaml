@@ -1,0 +1,28 @@
+Logout: Αποσύνδεση
+Created By: Δημιουργήθηκε απο
+Created At: Ημ/νία Καταχώρισης
+Updated By: Ανανεώθηκε απο
+Select a value: Επιλέξτε μια τιμή
+
+ROLE_USER: Μονάδα
+
+# Unit
+Unit: Μονάδα
+Unit Id: Κωδικός SUS Μονάδας
+Unit List: Λίστα Μονάδων
+Mm Id: Κωδικός ΜΜ Μονάδας
+Mm Sync Id: Κωδικός ΜΜ Μονάδας
+Unit Mm Id: Κωδικός ΜΜ Μονάδας # Για φίλτρα
+Unit Name: Όνομα Μονάδας
+Unit State: Κατάσταση Μονάδας
+Unit Category: Κατηγορία Μονάδας
+Unit Category Name: Κατηγορία Μονάδας
+Unit Fy: Φορέας Υλοποίησης
+Unit Fy Name: Φορέας Υλοποίησης
+Unit Registry No: Κωδικός ΥΠΕΠΘ
+Name: Όνομα
+Category: Κατηγορία
+Unit Type: Τύπος Μονάδας
+
+Action: Ενέργεια
+Actions: Ενέργειες

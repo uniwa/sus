@@ -1,0 +1,28 @@
+sonata_admin:
+    # Port of old SUSAdminBundle/Resources/config/sonata.yml
+    title: 'SUS'
+    # Old handler was sonata.admin.security.handler.acl, but the ACL layer was gutted (the
+    # compiler pass removed the basic ACL voter and the custom AdminAclVoter decided everything
+    # from roles.yml/LDAP). Symfony 7 has no ACL component; this custom handler forwards the
+    # plain LIST/VIEW/EDIT/CREATE/EXPORT attributes to App\Security\AdminAclVoter — same
+    # observable permission matrix (admins.md §5, security.md §9/§12).
+    security:
+        handler: App\Admin\Security\SusAdminSecurityHandler
+    persist_filters: true
+    title_logo: 'images/psd_logo.png'
+    options:
+        # The old layout override rendered the title as text (the logo <img> was commented out)
+        logo_content: text
+    templates:
+        layout: 'admin/layout.html.twig'
+        edit: 'admin/edit.html.twig'
+        user_block: 'admin/user_block.html.twig'
+        # old `ajax`, `list`, `show` entries pointed at stock Sonata templates — defaults kept
+    dashboard:
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]

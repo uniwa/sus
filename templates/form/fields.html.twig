@@ -1,0 +1,21 @@
+{# Port of old `SUSAdminBundle::fields.html.twig` (global Twig form theme).
+   Purpose of the old override: render choice option labels UNESCAPED (`|raw`) so HTML entities
+   in choice labels display correctly. Rewritten on top of Symfony 7's stock
+   `choice_widget_options` block (form_div_layout.html.twig) because the 2.8-era original used
+   `{% spaceless %}` (removed in Twig 3) and a bare `translation_domain` variable; the
+   `selectedchoice` test still exists in the Symfony Twig bridge. Only the `|raw` on the labels
+   differs from stock.
+   The old file's second block, `field_widget` (legacy Symfony 2 `field` type alias), was dead
+   code in Symfony 3+ and was NOT ported. #}
+{%- block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}"{% if choice.attr %}{% with { attr: choice.attr } %}{{ block('attributes') }}{% endwith %}{% endif %}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label|raw : choice.label|trans(choice.labelTranslationParameters, choice_translation_domain)|raw }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options -%}

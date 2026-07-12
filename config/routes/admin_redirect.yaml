@@ -1,0 +1,11 @@
+# /admin/ 301-redirects to the Sonata dashboard (old route `adminredirts`,
+# FrameworkBundle:Redirect:redirect with permanent: true).
+# This lives in its own file (loaded alphabetically BEFORE sonata_admin.yaml) so it
+# registers ahead of Sonata's own `sonata_admin_redirect` route on the same /admin/ path —
+# otherwise Sonata's action would shadow it and answer 302 instead of the old app's 301.
+adminredirts:
+    path: /admin/
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        route: sonata_admin_dashboard
+        permanent: true

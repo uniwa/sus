@@ -1,0 +1,15 @@
+{# Port of old `SUSAdminBundle::edit.html.twig` (Sonata CRUD edit override).
+   The old file overrode only:
+    - `title`: same strings as stock Sonata, but WITHOUT the 15-char truncation Sonata 4 applies
+      by default — preserved below so the full unit name shows in the page title;
+    - `footer`: `{{ parent() }}` plus a commented-out `tinymce_init()` — dropped, since Sonata 4's
+      edit template chain has no `footer` block and the override was a no-op anyway. #}
+{% extends '@SonataAdmin/CRUD/edit.html.twig' %}
+
+{% block title %}
+    {% if admin.id(object) is not null %}
+        {{ 'title_edit'|trans({'%name%': admin.toString(object)}, 'SonataAdminBundle') }}
+    {% else %}
+        {{ 'title_create'|trans({}, 'SonataAdminBundle') }}
+    {% endif %}
+{% endblock %}
