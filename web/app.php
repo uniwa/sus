@@ -10,6 +10,9 @@ require_once __DIR__.'/../app/AppKernel.php';
 $kernel = new AppKernel('prod', false);
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
+if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != "on") {
+    $_SERVER['HTTPS'] = "on";
+}
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
