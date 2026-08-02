@@ -59,7 +59,10 @@ class PhpCasClient
             $this->casHost,
             $this->casPort,
             $this->casUri,
-            rtrim($this->serviceBaseUrl, '/'),
+            // phpCAS appends the request URI itself, so service_base_url must be scheme+host
+            // ONLY — never the app's base path, or the validated service URL doubles the
+            // deployment subdir (e.g. /sus/sus/login_check) and CAS rejects the ticket.
+            $this->getServiceRootUrl(),
             false // do NOT let phpCAS rename the PHP session — Symfony owns it
         );
 
@@ -102,7 +105,28 @@ class PhpCasClient
      */
     public function getLoginUrl(): string
     {
-        return $this->getCasBaseUrl().'/login?service='.urlencode(rtrim($this->serviceBaseUrl, '/').'/login_check');
+        // Must match EXACTLY what phpCAS reconstructs at validation time
+        // (getServiceRootUrl() + REQUEST_URI, where REQUEST_URI = basePath + '/login_check').
+        $basePath = $this->requestStack->getCurrentRequest()?->getBasePath() ?? '';
+        $service = $this->getServiceRootUrl().$basePath.'/login_check';
+
+        return $this->getCasBaseUrl().'/login?service='.urlencode($service);
+    }
+
+    /**
+     * Scheme + host (+ non-standard port) of this service, derived from CAS_SERVICE_BASE_URL.
+     * Any path in the configured value is stripped: phpCAS appends the request URI itself, and
+     * the login service URL adds the base path separately, so the two constructions agree.
+     */
+    private function getServiceRootUrl(): string
+    {
+        $p = parse_url($this->serviceBaseUrl);
+        $url = ($p['scheme'] ?? 'https').'://'.($p['host'] ?? '');
+        if (isset($p['port']) && !\in_array($p['port'], [80, 443], true)) {
+            $url .= ':'.$p['port'];
+        }
+
+        return $url;
     }
 
     /**
