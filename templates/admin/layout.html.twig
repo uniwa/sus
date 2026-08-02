@@ -14,9 +14,9 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
 {% block logo %}
-    <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
-        {# old override showed the title as text (title_logo img was commented out) — kept #}
-        <span>{{ sonata_config.title }}</span>
+    <a class="logo" href="{{ path('sonata_admin_dashboard') }}" title="{{ sonata_config.title }}">
+        <img src="{{ asset('images/psd_logo.png') }}" alt="{{ sonata_config.title }}"
+             style="max-height: 42px; width: auto;">
     </a>
 {% endblock %}
 
