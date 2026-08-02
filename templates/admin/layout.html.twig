@@ -16,7 +16,8 @@
 {% block logo %}
     <a class="logo" href="{{ path('sonata_admin_dashboard') }}" title="{{ sonata_config.title }}">
         <img src="{{ asset('images/psd_logo.png') }}" alt="{{ sonata_config.title }}"
-             style="max-height: 42px; width: auto;">
+             style="max-height: 42px; width: auto; vertical-align: middle;">
+        <span style="vertical-align: middle; margin-left: 8px; font-weight: bold; font-size: 18px;">{{ sonata_config.title }}</span>
     </a>
 {% endblock %}
 
