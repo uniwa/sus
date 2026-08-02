@@ -41,7 +41,11 @@
         var hasCoords = !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0);
         var center = hasCoords ? [lat, lng] : [dLat, dLng];
 
-        var map = L.map(container).setView(center, hasCoords ? 15 : 6);
+        // scrollWheelZoom off by default so scrolling the page over the map doesn't
+        // hijack the wheel; it's enabled only while the map has focus (after a click).
+        var map = L.map(container, { scrollWheelZoom: false }).setView(center, hasCoords ? 15 : 6);
+        map.on('focus', function () { map.scrollWheelZoom.enable(); });
+        map.on('blur', function () { map.scrollWheelZoom.disable(); });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
