@@ -85,15 +85,6 @@ final class UnitAdmin extends AbstractAdmin
         $collection->remove('delete');
     }
 
-    /**
-     * Add the Leaflet coordinate-picker widget theme for the `latlng` field
-     * (block sus_latlng_widget in templates/admin/form/latlng_map.html.twig).
-     */
-    public function getFormTheme(): array
-    {
-        return array_merge(parent::getFormTheme(), ['admin/form/latlng_map.html.twig']);
-    }
-
     protected function configureShowFields(ShowMapper $show): void
     {
         $show

@@ -18,6 +18,13 @@ services:
     App\:
         resource: '../src/'
 
+    # Register the Leaflet coordinate-picker form theme for the Unit admin.
+    # getFormTheme()/setFormTheme() are final in Sonata 4, so the theme is set via this
+    # service call; the compiler pass keeps an explicit setFormTheme call over its default.
+    App\Admin\UnitAdmin:
+        calls:
+            - [setFormTheme, [['admin/form/latlng_map.html.twig']]]
+
     # --- Security area (CAS SSO) ------------------------------------------------------------
 
     App\Security\PhpCasClient:
