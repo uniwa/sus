@@ -11,3 +11,10 @@
 /WORKPLAN.md
 /docs/port-inventory/
 /config/reference.php
+
+# Belt-and-suspenders: the legacy Symfony 2.8 tree must never be tracked here.
+# A stray copy in the working dir was once accidentally committed (parameters.yml leak).
+/app/
+/web/
+parameters.yml
+parameters.yml.*
