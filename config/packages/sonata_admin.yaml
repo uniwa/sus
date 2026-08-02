@@ -10,6 +10,14 @@ sonata_admin:
         handler: App\Admin\Security\SusAdminSecurityHandler
     persist_filters: true
     title_logo: 'images/psd_logo.png'
+    assets:
+        # Leaflet coordinate picker for the Unit latlng widget — vendored, no CDN/API key.
+        # `extra_*` appends to Sonata's default asset lists.
+        extra_stylesheets:
+            - vendor/leaflet/leaflet.css
+        extra_javascripts:
+            - vendor/leaflet/leaflet.js
+            - js/sus-latlng-map.js
     options:
         # The old layout override rendered the title as text (the logo <img> was commented out)
         logo_content: text

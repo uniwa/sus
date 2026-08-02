@@ -1,0 +1,16 @@
+{# Form-theme for App\Form\Type\LatLngType (block prefix `sus_latlng`).
+   Renders the Latitude/Longitude inputs plus a Leaflet map picker wired to them.
+   Leaflet + the picker JS are loaded via sonata_admin.assets (config/packages/sonata_admin.yaml). #}
+{% block sus_latlng_widget %}
+    <div class="sus-latlng">
+        {{ form_row(form.lat) }}
+        {{ form_row(form.lng) }}
+        <div class="sus-latlng-map"
+             data-lat-id="{{ form.lat.vars.id }}"
+             data-lng-id="{{ form.lng.vars.id }}"
+             data-default-lat="{{ default_lat|default(37.984042) }}"
+             data-default-lng="{{ default_lng|default(23.728179) }}"
+             data-img-base="{{ asset('vendor/leaflet/images') }}"
+             style="height: 320px; margin-top: 10px; border: 1px solid #ccc; border-radius: 3px;"></div>
+    </div>
+{% endblock %}

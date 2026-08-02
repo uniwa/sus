@@ -10,3 +10,4 @@
 ###< symfony/framework-bundle ###
 /WORKPLAN.md
 /docs/port-inventory/
+/config/reference.php

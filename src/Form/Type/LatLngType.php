@@ -7,6 +7,8 @@ namespace App\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -25,6 +27,15 @@ final class LatLngType extends AbstractType
         $builder
             ->add('lat', TextType::class, $options['lat_options'])
             ->add('lng', TextType::class, $options['lng_options']);
+    }
+
+    /**
+     * Expose the default map centre to the form theme (latlng_map.html.twig / sus-latlng-map.js).
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['default_lat'] = $options['default_lat'];
+        $view->vars['default_lng'] = $options['default_lng'];
     }
 
     public function configureOptions(OptionsResolver $resolver): void
