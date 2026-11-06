@@ -134,10 +134,10 @@ final class UnitAdmin extends AbstractAdmin
                 ->add('foundationDate', null, ['label' => 'Έτος Ίδρυσης'])
                 ->add('state', null, ['placeholder' => '-', 'required' => true, 'label' => 'Κατάσταση'])
                 ->add('legalCharacter', null, ['placeholder' => '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'])
-                ->add('eduAdmin', null, ['label' => 'Διεύθυνση Εκπαίδευσης', 'query_builder' => static function (EntityRepository $rep) {
+                ->add('regionEduAdmin', null, ['label' => 'Περιφερειακή Διεύθυνση', 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
-                ->add('regionEduAdmin', null, ['label' => 'Περιφερειακή Διεύθυνση', 'query_builder' => static function (EntityRepository $rep) {
+                ->add('eduAdmin', null, ['label' => 'Διεύθυνση Εκπαίδευσης', 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
                 ->add('manager.firstName', TextType::class, ['label' => 'Όνομα Υπευθύνου', 'required' => false])
@@ -145,16 +145,20 @@ final class UnitAdmin extends AbstractAdmin
                 ->add('comments', null, ['label' => 'Σχόλια'])
             ->end()
             ->with('Στοιχεία Τοποθεσίας')
-                ->add('streetAddress', null, ['label' => 'Οδός, Αριθμός'])
-                ->add('postalCode', null, ['label' => 'Ταχυδρομικός Κώδικας'])
+                ->add('country', CountryPickerType::class, [
+                    'label' => 'Country',
+                    'required' => true,
+                ])
+                ->add('region', null, ['label' => 'Περιφέρεια', 'query_builder' => static function (EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }])
+                ->add('prefecture', null, ['label' => 'Περιφερειακή Ενότητα'])
                 ->add('municipality', null, ['label' => 'Δήμος ΟΤΑ', 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
                 ->add('municipalityCommunity', null, ['label' => 'Δημοτική Ενότητα'])
-                ->add('prefecture', null, ['label' => 'Περιφερειακή Ενότητα'])
-                ->add('region', null, ['label' => 'Περιφέρεια', 'query_builder' => static function (EntityRepository $rep) {
-                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
-                }])
+                ->add('streetAddress', null, ['label' => 'Οδός, Αριθμός'])
+                ->add('postalCode', null, ['label' => 'Ταχυδρομικός Κώδικας'])
                 ->add('positioning', null, ['label' => 'Κτηριακή Θέση'])
                 ->add('latlng', LatLngType::class, [
                     'label' => 'Αναζήτηση Συντεταγμένων',
@@ -171,10 +175,6 @@ final class UnitAdmin extends AbstractAdmin
                     ],
                     'default_lat' => 37.984042,
                     'default_lng' => 23.728179,
-                ])
-                ->add('country', CountryPickerType::class, [
-                    'label' => 'Country',
-                    'required' => true,
                 ])
             ->end()
             ->with('Στοιχεία Επικοινωνίας')
@@ -196,8 +196,8 @@ final class UnitAdmin extends AbstractAdmin
                     'edit' => [],
                 ],
             ])
-            ->add('unitId', FieldDescriptionInterface::TYPE_STRING)
-            ->add('mmSyncId', FieldDescriptionInterface::TYPE_STRING)
+            ->add('unitId', FieldDescriptionInterface::TYPE_STRING, ['label' => 'Κωδικός SUS'])
+            ->add('mmSyncId', FieldDescriptionInterface::TYPE_STRING, ['label' => 'Κωδικός ΜΜ'])
             ->addIdentifier('name', FieldDescriptionInterface::TYPE_STRING, ['label' => 'Ονομασία'])
             ->add('state.name', FieldDescriptionInterface::TYPE_STRING, ['label' => 'Κατάσταση'])
             ->add('manager', FieldDescriptionInterface::TYPE_STRING, ['label' => 'Υπεύθυνος'])
@@ -212,12 +212,13 @@ final class UnitAdmin extends AbstractAdmin
         }
 
         $filter
-            ->add('unitId')
-            ->add('mmSyncId')
-            ->add('name')
-            ->add('unitType')
+            ->add('unitId', null, ['label' => 'Κωδικός SUS'])
+            ->add('mmSyncId', null, ['label' => 'Κωδικός ΜΜ'])
+            ->add('name', null, ['label' => 'Ονομασία'])
+            ->add('unitType', null, ['label' => 'Τύπος μονάδας'])
             ->add('manager', null, ['label' => 'Υπεύθυνος'])
             ->add('full_text', CallbackFilter::class, [
+                'label' => 'Αναζήτηση (Ονομασία ή Κωδικός ΜΜ)',
                 'callback' => $this->getFullTextFilter(...),
                 'field_type' => TextType::class,
             ])
