@@ -18,6 +18,7 @@ sonata_admin:
         extra_javascripts:
             - vendor/leaflet/leaflet.js
             - js/sus-latlng-map.js
+            - js/sus-dependent-selects.js
     options:
         # The old layout override rendered the title as text (the logo <img> was commented out)
         logo_content: text

@@ -9,6 +9,7 @@ use App\Form\Type\CountryPickerType;
 use App\Form\Type\LatLngType;
 use App\Security\RolesRegistry;
 use App\Security\UserPermissions;
+use App\Service\LocationHierarchy;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
@@ -57,6 +58,7 @@ final class UnitAdmin extends AbstractAdmin
         private readonly TokenStorageInterface $tokenStorage,
         private readonly RolesRegistry $rolesRegistry,
         private readonly UserPermissions $userPermissions,
+        private readonly LocationHierarchy $locationHierarchy,
     ) {
     }
 
@@ -134,10 +136,10 @@ final class UnitAdmin extends AbstractAdmin
                 ->add('foundationDate', null, ['label' => 'Έτος Ίδρυσης'])
                 ->add('state', null, ['placeholder' => '-', 'required' => true, 'label' => 'Κατάσταση'])
                 ->add('legalCharacter', null, ['placeholder' => '-', 'required' => true, 'label' => 'Νομικός Χαρακτήρας'])
-                ->add('regionEduAdmin', null, ['label' => 'Περιφερειακή Διεύθυνση', 'query_builder' => static function (EntityRepository $rep) {
+                ->add('regionEduAdmin', null, ['label' => 'Περιφερειακή Διεύθυνση', 'attr' => $this->dependentField('regionEduAdmin'), 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
-                ->add('eduAdmin', null, ['label' => 'Διεύθυνση Εκπαίδευσης', 'query_builder' => static function (EntityRepository $rep) {
+                ->add('eduAdmin', null, ['label' => 'Διεύθυνση Εκπαίδευσης', 'attr' => $this->dependentField('eduAdmin', 'regionEduAdmin', $this->locationHierarchy->eduAdminToRegionEduAdmin()), 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
                 ->add('manager.firstName', TextType::class, ['label' => 'Όνομα Υπευθύνου', 'required' => false])
@@ -149,14 +151,18 @@ final class UnitAdmin extends AbstractAdmin
                     'label' => 'Country',
                     'required' => true,
                 ])
-                ->add('region', null, ['label' => 'Περιφέρεια', 'query_builder' => static function (EntityRepository $rep) {
+                ->add('region', null, ['label' => 'Περιφέρεια', 'attr' => $this->dependentField('region'), 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
-                ->add('prefecture', null, ['label' => 'Περιφερειακή Ενότητα'])
-                ->add('municipality', null, ['label' => 'Δήμος ΟΤΑ', 'query_builder' => static function (EntityRepository $rep) {
+                ->add('prefecture', null, ['label' => 'Περιφερειακή Ενότητα', 'attr' => $this->dependentField('prefecture', 'region', $this->locationHierarchy->prefectureToRegion()), 'query_builder' => static function (EntityRepository $rep) {
                     return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
                 }])
-                ->add('municipalityCommunity', null, ['label' => 'Δημοτική Ενότητα'])
+                ->add('municipality', null, ['label' => 'Δήμος ΟΤΑ', 'attr' => $this->dependentField('municipality', 'prefecture', $this->locationHierarchy->municipalityToPrefecture()), 'query_builder' => static function (EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }])
+                ->add('municipalityCommunity', null, ['label' => 'Δημοτική Ενότητα', 'attr' => $this->dependentField('municipalityCommunity', 'municipality', $this->locationHierarchy->communityToMunicipality()), 'query_builder' => static function (EntityRepository $rep) {
+                    return $rep->createQueryBuilder('e')->orderBy('e.name', 'ASC');
+                }])
                 ->add('streetAddress', null, ['label' => 'Οδός, Αριθμός'])
                 ->add('postalCode', null, ['label' => 'Ταχυδρομικός Κώδικας'])
                 ->add('positioning', null, ['label' => 'Κτηριακή Θέση'])
@@ -184,6 +190,24 @@ final class UnitAdmin extends AbstractAdmin
                 ->add('website', null, ['label' => 'Website'])
             ->end()
         ;
+    }
+
+    /**
+     * Wiring read by public/js/sus-dependent-selects.js.
+     *
+     * @param array<int, int> $parentByChild option value => parent option value
+     *
+     * @return array<string, string>
+     */
+    private function dependentField(string $key, ?string $parentKey = null, array $parentByChild = []): array
+    {
+        $attr = ['data-sus-dep-key' => $key];
+        if ($parentKey !== null) {
+            $attr['data-sus-dep-parent'] = $parentKey;
+            $attr['data-sus-dep-map'] = json_encode($parentByChild, \JSON_THROW_ON_ERROR | \JSON_FORCE_OBJECT);
+        }
+
+        return $attr;
     }
 
     protected function configureListFields(ListMapper $list): void

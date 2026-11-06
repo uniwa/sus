@@ -29,6 +29,9 @@ class Prefecture
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     private ?string $name = null;
 
+    #[ORM\Column(name: 'region_id', type: 'integer', nullable: true)]
+    private ?int $regionId = null;
+
     public function getPrefectureId(): ?int
     {
         return $this->prefectureId;
@@ -47,6 +50,16 @@ class Prefecture
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getRegionId(): ?int
+    {
+        return $this->regionId;
+    }
+
+    public function setRegionId(?int $regionId): void
+    {
+        $this->regionId = $regionId;
     }
 
     public function __toString(): string
