@@ -158,6 +158,12 @@
             community.push(address.municipality); // single-unit Δήμοι share the Δήμος name
         }
 
+        if (address.country_code && address.country_code !== 'gr') {
+            // Outside Greece the Greek Περιφέρεια/Δήμος dropdowns cannot apply.
+            track(setInput(formField(form, 'postalCode'), (address.postcode || '').replace(/\s+/g, '')), 'Τ.Κ.');
+            return { filled: filled, missed: missed };
+        }
+
         var street = [address.road || address.pedestrian || address.square, address.house_number].filter(Boolean).join(' ');
         track(setInput(formField(form, 'streetAddress'), street), 'Οδός, Αριθμός');
         track(setInput(formField(form, 'postalCode'), (address.postcode || '').replace(/\s+/g, '')), 'Τ.Κ.');
@@ -167,6 +173,51 @@
         track(setSelectByName(formField(form, 'municipalityCommunity'), community), 'Δημοτική Ενότητα');
 
         return { filled: filled, missed: missed };
+    }
+
+    /**
+     * The typed text first, then shorter versions OSM is likelier to know: the text inside
+     * parentheses on its own, and leading comma-separated parts dropped (usually a building or
+     * business name, e.g. "Shkolla Jo Publike "Omiros", SH75, Korçë 7023" → "SH75, Korçë 7023").
+     */
+    function queryVariants(q) {
+        var bases = [];
+        var inner = q.match(/\(([^)]+)\)/g) || [];
+        inner.forEach(function (p) { bases.push(p.slice(1, -1).trim()); });
+        bases.push(q.replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim());
+        var out = [];
+        function add(v) {
+            v = v.trim().replace(/^[,\s]+|[,\s]+$/g, '');
+            if (v && out.indexOf(v) < 0) {
+                out.push(v);
+            }
+        }
+        add(q);
+        bases.forEach(function (base) {
+            add(base);
+            var parts = base.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+            // Never down to a lone trailing part of a long address: that is usually the country.
+            var last = parts.length >= 4 ? parts.length - 1 : parts.length;
+            for (var i = 1; i < last; i++) {
+                add(parts.slice(i).join(', '));
+            }
+        });
+        return out.slice(0, 5);
+    }
+
+    /** Runs the Nominatim queries in order until one finds something. */
+    function firstHit(attempts) {
+        var i = 0;
+        function next() {
+            if (i >= attempts.length) {
+                return Promise.resolve({ rows: [], query: null });
+            }
+            var params = attempts[i++];
+            return nominatim(params).then(function (rows) {
+                return rows.length ? { rows: rows, query: params.q } : next();
+            });
+        }
+        return next();
     }
 
     function buildSearch(container, map, marker, writeInputs) {
@@ -205,8 +256,9 @@
                 return;
             }
             var result = fillAddressFields(form, chosen.address);
-            fillStatus.textContent = (result.filled.length ? 'Συμπληρώθηκαν: ' + result.filled.join(', ') + '. ' : '')
-                + (result.missed.length ? 'Χωρίς αντιστοιχία (ελέγξτε τα): ' + result.missed.join(', ') + '.' : '');
+            var sentence = function (text) { return /\.$/.test(text) ? text : text + '.'; };
+            fillStatus.textContent = (result.filled.length ? sentence('Συμπληρώθηκαν: ' + result.filled.join(', ')) + ' ' : '')
+                + (result.missed.length ? sentence('Χωρίς αντιστοιχία (ελέγξτε τα): ' + result.missed.join(', ')) : '');
         });
 
         // Track "Οδός, Αριθμός" until the user types their own query.
@@ -280,30 +332,42 @@
             fillStatus.textContent = '';
             setStatus('Αναζήτηση…');
 
+            var areaPlain = areaName.replace(/^(Δήμος|Περιφερειακή Ενότητα) /, '');
+            var variants = queryVariants(q);
             var area = null;
             var areaPromise = areaName && country === 'gr' ? areaBounds(areaName, country) : Promise.resolve(null);
             areaPromise.then(function (found) {
                 area = found;
                 if (!q) {
-                    return [];
+                    return { rows: [] };
                 }
+                // Most precise first: inside the Δήμος, then the country, then anywhere; each
+                // with the full text before the shortened variants (building name dropped, …).
+                var attempts = [];
                 if (area) {
-                    return nominatim({ q: q, countrycodes: country, viewbox: area.viewbox, bounded: 1 });
+                    variants.slice(0, 2).forEach(function (v) {
+                        attempts.push({ q: v, countrycodes: country, viewbox: area.viewbox, bounded: 1 });
+                    });
                 }
-                return [];
-            }).then(function (rows) {
-                if (rows.length || !q) {
-                    return rows;
+                if (areaPlain && country === 'gr') {
+                    attempts.push({ q: q + ', ' + areaPlain, countrycodes: country });
                 }
-                // Nothing inside the area (or no area): search the whole country.
-                return nominatim({ q: areaName ? q + ', ' + areaName.replace(/^(Δήμος|Περιφερειακή Ενότητα) /, '') : q, countrycodes: country });
-            }).then(function (rows) {
+                variants.forEach(function (v) {
+                    attempts.push({ q: v, countrycodes: country });
+                });
+                attempts.push({ q: variants[Math.min(1, variants.length - 1)] }); // maybe the country is wrong
+                return firstHit(attempts.slice(0, 7));
+            }).then(function (hit) {
+                var rows = hit.rows;
                 if (rows.length) {
+                    var approx = hit.query && hit.query !== q
+                        ? ' (η πλήρης διεύθυνση δεν βρέθηκε· αναζητήθηκε «' + hit.query + '»)'
+                        : '';
                     choose(rows[0]);
                     showResults(rows);
-                    setStatus(rows.length > 1
+                    setStatus((rows.length > 1
                         ? 'Βρέθηκαν ' + rows.length + ' αποτελέσματα — επιλέξτε το σωστό ή μετακινήστε την πινέζα.'
-                        : 'Βρέθηκε: ' + rows[0].display_name + ' — αν δεν είναι ακριβές, μετακινήστε την πινέζα.');
+                        : 'Βρέθηκε: ' + rows[0].display_name + ' — αν δεν είναι ακριβές, μετακινήστε την πινέζα.') + approx);
                 } else if (area) {
                     map.fitBounds(area.bounds);
                     setStatus('Η διεύθυνση δεν βρέθηκε· ο χάρτης δείχνει τον Δήμο — κάντε κλικ στο σωστό σημείο.');
