@@ -70,11 +70,14 @@
     }
 
     function formField(form, suffix) {
-        return form ? form.querySelector('[id$="_' + suffix + '"]') : null;
+        // Only form controls: Sonata also gives each field's wrapper div an id ending in the
+        // field name (sonata-ba-field-container-…_streetAddress), and it comes first.
+        var sel = '_' + suffix + '"]';
+        return form ? form.querySelector('input[id$="' + sel + ', select[id$="' + sel + ', textarea[id$="' + sel) : null;
     }
 
     function selectedText(select) {
-        if (!select || !select.value || select.selectedIndex < 0) {
+        if (!select || !select.options || !select.value || select.selectedIndex < 0) {
             return '';
         }
         return select.options[select.selectedIndex].text.trim();
@@ -109,7 +112,7 @@
         var userEdited = false;
         function fillFromStreet() {
             if (!userEdited && street) {
-                input.value = street.value.trim();
+                input.value = (street.value || '').trim();
             }
         }
         fillFromStreet();
