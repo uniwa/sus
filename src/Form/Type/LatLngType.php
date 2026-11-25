@@ -16,9 +16,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Symfony 2 only) used for `Unit.latlng` — the entity's virtual property mapped onto the
  * `latitude`/`longitude` columns via getLatLng()/setLatLng(array{lat,lng}).
  *
- * Renders two plain text inputs (Latitude / Longitude). The old Google-Maps picker widget
- * (jquery.ohgooglemaps.js) is NOT reimplemented; the `default_lat`/`default_lng`/
- * `include_jquery` options are accepted for signature parity but ignored.
+ * Renders two plain text inputs (Latitude / Longitude) plus, via admin/form/latlng_map.html.twig
+ * and public/js/sus-latlng-map.js, a Leaflet/OSM map picker with address search in place of the
+ * old Google-Maps widget. `include_jquery` is accepted for signature parity but ignored.
  */
 final class LatLngType extends AbstractType
 {
@@ -43,7 +43,7 @@ final class LatLngType extends AbstractType
         $resolver->setDefaults([
             'lat_options' => ['label' => 'Latitude', 'required' => false, 'empty_data' => '0'],
             'lng_options' => ['label' => 'Longitude', 'required' => false, 'empty_data' => '0'],
-            // accepted-but-ignored legacy oh_google_maps options (map picker not ported)
+            // legacy oh_google_maps options; default_lat/lng centre the map, include_jquery is ignored
             'default_lat' => 37.984042,
             'default_lng' => 23.728179,
             'include_jquery' => false,
