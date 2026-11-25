@@ -13,6 +13,12 @@
  * up by name; only if that finds nothing is the whole country searched. Nominatim allows at most
  * one request per second, hence the spacing between the requests of one search.
  *
+ * "Συμπλήρωση πεδίων" copies the chosen result's address into the form: Οδός/Αριθμός, Τ.Κ. and
+ * the Περιφέρεια > Περ. Ενότητα > Δήμος > Δημοτική Ενότητα dropdowns, matched to the options by
+ * name (accents, case, "Δήμος "-style prefixes and punctuation ignored). Dropdowns are set top-down
+ * so sus-dependent-selects.js narrows each level before the next is chosen; a level with no
+ * matching option is left as it was and reported.
+ *
  * Wiring comes from data-* attributes set by admin/form/latlng_map.html.twig.
  */
 (function () {
@@ -42,7 +48,7 @@
         var delay = Math.max(0, lastRequestAt + 1100 - Date.now());
         return wait(delay).then(function () {
             lastRequestAt = Date.now();
-            var query = Object.assign({ format: 'jsonv2', 'accept-language': 'el', limit: 5 }, params);
+            var query = Object.assign({ format: 'jsonv2', 'accept-language': 'el', limit: 5, addressdetails: 1 }, params);
             var url = NOMINATIM + '?' + Object.keys(query).map(function (k) {
                 return encodeURIComponent(k) + '=' + encodeURIComponent(query[k]);
             }).join('&');
@@ -83,6 +89,86 @@
         return select.options[select.selectedIndex].text.trim();
     }
 
+    function normalize(text) {
+        return String(text || '')
+            .normalize('NFD').replace(/[̀-ͯ]/g, '')
+            .toUpperCase()
+            .replace(/^(ΠΕΡΙΦΕΡΕΙΑΚΗ ΕΝΟΤΗΤΑ|ΠΕΡΙΦΕΡΕΙΑ|ΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ|ΔΗΜΟΤΙΚΗ ΚΟΙΝΟΤΗΤΑ|ΚΟΙΝΟΤΗΤΑ|ΔΗΜΟΣ)\s+/, '')
+            .replace(/&/g, ' ΚΑΙ ')
+            .replace(/[^A-Z0-9Α-Ω.]+/g, ' ')
+            .trim();
+    }
+
+    /** "ΑΝ. ΜΑΚΕΔΟΝΙΑΣ & ΘΡΑΚΗΣ" matches "Ανατολικής Μακεδονίας και Θράκης": abbreviations are prefixes. */
+    function namesMatch(optionText, osmName) {
+        var a = normalize(optionText);
+        var b = normalize(osmName);
+        if (!a || !b) {
+            return false;
+        }
+        if (a.replace(/[\s.]/g, '') === b.replace(/[\s.]/g, '')) {
+            return true;
+        }
+        var at = a.split(/\s+/);
+        var bt = b.split(/\s+/);
+        return at.length === bt.length && at.every(function (token, i) {
+            return token.slice(-1) === '.' ? bt[i].indexOf(token.slice(0, -1)) === 0 : token === bt[i];
+        });
+    }
+
+    function setSelectByName(select, names) {
+        if (!select) {
+            return false;
+        }
+        var option = Array.prototype.find.call(select.options, function (o) {
+            return o.value !== '' && names.some(function (n) { return namesMatch(o.text, n); });
+        });
+        if (!option) {
+            return false;
+        }
+        if (window.jQuery) {
+            window.jQuery(select).val(option.value).trigger('change');
+        } else {
+            select.value = option.value;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        return true;
+    }
+
+    function setInput(field, value) {
+        if (!field || !value) {
+            return false;
+        }
+        field.value = value;
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+        field.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+    }
+
+    /** Copy an address-detailed Nominatim result into the unit form; returns {filled, missed}. */
+    function fillAddressFields(form, address) {
+        var filled = [];
+        var missed = [];
+        function track(ok, label) {
+            (ok ? filled : missed).push(label);
+        }
+        var values = Object.keys(address).map(function (k) { return address[k]; });
+        var community = values.filter(function (v) { return /^(Δημοτική Ενότητα|Δημοτική Κοινότητα) /.test(v); });
+        if (address.municipality) {
+            community.push(address.municipality); // single-unit Δήμοι share the Δήμος name
+        }
+
+        var street = [address.road || address.pedestrian || address.square, address.house_number].filter(Boolean).join(' ');
+        track(setInput(formField(form, 'streetAddress'), street), 'Οδός, Αριθμός');
+        track(setInput(formField(form, 'postalCode'), (address.postcode || '').replace(/\s+/g, '')), 'Τ.Κ.');
+        track(setSelectByName(formField(form, 'region'), [address.state].filter(Boolean)), 'Περιφέρεια');
+        track(setSelectByName(formField(form, 'prefecture'), [address.county].filter(Boolean)), 'Περιφερειακή Ενότητα');
+        track(setSelectByName(formField(form, 'municipality'), [address.municipality, address.city].filter(Boolean)), 'Δήμος');
+        track(setSelectByName(formField(form, 'municipalityCommunity'), community), 'Δημοτική Ενότητα');
+
+        return { filled: filled, missed: missed };
+    }
+
     function buildSearch(container, map, marker, writeInputs) {
         var form = container.closest('form');
         var street = formField(form, 'streetAddress');
@@ -100,6 +186,9 @@
             '<i class="fa fa-search"></i> Εύρεση στον χάρτη</button></span>' +
             '</div>' +
             '<p class="help-block sus-latlng-status" style="margin-bottom:0"></p>' +
+            '<button type="button" class="btn btn-default btn-sm sus-latlng-fill" style="display:none;margin-top:5px">' +
+            '<i class="fa fa-pencil"></i> Συμπλήρωση πεδίων διεύθυνσης από το αποτέλεσμα</button>' +
+            '<p class="help-block sus-latlng-fill-status" style="margin-bottom:0"></p>' +
             '<div class="list-group sus-latlng-results" style="margin:5px 0 0"></div>';
         container.parentNode.insertBefore(box, container);
 
@@ -107,6 +196,18 @@
         var button = box.querySelector('button');
         var status = box.querySelector('.sus-latlng-status');
         var results = box.querySelector('.sus-latlng-results');
+        var fillButton = box.querySelector('.sus-latlng-fill');
+        var fillStatus = box.querySelector('.sus-latlng-fill-status');
+        var chosen = null;
+
+        fillButton.addEventListener('click', function () {
+            if (!chosen || !chosen.address) {
+                return;
+            }
+            var result = fillAddressFields(form, chosen.address);
+            fillStatus.textContent = (result.filled.length ? 'Συμπληρώθηκαν: ' + result.filled.join(', ') + '. ' : '')
+                + (result.missed.length ? 'Χωρίς αντιστοιχία (ελέγξτε τα): ' + result.missed.join(', ') + '.' : '');
+        });
 
         // Track "Οδός, Αριθμός" until the user types their own query.
         var userEdited = false;
@@ -126,6 +227,9 @@
         }
 
         function choose(row, item) {
+            chosen = row;
+            fillButton.style.display = row.address ? '' : 'none';
+            fillStatus.textContent = '';
             var ll = L.latLng(parseFloat(row.lat), parseFloat(row.lon));
             marker.setLatLng(ll);
             map.setView(ll, 17);
@@ -171,6 +275,9 @@
 
             button.disabled = true;
             results.innerHTML = '';
+            chosen = null;
+            fillButton.style.display = 'none';
+            fillStatus.textContent = '';
             setStatus('Αναζήτηση…');
 
             var area = null;
