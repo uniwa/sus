@@ -296,8 +296,9 @@ class MMService
                 // `mmSyncLastUpdateDate < updatedAt` check doesn't immediately re-flag the unit.
                 $modifyDateTime = new \DateTime('now');
                 $unit->setMmSyncLastUpdateDate($modifyDateTime->add(new \DateInterval('PT2M')));
-                $this->em->persist($unit);
-                $this->em->flush();
+                // No flush here: this runs inside the listener's onFlush, where a nested flush
+                // breaks the outer one (SQLSTATE[HY093] → Sonata "Σφάλμα κατά τη δημιουργία").
+                // The caller (listener or sync command) flushes.
 
                 return;
             }
@@ -369,8 +370,7 @@ class MMService
             if (isset($curWorker[0])) { // Check if already exists — adopt the MM id, do not push
                 $worker->setMmSyncId((int) $curWorker[0]->worker_id);
                 $worker->setMmSyncLastUpdateDate(new \DateTime('now'));
-                $this->em->persist($worker);
-                $this->em->flush();
+                // No flush here either: see persistUnit(); the caller flushes.
                 foreach ($this->getWorkerUnits($worker) as $curUnit) {
                     $this->addUnitWorker($curUnit, $worker);
                 }
