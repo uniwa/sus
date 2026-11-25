@@ -232,8 +232,12 @@
         box.style.marginTop = '10px';
         box.innerHTML =
             '<div class="input-group">' +
-            '<input type="text" class="form-control" placeholder="Οδός και αριθμός, π.χ. Πανεπιστημίου 30">' +
-            '<span class="input-group-btn"><button type="button" class="btn btn-default">' +
+            // autocomplete=off: otherwise the browser puts the old text back on refresh.
+            '<input type="text" class="form-control" autocomplete="off" placeholder="Οδός και αριθμός, π.χ. Πανεπιστημίου 30">' +
+            '<span class="input-group-btn">' +
+            '<button type="button" class="btn btn-default sus-latlng-clear" title="Καθαρισμός αναζήτησης">' +
+            '<i class="fa fa-times"></i></button>' +
+            '<button type="button" class="btn btn-default sus-latlng-go">' +
             '<i class="fa fa-search"></i> Εύρεση στον χάρτη</button></span>' +
             '</div>' +
             '<p class="help-block sus-latlng-status" style="margin-bottom:0"></p>' +
@@ -244,7 +248,8 @@
         container.parentNode.insertBefore(box, container);
 
         var input = box.querySelector('input');
-        var button = box.querySelector('button');
+        var button = box.querySelector('.sus-latlng-go');
+        var clearButton = box.querySelector('.sus-latlng-clear');
         var status = box.querySelector('.sus-latlng-status');
         var results = box.querySelector('.sus-latlng-results');
         var fillButton = box.querySelector('.sus-latlng-fill');
@@ -382,6 +387,17 @@
         }
 
         button.addEventListener('click', search);
+        // Empties the search box and its results; the coordinates already chosen stay.
+        clearButton.addEventListener('click', function () {
+            input.value = '';
+            userEdited = true; // stay empty instead of refilling from "Οδός, Αριθμός"
+            chosen = null;
+            results.innerHTML = '';
+            fillButton.style.display = 'none';
+            fillStatus.textContent = '';
+            setStatus('');
+            input.focus();
+        });
         input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault(); // don't submit the unit form
